@@ -1,0 +1,1 @@
+# apartment.ms.core.app
