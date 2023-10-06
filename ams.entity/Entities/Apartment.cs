@@ -2,8 +2,10 @@
 {
     using ams.core.Entities;
 
-    internal class Apartment : EntityBase
+    public class Apartment : EntityBase
     {
         public string? Name { get; set; }
+        public Guid? AccountId { get; set; }
+        public Account Accounts { get; set; }
     }
 }
