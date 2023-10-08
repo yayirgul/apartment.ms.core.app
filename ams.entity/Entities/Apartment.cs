@@ -1,11 +1,14 @@
 ﻿namespace ams.entity.Entities
 {
     using ams.core.Entities;
+    using System.ComponentModel.DataAnnotations;
 
     public class Apartment : EntityBase
     {
-        public string? Name { get; set; }
         public Guid? AccountId { get; set; }
-        public Account Accounts { get; set; }
+        public Account? Accounts { get; set; }
+
+        [StringLength(300)]
+        public string? ApartmentName { get; set; }
     }
 }
