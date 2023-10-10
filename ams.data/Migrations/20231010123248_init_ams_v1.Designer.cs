@@ -12,7 +12,7 @@ using ams.data.Context;
 namespace ams.data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20231008184515_init_ams_v1")]
+    [Migration("20231010123248_init_ams_v1")]
     partial class init_ams_v1
     {
         /// <inheritdoc />
