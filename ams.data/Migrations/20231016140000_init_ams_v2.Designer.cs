@@ -12,8 +12,8 @@ using ams.data.Context;
 namespace ams.data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20231010123248_init_ams_v1")]
-    partial class init_ams_v1
+    [Migration("20231016140000_init_ams_v2")]
+    partial class init_ams_v2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -43,21 +43,21 @@ namespace ams.data.Migrations
                         .HasMaxLength(300)
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("DeletedBy")
+                    b.Property<DateTime?>("DeletedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeletedUserId")
                         .HasMaxLength(300)
                         .HasColumnType("nvarchar(300)");
-
-                    b.Property<DateTime>("DeletedTime")
-                        .HasColumnType("datetime2");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsDeleted")
+                    b.Property<bool?>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsStatus")
-                        .HasColumnType("bit");
+                    b.Property<string>("IsStatus")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsTestAccount")
                         .HasColumnType("bit");
@@ -68,7 +68,7 @@ namespace ams.data.Migrations
                     b.Property<int?>("LanguageId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("ModifiedTime")
+                    b.Property<DateTime?>("ModifiedTime")
                         .HasColumnType("datetime2");
 
                     b.Property<Guid?>("ModifiedUserId")
@@ -81,6 +81,65 @@ namespace ams.data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Accounts");
+                });
+
+            modelBuilder.Entity("ams.entity.Entities.AdxMenu", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("CreateUserId")
+                        .HasMaxLength(300)
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("DeletedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeletedUserId")
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<string>("Icons")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("IsStatus")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("LanguageId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("MenuUrl")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<DateTime?>("ModifiedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("ModifiedUserId")
+                        .HasMaxLength(300)
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ParentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Title")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AdxMenus");
                 });
 
             modelBuilder.Entity("ams.entity.Entities.Apartment", b =>
@@ -103,26 +162,26 @@ namespace ams.data.Migrations
                         .HasMaxLength(300)
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("DeletedBy")
+                    b.Property<DateTime?>("DeletedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeletedUserId")
                         .HasMaxLength(300)
                         .HasColumnType("nvarchar(300)");
-
-                    b.Property<DateTime>("DeletedTime")
-                        .HasColumnType("datetime2");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsDeleted")
+                    b.Property<bool?>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsStatus")
-                        .HasColumnType("bit");
+                    b.Property<string>("IsStatus")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("LanguageId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("ModifiedTime")
+                    b.Property<DateTime?>("ModifiedTime")
                         .HasColumnType("datetime2");
 
                     b.Property<Guid?>("ModifiedUserId")
@@ -155,12 +214,12 @@ namespace ams.data.Migrations
                         .HasMaxLength(300)
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("DeletedBy")
+                    b.Property<DateTime?>("DeletedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeletedUserId")
                         .HasMaxLength(300)
                         .HasColumnType("nvarchar(300)");
-
-                    b.Property<DateTime>("DeletedTime")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("ExpenseCode")
                         .HasColumnType("nvarchar(max)");
@@ -171,16 +230,16 @@ namespace ams.data.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsDeleted")
+                    b.Property<bool?>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsStatus")
-                        .HasColumnType("bit");
+                    b.Property<string>("IsStatus")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("LanguageId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("ModifiedTime")
+                    b.Property<DateTime?>("ModifiedTime")
                         .HasColumnType("datetime2");
 
                     b.Property<Guid?>("ModifiedUserId")
@@ -222,12 +281,12 @@ namespace ams.data.Migrations
                         .HasMaxLength(300)
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("DeletedBy")
+                    b.Property<DateTime?>("DeletedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeletedUserId")
                         .HasMaxLength(300)
                         .HasColumnType("nvarchar(300)");
-
-                    b.Property<DateTime>("DeletedTime")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("ExpenseCode")
                         .IsRequired()
@@ -241,16 +300,16 @@ namespace ams.data.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsDeleted")
+                    b.Property<bool?>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsStatus")
-                        .HasColumnType("bit");
+                    b.Property<string>("IsStatus")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("LanguageId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("ModifiedTime")
+                    b.Property<DateTime?>("ModifiedTime")
                         .HasColumnType("datetime2");
 
                     b.Property<Guid?>("ModifiedUserId")
@@ -294,12 +353,12 @@ namespace ams.data.Migrations
                         .HasMaxLength(300)
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("DeletedBy")
+                    b.Property<DateTime?>("DeletedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeletedUserId")
                         .HasMaxLength(300)
                         .HasColumnType("nvarchar(300)");
-
-                    b.Property<DateTime>("DeletedTime")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("HousingName")
                         .IsRequired()
@@ -309,16 +368,16 @@ namespace ams.data.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsDeleted")
+                    b.Property<bool?>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsStatus")
-                        .HasColumnType("bit");
+                    b.Property<string>("IsStatus")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("LanguageId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("ModifiedTime")
+                    b.Property<DateTime?>("ModifiedTime")
                         .HasColumnType("datetime2");
 
                     b.Property<Guid?>("ModifiedUserId")
@@ -359,12 +418,12 @@ namespace ams.data.Migrations
                         .HasMaxLength(300)
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("DeletedBy")
+                    b.Property<DateTime?>("DeletedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeletedUserId")
                         .HasMaxLength(300)
                         .HasColumnType("nvarchar(300)");
-
-                    b.Property<DateTime>("DeletedTime")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("HousingName")
                         .IsRequired()
@@ -374,16 +433,16 @@ namespace ams.data.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsDeleted")
+                    b.Property<bool?>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsStatus")
-                        .HasColumnType("bit");
+                    b.Property<string>("IsStatus")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("LanguageId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("ModifiedTime")
+                    b.Property<DateTime?>("ModifiedTime")
                         .HasColumnType("datetime2");
 
                     b.Property<Guid?>("ModifiedUserId")
@@ -402,6 +461,54 @@ namespace ams.data.Migrations
                     b.ToTable("HousingSafes");
                 });
 
+            modelBuilder.Entity("ams.entity.Entities.Role", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("CreateUserId")
+                        .HasMaxLength(300)
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("DeletedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeletedUserId")
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("IsStatus")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("LanguageId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("ModifiedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("ModifiedUserId")
+                        .HasMaxLength(300)
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("RoleType")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Roles");
+                });
+
             modelBuilder.Entity("ams.entity.Entities.User", b =>
                 {
                     b.Property<Guid>("Id")
@@ -415,12 +522,12 @@ namespace ams.data.Migrations
                         .HasMaxLength(300)
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("DeletedBy")
+                    b.Property<DateTime?>("DeletedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeletedUserId")
                         .HasMaxLength(300)
                         .HasColumnType("nvarchar(300)");
-
-                    b.Property<DateTime>("DeletedTime")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
                         .HasMaxLength(1000)
@@ -433,16 +540,16 @@ namespace ams.data.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsDeleted")
+                    b.Property<bool?>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsStatus")
-                        .HasColumnType("bit");
+                    b.Property<string>("IsStatus")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("LanguageId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("ModifiedTime")
+                    b.Property<DateTime?>("ModifiedTime")
                         .HasColumnType("datetime2");
 
                     b.Property<Guid?>("ModifiedUserId")

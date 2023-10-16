@@ -17,6 +17,8 @@
         public DbSet<HousingSafe> HousingSafes { get; set; }
         public DbSet<Expense> Expenses { get; set; }
         public DbSet<Debit> Debits { get; set; }
+        public DbSet<AdxMenu> AdxMenus { get; set; }
+        public DbSet<Role> Roles { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ams.data.Migrations
 {
     /// <inheritdoc />
-    public partial class init_ams_v1 : Migration
+    public partial class init_ams_v2 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -22,18 +22,65 @@ namespace ams.data.Migrations
                     IsTestAccount = table.Column<bool>(type: "bit", nullable: false),
                     CreateUserId = table.Column<Guid>(type: "uniqueidentifier", maxLength: 300, nullable: true),
                     ModifiedUserId = table.Column<Guid>(type: "uniqueidentifier", maxLength: 300, nullable: true),
-                    DeletedBy = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: true),
+                    DeletedUserId = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: true),
                     CreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ModifiedTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DeletedTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    IsStatus = table.Column<bool>(type: "bit", nullable: false),
+                    ModifiedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DeletedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: true),
+                    IsStatus = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     LanguageId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Accounts", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AdxMenus",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ParentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    MenuUrl = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    Icons = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    CreateUserId = table.Column<Guid>(type: "uniqueidentifier", maxLength: 300, nullable: true),
+                    ModifiedUserId = table.Column<Guid>(type: "uniqueidentifier", maxLength: 300, nullable: true),
+                    DeletedUserId = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: true),
+                    CreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ModifiedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DeletedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: true),
+                    IsStatus = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    LanguageId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AdxMenus", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Roles",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    RoleType = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    CreateUserId = table.Column<Guid>(type: "uniqueidentifier", maxLength: 300, nullable: true),
+                    ModifiedUserId = table.Column<Guid>(type: "uniqueidentifier", maxLength: 300, nullable: true),
+                    DeletedUserId = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: true),
+                    CreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ModifiedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DeletedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: true),
+                    IsStatus = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    LanguageId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Roles", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -48,12 +95,12 @@ namespace ams.data.Migrations
                     Surname = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: true),
                     CreateUserId = table.Column<Guid>(type: "uniqueidentifier", maxLength: 300, nullable: true),
                     ModifiedUserId = table.Column<Guid>(type: "uniqueidentifier", maxLength: 300, nullable: true),
-                    DeletedBy = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: true),
+                    DeletedUserId = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: true),
                     CreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ModifiedTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DeletedTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    IsStatus = table.Column<bool>(type: "bit", nullable: false),
+                    ModifiedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DeletedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: true),
+                    IsStatus = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     LanguageId = table.Column<int>(type: "int", nullable: true)
                 },
@@ -71,12 +118,12 @@ namespace ams.data.Migrations
                     ApartmentName = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: true),
                     CreateUserId = table.Column<Guid>(type: "uniqueidentifier", maxLength: 300, nullable: true),
                     ModifiedUserId = table.Column<Guid>(type: "uniqueidentifier", maxLength: 300, nullable: true),
-                    DeletedBy = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: true),
+                    DeletedUserId = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: true),
                     CreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ModifiedTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DeletedTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    IsStatus = table.Column<bool>(type: "bit", nullable: false),
+                    ModifiedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DeletedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: true),
+                    IsStatus = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     LanguageId = table.Column<int>(type: "int", nullable: true)
                 },
@@ -105,12 +152,12 @@ namespace ams.data.Migrations
                     Year = table.Column<int>(type: "int", nullable: true),
                     CreateUserId = table.Column<Guid>(type: "uniqueidentifier", maxLength: 300, nullable: true),
                     ModifiedUserId = table.Column<Guid>(type: "uniqueidentifier", maxLength: 300, nullable: true),
-                    DeletedBy = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: true),
+                    DeletedUserId = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: true),
                     CreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ModifiedTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DeletedTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    IsStatus = table.Column<bool>(type: "bit", nullable: false),
+                    ModifiedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DeletedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: true),
+                    IsStatus = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     LanguageId = table.Column<int>(type: "int", nullable: true)
                 },
@@ -142,12 +189,12 @@ namespace ams.data.Migrations
                     HousingName = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: false),
                     CreateUserId = table.Column<Guid>(type: "uniqueidentifier", maxLength: 300, nullable: true),
                     ModifiedUserId = table.Column<Guid>(type: "uniqueidentifier", maxLength: 300, nullable: true),
-                    DeletedBy = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: true),
+                    DeletedUserId = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: true),
                     CreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ModifiedTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DeletedTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    IsStatus = table.Column<bool>(type: "bit", nullable: false),
+                    ModifiedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DeletedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: true),
+                    IsStatus = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     LanguageId = table.Column<int>(type: "int", nullable: true)
                 },
@@ -180,12 +227,12 @@ namespace ams.data.Migrations
                     Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     CreateUserId = table.Column<Guid>(type: "uniqueidentifier", maxLength: 300, nullable: true),
                     ModifiedUserId = table.Column<Guid>(type: "uniqueidentifier", maxLength: 300, nullable: true),
-                    DeletedBy = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: true),
+                    DeletedUserId = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: true),
                     CreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ModifiedTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DeletedTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    IsStatus = table.Column<bool>(type: "bit", nullable: false),
+                    ModifiedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DeletedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: true),
+                    IsStatus = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     LanguageId = table.Column<int>(type: "int", nullable: true)
                 },
@@ -219,12 +266,12 @@ namespace ams.data.Migrations
                     Paid = table.Column<bool>(type: "bit", nullable: false),
                     CreateUserId = table.Column<Guid>(type: "uniqueidentifier", maxLength: 300, nullable: true),
                     ModifiedUserId = table.Column<Guid>(type: "uniqueidentifier", maxLength: 300, nullable: true),
-                    DeletedBy = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: true),
+                    DeletedUserId = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: true),
                     CreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ModifiedTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DeletedTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    IsStatus = table.Column<bool>(type: "bit", nullable: false),
+                    ModifiedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DeletedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: true),
+                    IsStatus = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     LanguageId = table.Column<int>(type: "int", nullable: true)
                 },
@@ -284,6 +331,9 @@ namespace ams.data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "AdxMenus");
+
+            migrationBuilder.DropTable(
                 name: "Debits");
 
             migrationBuilder.DropTable(
@@ -291,6 +341,9 @@ namespace ams.data.Migrations
 
             migrationBuilder.DropTable(
                 name: "HousingSafes");
+
+            migrationBuilder.DropTable(
+                name: "Roles");
 
             migrationBuilder.DropTable(
                 name: "Users");
