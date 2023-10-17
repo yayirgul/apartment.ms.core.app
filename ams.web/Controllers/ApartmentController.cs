@@ -4,7 +4,8 @@ namespace ams.web.Controllers
 {
 	public class ApartmentController : Controller
 	{
-		public IActionResult Apartments()
+        [Route("ams/apartments")]
+        public IActionResult Apartments()
 		{
 			return View();
 		}

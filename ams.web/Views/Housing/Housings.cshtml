@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewData["Title"] = "Housings";
+    ViewData["Title"] = "Konutlar";
 }
 
 <h1></h1>
@@ -23,3 +23,63 @@
         </div>
     </div>
 }
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="card card-custom">
+                <div class="card-header">
+                    <div class="card-title">
+                        <span class="card-icon">
+                            <i class="far fa-building text-primary"></i>
+                        </span>
+                        <h3 class="card-label">Daireler</h3>
+                    </div>
+                    <div class="card-toolbar">
+                        <a href="javascript:;" class="btn btn-primary font-weight-bolder">
+                            Yeni Daire
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+
+                    <!--begin::Search Form-->
+                    <div class="mb-7">
+                        <div class="row align-items-center">
+                            <div class="col-lg-9 col-xl-8">
+                                <div class="row align-items-center">
+
+                                    <div class="col-md-4 my-2 my-md-0">
+                                        <div class="input-icon">
+                                            <input type="text" class="form-control" placeholder="Search..." id="kt_datatable_search_query" />
+                                            <span>
+                                                <i class="flaticon2-search-1 text-muted"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4 my-2 my-md-0">
+                                        <div class="d-flex align-items-center">
+                                            <label class="mr-3 mb-0 d-none d-md-block">Status:</label>
+                                            <select class="form-control" id="kt_datatable_search_status">
+                                                <option value="">All</option>
+                                                <option value="1">Active</option>
+                                                <option value="2">Passive</option>
+                                            </select>
+                                        </div>
+                                    </div>
+ 
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    
+                    <div class="datatable datatable-bordered datatable-head-custom" id="kt_datatable"></div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
