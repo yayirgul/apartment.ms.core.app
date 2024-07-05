@@ -15,5 +15,19 @@
         public string? Firstname { get; set; }
         [StringLength(300)]
         public string? Surname { get; set; }
+        public Guid? AccountId { get; set; }
+
+        /*
+         
+        AppRole
+        AppRoleClaim
+
+        AppUser
+        AppUserClaim
+        AppUserLogin
+        AppUserRole
+        AppUserToken
+         
+         */
     }
 }

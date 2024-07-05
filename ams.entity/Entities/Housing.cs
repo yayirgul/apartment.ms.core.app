@@ -9,13 +9,17 @@
         public Guid OwnerId { get; set; }
         [ForeignKey(nameof(Account))]
         public Guid AccountId { get; set; }
-        public Account Accounts { get; set; }
+        public Account? Accounts { get; set; }
         public Guid ApartmentId { get; set; }
-        public Apartment Apartments { get; set; }
+        public Apartment? Apartments { get; set; }
         [StringLength(300)]
-        public string HousingName { get; set; }
+        public string? HousingName { get; set; }
+
+        //[ForeignKey(nameof(HousingSafe))]
+        //public Guid? HousingSafeId { get; set; }
+        //public HousingSafe? HousingSafe { get; set; }
 
         // TODO : 1 konutun 1'den çok borcu olabilir
-        public ICollection<Debit> Debits { get; set; }
+        public ICollection<Debit>? Debits { get; set; }
     }
 }

@@ -1,27 +1,34 @@
 ﻿namespace ams.data.Context
 {
     using ams.entity.Entities;
+    using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
     using System.Reflection;
 
-    public class AppDbContext : DbContext
+    public class AppDbContext : IdentityDbContext<AppUser, AppRole, Guid>
     {
         public AppDbContext() { }
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) {}
 
         public DbSet<Account> Accounts { get; set; }
-        public DbSet<User> Users { get; set; }
         public DbSet<Apartment> Apartments { get; set; }
         public DbSet<Housing> Housings { get; set; }
         public DbSet<HousingSafe> HousingSafes { get; set; }
         public DbSet<Expense> Expenses { get; set; }
         public DbSet<Debit> Debits { get; set; }
         public DbSet<AdxMenu> AdxMenus { get; set; }
-        public DbSet<Role> Roles { get; set; }
+
+        //public DbSet<User> Users { get; set; }
+        //public DbSet<Role> Roles { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            /*
+             *  TODO : "IdentityDbContext" yapısını kullandığım için "base.OnModelCreating(builder)" nesnemi ekledim
+             */
+
+            base.OnModelCreating(builder);
             builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
     }

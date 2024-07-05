@@ -22,6 +22,141 @@ namespace ams.data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetRoleClaims", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserClaims", (string)null);
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityUserClaim<Guid>");
+
+                    b.UseTphMappingStrategy();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
+                {
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ProviderKey")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ProviderDisplayName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("LoginProvider", "ProviderKey");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserLogins", (string)null);
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityUserLogin<Guid>");
+
+                    b.UseTphMappingStrategy();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("UserId", "RoleId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetUserRoles", (string)null);
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityUserRole<Guid>");
+
+                    b.UseTphMappingStrategy();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("UserId", "LoginProvider", "Name");
+
+                    b.ToTable("AspNetUserTokens", (string)null);
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityUserToken<Guid>");
+
+                    b.UseTphMappingStrategy();
+                });
+
             modelBuilder.Entity("ams.entity.Entities.Account", b =>
                 {
                     b.Property<Guid>("Id")
@@ -29,23 +164,23 @@ namespace ams.data.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("AccountName")
-                        .IsRequired()
                         .HasMaxLength(300)
                         .HasColumnType("nvarchar(300)");
 
                     b.Property<DateTime>("CreateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("CreateUserId")
-                        .HasMaxLength(300)
+                    b.Property<Guid?>("CreateUser")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("DeletedTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("DeletedUserId")
-                        .HasMaxLength(300)
-                        .HasColumnType("nvarchar(300)");
+                    b.Property<Guid?>("DeletedUser")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Domain")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
@@ -68,8 +203,7 @@ namespace ams.data.Migrations
                     b.Property<DateTime?>("ModifiedTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("ModifiedUserId")
-                        .HasMaxLength(300)
+                    b.Property<Guid?>("ModifiedUser")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("TrialEndDate")
@@ -89,16 +223,14 @@ namespace ams.data.Migrations
                     b.Property<DateTime>("CreateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("CreateUserId")
-                        .HasMaxLength(300)
+                    b.Property<Guid?>("CreateUser")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("DeletedTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("DeletedUserId")
-                        .HasMaxLength(300)
-                        .HasColumnType("nvarchar(300)");
+                    b.Property<Guid?>("DeletedUser")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Icons")
                         .HasMaxLength(50)
@@ -123,8 +255,7 @@ namespace ams.data.Migrations
                     b.Property<DateTime?>("ModifiedTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("ModifiedUserId")
-                        .HasMaxLength(300)
+                    b.Property<Guid?>("ModifiedUser")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("ParentId")
@@ -155,16 +286,14 @@ namespace ams.data.Migrations
                     b.Property<DateTime>("CreateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("CreateUserId")
-                        .HasMaxLength(300)
+                    b.Property<Guid?>("CreateUser")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("DeletedTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("DeletedUserId")
-                        .HasMaxLength(300)
-                        .HasColumnType("nvarchar(300)");
+                    b.Property<Guid?>("DeletedUser")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
@@ -181,8 +310,7 @@ namespace ams.data.Migrations
                     b.Property<DateTime?>("ModifiedTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("ModifiedUserId")
-                        .HasMaxLength(300)
+                    b.Property<Guid?>("ModifiedUser")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
@@ -190,6 +318,153 @@ namespace ams.data.Migrations
                     b.HasIndex("AccountId");
 
                     b.ToTable("Apartments");
+                });
+
+            modelBuilder.Entity("ams.entity.Entities.AppRole", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasDatabaseName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
+
+                    b.ToTable("AspNetRoles", (string)null);
+                });
+
+            modelBuilder.Entity("ams.entity.Entities.AppUser", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("AccountId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("CreateUser")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("DeletedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("DeletedUser")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Firstname")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Lastname")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<DateTime?>("ModifiedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("ModifiedUser")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedEmail")
+                        .HasDatabaseName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasDatabaseName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("d719553d-48ce-4edd-bc71-5e4a44ddce8b"),
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "b56e94e0-9521-45c9-8f56-9c3b77399431",
+                            CreateTime = new DateTime(2024, 7, 6, 0, 59, 42, 947, DateTimeKind.Local).AddTicks(6959),
+                            Email = "yayirgul@gmail.com",
+                            EmailConfirmed = true,
+                            Firstname = "Yunus",
+                            IsActive = false,
+                            Lastname = "AYIRGÜL",
+                            LockoutEnabled = false,
+                            NormalizedEmail = "YAYIRGUL@GMAIL.COM",
+                            NormalizedUserName = "YAYIRGUL@GMAIL.COM",
+                            PasswordHash = "AQAAAAIAAYagAAAAENlfkvPXNMGn3d/DduRMqLWcgxUmoTRE6iqUnnAYGgaHMiI1IPsx4+iZ/9X+3ktGNA==",
+                            PhoneNumber = "+905558008040",
+                            PhoneNumberConfirmed = true,
+                            SecurityStamp = "36dd2ed8-3c9b-482e-a893-3ab381021479",
+                            TwoFactorEnabled = false,
+                            UserName = "yayirgul@gmail.com"
+                        });
                 });
 
             modelBuilder.Entity("ams.entity.Entities.Debit", b =>
@@ -201,22 +476,23 @@ namespace ams.data.Migrations
                     b.Property<Guid>("AccountId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<decimal?>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<Guid>("ApartmentId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("CreateUserId")
-                        .HasMaxLength(300)
+                    b.Property<Guid?>("CreateUser")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("DeletedTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("DeletedUserId")
-                        .HasMaxLength(300)
-                        .HasColumnType("nvarchar(300)");
+                    b.Property<Guid?>("DeletedUser")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ExpenseCode")
                         .HasColumnType("nvarchar(max)");
@@ -239,8 +515,7 @@ namespace ams.data.Migrations
                     b.Property<DateTime?>("ModifiedTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("ModifiedUserId")
-                        .HasMaxLength(300)
+                    b.Property<Guid?>("ModifiedUser")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("OwnerId")
@@ -274,23 +549,19 @@ namespace ams.data.Migrations
                     b.Property<DateTime>("CreateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("CreateUserId")
-                        .HasMaxLength(300)
+                    b.Property<Guid?>("CreateUser")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("DeletedTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("DeletedUserId")
-                        .HasMaxLength(300)
-                        .HasColumnType("nvarchar(300)");
+                    b.Property<Guid?>("DeletedUser")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ExpenseCode")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ExpenseName")
-                        .IsRequired()
                         .HasMaxLength(300)
                         .HasColumnType("nvarchar(300)");
 
@@ -309,15 +580,11 @@ namespace ams.data.Migrations
                     b.Property<DateTime?>("ModifiedTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("ModifiedUserId")
-                        .HasMaxLength(300)
+                    b.Property<Guid?>("ModifiedUser")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int?>("Month")
                         .HasColumnType("int");
-
-                    b.Property<Guid>("OwnerId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int?>("Year")
                         .HasColumnType("int");
@@ -346,19 +613,16 @@ namespace ams.data.Migrations
                     b.Property<DateTime>("CreateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("CreateUserId")
-                        .HasMaxLength(300)
+                    b.Property<Guid?>("CreateUser")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("DeletedTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("DeletedUserId")
-                        .HasMaxLength(300)
-                        .HasColumnType("nvarchar(300)");
+                    b.Property<Guid?>("DeletedUser")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("HousingName")
-                        .IsRequired()
                         .HasMaxLength(300)
                         .HasColumnType("nvarchar(300)");
 
@@ -377,8 +641,7 @@ namespace ams.data.Migrations
                     b.Property<DateTime?>("ModifiedTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("ModifiedUserId")
-                        .HasMaxLength(300)
+                    b.Property<Guid?>("ModifiedUser")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("OwnerId")
@@ -411,21 +674,17 @@ namespace ams.data.Migrations
                     b.Property<DateTime>("CreateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("CreateUserId")
-                        .HasMaxLength(300)
+                    b.Property<Guid?>("CreateUser")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("DeletedTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("DeletedUserId")
-                        .HasMaxLength(300)
-                        .HasColumnType("nvarchar(300)");
+                    b.Property<Guid?>("DeletedUser")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("HousingName")
-                        .IsRequired()
-                        .HasMaxLength(300)
-                        .HasColumnType("nvarchar(300)");
+                    b.Property<Guid>("HousingId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
@@ -442,8 +701,7 @@ namespace ams.data.Migrations
                     b.Property<DateTime?>("ModifiedTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("ModifiedUserId")
-                        .HasMaxLength(300)
+                    b.Property<Guid?>("ModifiedUser")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("OwnerId")
@@ -455,119 +713,88 @@ namespace ams.data.Migrations
 
                     b.HasIndex("ApartmentId");
 
+                    b.HasIndex("HousingId");
+
                     b.ToTable("HousingSafes");
                 });
 
-            modelBuilder.Entity("ams.entity.Entities.Role", b =>
+            modelBuilder.Entity("ams.entity.Entities.AppUserClaim", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>");
 
-                    b.Property<DateTime>("CreateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("CreateUserId")
-                        .HasMaxLength(300)
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("DeletedTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("DeletedUserId")
-                        .HasMaxLength(300)
-                        .HasColumnType("nvarchar(300)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("IsStatus")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("LanguageId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("ModifiedTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("ModifiedUserId")
-                        .HasMaxLength(300)
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("RoleType")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Roles");
+                    b.HasDiscriminator().HasValue("AppUserClaim");
                 });
 
-            modelBuilder.Entity("ams.entity.Entities.User", b =>
+            modelBuilder.Entity("ams.entity.Entities.AppUserLogin", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>");
 
-                    b.Property<DateTime>("CreateTime")
-                        .HasColumnType("datetime2");
+                    b.HasDiscriminator().HasValue("AppUserLogin");
+                });
 
-                    b.Property<Guid?>("CreateUserId")
-                        .HasMaxLength(300)
-                        .HasColumnType("uniqueidentifier");
+            modelBuilder.Entity("ams.entity.Entities.AppUserRole", b =>
+                {
+                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>");
 
-                    b.Property<DateTime?>("DeletedTime")
-                        .HasColumnType("datetime2");
+                    b.HasDiscriminator().HasValue("AppUserRole");
+                });
 
-                    b.Property<string>("DeletedUserId")
-                        .HasMaxLength(300)
-                        .HasColumnType("nvarchar(300)");
+            modelBuilder.Entity("ams.entity.Entities.AppUserToken", b =>
+                {
+                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>");
 
-                    b.Property<string>("Email")
-                        .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)");
+                    b.HasDiscriminator().HasValue("AppUserToken");
+                });
 
-                    b.Property<string>("Firstname")
-                        .HasMaxLength(300)
-                        .HasColumnType("nvarchar(300)");
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
+                {
+                    b.HasOne("ams.entity.Entities.AppRole", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
 
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
+                {
+                    b.HasOne("ams.entity.Entities.AppUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
 
-                    b.Property<bool?>("IsDeleted")
-                        .HasColumnType("bit");
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
+                {
+                    b.HasOne("ams.entity.Entities.AppUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
 
-                    b.Property<string>("IsStatus")
-                        .HasColumnType("nvarchar(max)");
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
+                {
+                    b.HasOne("ams.entity.Entities.AppRole", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Property<int?>("LanguageId")
-                        .HasColumnType("int");
+                    b.HasOne("ams.entity.Entities.AppUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
 
-                    b.Property<DateTime?>("ModifiedTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("ModifiedUserId")
-                        .HasMaxLength(300)
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Password")
-                        .HasMaxLength(300)
-                        .HasColumnType("nvarchar(300)");
-
-                    b.Property<string>("Surname")
-                        .HasMaxLength(300)
-                        .HasColumnType("nvarchar(300)");
-
-                    b.Property<string>("Username")
-                        .HasMaxLength(300)
-                        .HasColumnType("nvarchar(300)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Users");
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
+                {
+                    b.HasOne("ams.entity.Entities.AppUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ams.entity.Entities.Apartment", b =>
@@ -642,9 +869,17 @@ namespace ams.data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("ams.entity.Entities.Housing", "Housing")
+                        .WithMany()
+                        .HasForeignKey("HousingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Accounts");
 
                     b.Navigation("Apartments");
+
+                    b.Navigation("Housing");
                 });
 
             modelBuilder.Entity("ams.entity.Entities.Account", b =>

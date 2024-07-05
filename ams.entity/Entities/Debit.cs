@@ -9,12 +9,15 @@
 
         [ForeignKey(nameof(Account))]
         public Guid AccountId { get; set; }
-        [ForeignKey(nameof(Housing))]
 
+        [ForeignKey(nameof(Housing))]
         public Guid HousingId { get; set; }
-        public Housing Housings { get; set; } // 1 borcun 1 konutu olur
+        public Housing? Housings { get; set; } // 1 Borcun 1 konutu olur.
 
         public Guid ApartmentId { get; set; }
+
+        [Column(TypeName = "decimal(18,2)")]
+        public decimal? Amount { get; set; }
         public string? ExpenseCode { get; set; }
         public bool Paid { get; set; }
     }

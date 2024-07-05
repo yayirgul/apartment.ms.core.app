@@ -5,12 +5,9 @@
     public abstract class EntityBase : IEntityBase
     {
         public virtual Guid Id { get; set; } = Guid.NewGuid();
-        [StringLength(300)]
-        public virtual Guid? CreateUserId { get; set; }
-        [StringLength(300)]
-        public virtual Guid? ModifiedUserId { get; set; }
-        [StringLength(300)]
-        public virtual string? DeletedUserId { get; set; }
+        public virtual Guid? CreateUser { get; set; }
+        public virtual Guid? ModifiedUser { get; set; }
+        public virtual Guid? DeletedUser { get; set; }
         public virtual DateTime CreateTime { get; set; } = DateTime.Now;
         public virtual DateTime? ModifiedTime { get; set; }
         public virtual DateTime? DeletedTime { get; set; }
