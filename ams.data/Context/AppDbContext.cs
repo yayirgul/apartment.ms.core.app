@@ -5,7 +5,7 @@
     using Microsoft.EntityFrameworkCore;
     using System.Reflection;
 
-    public class AppDbContext : IdentityDbContext<AppUser, AppRole, Guid>
+    public class AppDbContext : IdentityDbContext<AppUser, AppRole, Guid, AppUserClaim, AppUserRole, AppUserLogin, AppRoleClaim, AppUserToken>
     {
         public AppDbContext() { }
 

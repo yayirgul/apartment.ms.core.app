@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace ams.entity.Entities
 {
-    public class AppUser : IdentityUser<Guid>, IEntityBase
+    public class AppUser : IdentityUser<Guid>
     {
         public Guid? AccountId { get; set; }
         public Guid? CreateUser { get; set; }

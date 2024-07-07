@@ -1,7 +1,5 @@
 ﻿namespace ams.core.Entities
 {
-    using System.ComponentModel.DataAnnotations;
-
     public abstract class EntityBase : IEntityBase
     {
         public virtual Guid Id { get; set; } = Guid.NewGuid();

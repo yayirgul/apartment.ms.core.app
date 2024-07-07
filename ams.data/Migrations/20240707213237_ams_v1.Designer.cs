@@ -12,7 +12,7 @@ using ams.data.Context;
 namespace ams.data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240705215943_ams_v1")]
+    [Migration("20240707213237_ams_v1")]
     partial class ams_v1
     {
         /// <inheritdoc />
@@ -24,141 +24,6 @@ namespace ams.data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ClaimType")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ClaimValue")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("RoleId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("RoleId");
-
-                    b.ToTable("AspNetRoleClaims", (string)null);
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ClaimType")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ClaimValue")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("AspNetUserClaims", (string)null);
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityUserClaim<Guid>");
-
-                    b.UseTphMappingStrategy();
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
-                {
-                    b.Property<string>("LoginProvider")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ProviderKey")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ProviderDisplayName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("LoginProvider", "ProviderKey");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("AspNetUserLogins", (string)null);
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityUserLogin<Guid>");
-
-                    b.UseTphMappingStrategy();
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
-                {
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("RoleId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("UserId", "RoleId");
-
-                    b.HasIndex("RoleId");
-
-                    b.ToTable("AspNetUserRoles", (string)null);
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityUserRole<Guid>");
-
-                    b.UseTphMappingStrategy();
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
-                {
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("LoginProvider")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Value")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("UserId", "LoginProvider", "Name");
-
-                    b.ToTable("AspNetUserTokens", (string)null);
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityUserToken<Guid>");
-
-                    b.UseTphMappingStrategy();
-                });
 
             modelBuilder.Entity("ams.entity.Entities.Account", b =>
                 {
@@ -194,9 +59,6 @@ namespace ams.data.Migrations
                     b.Property<string>("IsStatus")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsTestAccount")
-                        .HasColumnType("bit");
-
                     b.Property<bool>("IsTrial")
                         .HasColumnType("bit");
 
@@ -215,6 +77,18 @@ namespace ams.data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Accounts");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("db72e0e2-3201-414f-9753-190466e024f3"),
+                            AccountName = "ABC A.Ş",
+                            CreateTime = new DateTime(2024, 7, 8, 0, 32, 36, 823, DateTimeKind.Local).AddTicks(5598),
+                            Domain = "abc.com",
+                            IsActive = true,
+                            IsDeleted = false,
+                            IsTrial = true
+                        });
                 });
 
             modelBuilder.Entity("ams.entity.Entities.AdxMenu", b =>
@@ -251,10 +125,6 @@ namespace ams.data.Migrations
                     b.Property<int?>("LanguageId")
                         .HasColumnType("int");
 
-                    b.Property<string>("MenuUrl")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
                     b.Property<DateTime?>("ModifiedTime")
                         .HasColumnType("datetime2");
 
@@ -268,9 +138,25 @@ namespace ams.data.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<string>("Urls")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
                     b.HasKey("Id");
 
                     b.ToTable("AdxMenus");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("a2b3d904-401c-431f-9845-7fa2652d87fc"),
+                            CreateTime = new DateTime(2024, 7, 8, 0, 32, 36, 823, DateTimeKind.Local).AddTicks(6651),
+                            IsActive = true,
+                            IsDeleted = false,
+                            ParentId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Title = "Pano",
+                            Urls = "/"
+                        });
                 });
 
             modelBuilder.Entity("ams.entity.Entities.Apartment", b =>
@@ -321,6 +207,17 @@ namespace ams.data.Migrations
                     b.HasIndex("AccountId");
 
                     b.ToTable("Apartments");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("d4033eef-ba92-4a1f-9ecb-1eee6996214a"),
+                            AccountId = new Guid("db72e0e2-3201-414f-9753-190466e024f3"),
+                            ApartmentName = "Huzur APT",
+                            CreateTime = new DateTime(2024, 7, 8, 0, 32, 36, 823, DateTimeKind.Local).AddTicks(7420),
+                            IsActive = true,
+                            IsDeleted = false
+                        });
                 });
 
             modelBuilder.Entity("ams.entity.Entities.AppRole", b =>
@@ -349,6 +246,53 @@ namespace ams.data.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("4271dd20-390a-46ce-b67d-59678a720270"),
+                            ConcurrencyStamp = "fa99ef65-6edb-42e0-b6d2-c2ce9d95fedd",
+                            Name = "admin",
+                            NormalizedName = "ADMIN"
+                        },
+                        new
+                        {
+                            Id = new Guid("4438dff4-28d6-46c1-90eb-f6b2a233d97e"),
+                            ConcurrencyStamp = "3ede9a0f-26f3-43fe-87f6-7e15e9a9ca6d",
+                            Name = "agent",
+                            NormalizedName = "AGENT"
+                        },
+                        new
+                        {
+                            Id = new Guid("051004f1-a383-4746-a722-3b051d12aaea"),
+                            ConcurrencyStamp = "98e452e5-86b6-45c7-bc25-f17e148bf42d",
+                            Name = "user",
+                            NormalizedName = "USER"
+                        });
+                });
+
+            modelBuilder.Entity("ams.entity.Entities.AppRoleClaim", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetRoleClaims", (string)null);
                 });
 
             modelBuilder.Entity("ams.entity.Entities.AppUser", b =>
@@ -449,10 +393,10 @@ namespace ams.data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("d719553d-48ce-4edd-bc71-5e4a44ddce8b"),
+                            Id = new Guid("6fa95f6e-2516-49e8-9ae6-7745e7743dbf"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "b56e94e0-9521-45c9-8f56-9c3b77399431",
-                            CreateTime = new DateTime(2024, 7, 6, 0, 59, 42, 947, DateTimeKind.Local).AddTicks(6959),
+                            ConcurrencyStamp = "045ea4d2-7772-4801-af87-806bbb592b37",
+                            CreateTime = new DateTime(2024, 7, 8, 0, 32, 36, 824, DateTimeKind.Local).AddTicks(8638),
                             Email = "yayirgul@gmail.com",
                             EmailConfirmed = true,
                             Firstname = "Yunus",
@@ -461,13 +405,153 @@ namespace ams.data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "YAYIRGUL@GMAIL.COM",
                             NormalizedUserName = "YAYIRGUL@GMAIL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAENlfkvPXNMGn3d/DduRMqLWcgxUmoTRE6iqUnnAYGgaHMiI1IPsx4+iZ/9X+3ktGNA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEB3cM9raBiYDolpPP7wPpz0avlkKGhLOErKByloGqFcx4vGOGpbPwIC8SIcNi2ugcQ==",
                             PhoneNumber = "+905558008040",
                             PhoneNumberConfirmed = true,
-                            SecurityStamp = "36dd2ed8-3c9b-482e-a893-3ab381021479",
+                            SecurityStamp = "2e2a8b70-9f3d-40fe-bcf0-80a2451038d9",
                             TwoFactorEnabled = false,
                             UserName = "yayirgul@gmail.com"
+                        },
+                        new
+                        {
+                            Id = new Guid("89da7c75-8291-4baf-9060-028a07393dde"),
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "a2e4bac1-8f97-41bd-ac7e-6cefa4ca8920",
+                            CreateTime = new DateTime(2024, 7, 8, 0, 32, 36, 860, DateTimeKind.Local).AddTicks(7795),
+                            Email = "erdem@makronet.com",
+                            EmailConfirmed = true,
+                            Firstname = "Erdem",
+                            IsActive = false,
+                            Lastname = "Tekin",
+                            LockoutEnabled = false,
+                            NormalizedEmail = "ERDEM@MAKRONET.COM",
+                            NormalizedUserName = "ERDEM@MAKRONET.COM",
+                            PasswordHash = "AQAAAAIAAYagAAAAEA9GX165YpgvRxBDRhEZpdlz4TJKFpXNGHiMvhvIQ+26K3Z0RGm+8PKd8a9L9zaHcA==",
+                            PhoneNumber = "+905558008050",
+                            PhoneNumberConfirmed = true,
+                            SecurityStamp = "a1a84793-b072-49be-88b4-5c1c3cbf6881",
+                            TwoFactorEnabled = false,
+                            UserName = "erdem@makronet.com"
+                        },
+                        new
+                        {
+                            Id = new Guid("a35a610d-689f-4ab4-9324-cc227bfdbfba"),
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "b94c447b-dd8b-4d8f-84a1-66a1e79051c5",
+                            CreateTime = new DateTime(2024, 7, 8, 0, 32, 36, 898, DateTimeKind.Local).AddTicks(8510),
+                            Email = "umut@makronet.com",
+                            EmailConfirmed = true,
+                            Firstname = "Umut",
+                            IsActive = false,
+                            Lastname = "Arslan",
+                            LockoutEnabled = false,
+                            NormalizedEmail = "UMUT@MAKRONET.COM",
+                            NormalizedUserName = "UMUT@MAKRONET.COM",
+                            PasswordHash = "AQAAAAIAAYagAAAAEDez6OPAgB7WEEGM46NKXnFxU3LEGrWucmwqBuDIwcryQxNhjIQoW5W8sGObpGEYxg==",
+                            PhoneNumber = "+905558008060",
+                            PhoneNumberConfirmed = true,
+                            SecurityStamp = "d694df45-4f0c-4451-b6b1-c3610d0d6d05",
+                            TwoFactorEnabled = false,
+                            UserName = "umut@makronet.com"
                         });
+                });
+
+            modelBuilder.Entity("ams.entity.Entities.AppUserClaim", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserClaims", (string)null);
+                });
+
+            modelBuilder.Entity("ams.entity.Entities.AppUserLogin", b =>
+                {
+                    b.Property<string>("LoginProvider")
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<string>("ProviderKey")
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<string>("ProviderDisplayName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("LoginProvider", "ProviderKey");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserLogins", (string)null);
+                });
+
+            modelBuilder.Entity("ams.entity.Entities.AppUserRole", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("UserId", "RoleId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetUserRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = new Guid("6fa95f6e-2516-49e8-9ae6-7745e7743dbf"),
+                            RoleId = new Guid("4271dd20-390a-46ce-b67d-59678a720270")
+                        },
+                        new
+                        {
+                            UserId = new Guid("89da7c75-8291-4baf-9060-028a07393dde"),
+                            RoleId = new Guid("4438dff4-28d6-46c1-90eb-f6b2a233d97e")
+                        },
+                        new
+                        {
+                            UserId = new Guid("a35a610d-689f-4ab4-9324-cc227bfdbfba"),
+                            RoleId = new Guid("051004f1-a383-4746-a722-3b051d12aaea")
+                        });
+                });
+
+            modelBuilder.Entity("ams.entity.Entities.AppUserToken", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("UserId", "LoginProvider", "Name");
+
+                    b.ToTable("AspNetUserTokens", (string)null);
                 });
 
             modelBuilder.Entity("ams.entity.Entities.Debit", b =>
@@ -529,6 +613,10 @@ namespace ams.data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AccountId");
+
+                    b.HasIndex("ApartmentId");
+
                     b.HasIndex("HousingId");
 
                     b.ToTable("Debits");
@@ -572,6 +660,9 @@ namespace ams.data.Migrations
                         .HasColumnType("bit");
 
                     b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsFixed")
                         .HasColumnType("bit");
 
                     b.Property<string>("IsStatus")
@@ -647,7 +738,7 @@ namespace ams.data.Migrations
                     b.Property<Guid?>("ModifiedUser")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("OwnerId")
+                    b.Property<Guid?>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
@@ -656,7 +747,21 @@ namespace ams.data.Migrations
 
                     b.HasIndex("ApartmentId");
 
+                    b.HasIndex("UserId");
+
                     b.ToTable("Housings");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("709a770b-66c6-4adc-bd19-6438117bf646"),
+                            AccountId = new Guid("db72e0e2-3201-414f-9753-190466e024f3"),
+                            ApartmentId = new Guid("d4033eef-ba92-4a1f-9ecb-1eee6996214a"),
+                            CreateTime = new DateTime(2024, 7, 8, 0, 32, 36, 935, DateTimeKind.Local).AddTicks(4399),
+                            HousingName = "Daire 1",
+                            IsActive = true,
+                            IsDeleted = false
+                        });
                 });
 
             modelBuilder.Entity("ams.entity.Entities.HousingSafe", b =>
@@ -707,7 +812,7 @@ namespace ams.data.Migrations
                     b.Property<Guid?>("ModifiedUser")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("OwnerId")
+                    b.Property<Guid?>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
@@ -718,86 +823,22 @@ namespace ams.data.Migrations
 
                     b.HasIndex("HousingId");
 
+                    b.HasIndex("UserId");
+
                     b.ToTable("HousingSafes");
-                });
 
-            modelBuilder.Entity("ams.entity.Entities.AppUserClaim", b =>
-                {
-                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>");
-
-                    b.HasDiscriminator().HasValue("AppUserClaim");
-                });
-
-            modelBuilder.Entity("ams.entity.Entities.AppUserLogin", b =>
-                {
-                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>");
-
-                    b.HasDiscriminator().HasValue("AppUserLogin");
-                });
-
-            modelBuilder.Entity("ams.entity.Entities.AppUserRole", b =>
-                {
-                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>");
-
-                    b.HasDiscriminator().HasValue("AppUserRole");
-                });
-
-            modelBuilder.Entity("ams.entity.Entities.AppUserToken", b =>
-                {
-                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>");
-
-                    b.HasDiscriminator().HasValue("AppUserToken");
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
-                {
-                    b.HasOne("ams.entity.Entities.AppRole", null)
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
-                {
-                    b.HasOne("ams.entity.Entities.AppUser", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
-                {
-                    b.HasOne("ams.entity.Entities.AppUser", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
-                {
-                    b.HasOne("ams.entity.Entities.AppRole", null)
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ams.entity.Entities.AppUser", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
-                {
-                    b.HasOne("ams.entity.Entities.AppUser", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("666776f7-518b-4805-a726-eba238e03fc4"),
+                            AccountId = new Guid("db72e0e2-3201-414f-9753-190466e024f3"),
+                            Amount = 100m,
+                            ApartmentId = new Guid("d4033eef-ba92-4a1f-9ecb-1eee6996214a"),
+                            CreateTime = new DateTime(2024, 7, 8, 0, 32, 36, 935, DateTimeKind.Local).AddTicks(5018),
+                            HousingId = new Guid("709a770b-66c6-4adc-bd19-6438117bf646"),
+                            IsActive = true,
+                            IsDeleted = false
+                        });
                 });
 
             modelBuilder.Entity("ams.entity.Entities.Apartment", b =>
@@ -809,15 +850,82 @@ namespace ams.data.Migrations
                     b.Navigation("Accounts");
                 });
 
+            modelBuilder.Entity("ams.entity.Entities.AppRoleClaim", b =>
+                {
+                    b.HasOne("ams.entity.Entities.AppRole", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("ams.entity.Entities.AppUserClaim", b =>
+                {
+                    b.HasOne("ams.entity.Entities.AppUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("ams.entity.Entities.AppUserLogin", b =>
+                {
+                    b.HasOne("ams.entity.Entities.AppUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("ams.entity.Entities.AppUserRole", b =>
+                {
+                    b.HasOne("ams.entity.Entities.AppRole", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ams.entity.Entities.AppUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("ams.entity.Entities.AppUserToken", b =>
+                {
+                    b.HasOne("ams.entity.Entities.AppUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("ams.entity.Entities.Debit", b =>
                 {
-                    b.HasOne("ams.entity.Entities.Housing", "Housings")
+                    b.HasOne("ams.entity.Entities.Account", "Account")
+                        .WithMany()
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ams.entity.Entities.Apartment", "Apartment")
+                        .WithMany()
+                        .HasForeignKey("ApartmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ams.entity.Entities.Housing", "Housing")
                         .WithMany("Debits")
                         .HasForeignKey("HousingId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Housings");
+                    b.Navigation("Account");
+
+                    b.Navigation("Apartment");
+
+                    b.Navigation("Housing");
                 });
 
             modelBuilder.Entity("ams.entity.Entities.Expense", b =>
@@ -841,32 +949,38 @@ namespace ams.data.Migrations
 
             modelBuilder.Entity("ams.entity.Entities.Housing", b =>
                 {
-                    b.HasOne("ams.entity.Entities.Account", "Accounts")
+                    b.HasOne("ams.entity.Entities.Account", "Account")
                         .WithMany("Housings")
                         .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ams.entity.Entities.Apartment", "Apartments")
+                    b.HasOne("ams.entity.Entities.Apartment", "Apartment")
                         .WithMany()
                         .HasForeignKey("ApartmentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Accounts");
+                    b.HasOne("ams.entity.Entities.AppUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
 
-                    b.Navigation("Apartments");
+                    b.Navigation("Account");
+
+                    b.Navigation("Apartment");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ams.entity.Entities.HousingSafe", b =>
                 {
-                    b.HasOne("ams.entity.Entities.Account", "Accounts")
+                    b.HasOne("ams.entity.Entities.Account", "Account")
                         .WithMany()
                         .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ams.entity.Entities.Apartment", "Apartments")
+                    b.HasOne("ams.entity.Entities.Apartment", "Apartment")
                         .WithMany()
                         .HasForeignKey("ApartmentId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -878,11 +992,17 @@ namespace ams.data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Accounts");
+                    b.HasOne("ams.entity.Entities.AppUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
 
-                    b.Navigation("Apartments");
+                    b.Navigation("Account");
+
+                    b.Navigation("Apartment");
 
                     b.Navigation("Housing");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ams.entity.Entities.Account", b =>

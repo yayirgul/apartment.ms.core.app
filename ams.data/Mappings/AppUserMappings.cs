@@ -45,7 +45,8 @@
 
             var admin = new AppUser
             {
-                Id = Guid.Parse("D719553D-48CE-4EDD-BC71-5E4A44DDCE8B"),
+                Id = Guid.Parse("6FA95F6E-2516-49E8-9AE6-7745E7743DBF"),
+                AccountId = Guid.Parse("DB72E0E2-3201-414F-9753-190466E024F3"),
                 UserName = "yayirgul@gmail.com",
                 NormalizedUserName = "YAYIRGUL@GMAIL.COM",
                 Email = "yayirgul@gmail.com",
@@ -59,7 +60,41 @@
             };
             admin.PasswordHash = CreatePasswordHash(admin, "1");
 
-            builder.HasData(admin);
+            var agent = new AppUser
+            {
+                Id = Guid.Parse("89DA7C75-8291-4BAF-9060-028A07393DDE"),
+                AccountId = Guid.Parse("DB72E0E2-3201-414F-9753-190466E024F3"),
+                UserName = "erdem@makronet.com",
+                NormalizedUserName = "ERDEM@MAKRONET.COM",
+                Email = "erdem@makronet.com",
+                NormalizedEmail = "ERDEM@MAKRONET.COM",
+                EmailConfirmed = true,
+                PhoneNumber = "+905558008050",
+                PhoneNumberConfirmed = true,
+                Firstname = "Erdem",
+                Lastname = "Tekin",
+                SecurityStamp = Guid.NewGuid().ToString(),
+            };
+            agent.PasswordHash = CreatePasswordHash(agent, "1");
+
+            var user = new AppUser
+            {
+                Id = Guid.Parse("A35A610D-689F-4AB4-9324-CC227BFDBFBA"),
+                AccountId = Guid.Parse("DB72E0E2-3201-414F-9753-190466E024F3"),
+                UserName = "umut@makronet.com",
+                NormalizedUserName = "UMUT@MAKRONET.COM",
+                Email = "umut@makronet.com",
+                NormalizedEmail = "UMUT@MAKRONET.COM",
+                EmailConfirmed = true,
+                PhoneNumber = "+905558008060",
+                PhoneNumberConfirmed = true,
+                Firstname = "Umut",
+                Lastname = "Arslan",
+                SecurityStamp = Guid.NewGuid().ToString(),
+            };
+            user.PasswordHash = CreatePasswordHash(user, "1");
+
+            builder.HasData(admin, agent, user);
         }
 
         private string CreatePasswordHash(AppUser user, string password)
