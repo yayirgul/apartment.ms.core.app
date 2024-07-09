@@ -48,9 +48,9 @@
                 query = query.Where(where);
 
             if (inculude.Any())
-                foreach (var item in inculude)  
+                foreach (var item in inculude)
                     query = query.Include(item);
-     
+
             return await query.ToListAsync();
         }
 
