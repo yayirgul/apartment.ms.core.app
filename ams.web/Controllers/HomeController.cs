@@ -16,9 +16,9 @@ namespace ams.web.Controllers
             this.ApartmentService = ApartmentService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var r = ApartmentService.GetAllAsync();
+            var r = await ApartmentService.GetAllAsync();
 
             return View();
         }

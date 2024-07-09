@@ -9,7 +9,7 @@
         Task<bool> AnyAsync(Expression<Func<T, bool>> where);
         Task<int> CountAsync(Expression<Func<T, bool>> where);
         Task DeleteAsync(T entity);
-        Task<List<T>> GetAllAsync(Expression<Func<T, bool>>? where, params Expression<Func<T, object>>[] inculude);
+        Task<List<T>> GetAllAsync(Expression<Func<T, bool>>? where = null, params Expression<Func<T, object>>[] inculude);
         Task<T?> GetAsync(Expression<Func<T, bool>> where, params Expression<Func<T, object>>[] inculude);
         Task<T?> GetByIdAsync(Guid id);
         Task<T> UpdateAsync(T entity);

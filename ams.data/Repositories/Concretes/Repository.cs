@@ -40,7 +40,7 @@
             await Task.Run(() => { Table.Remove(entity); });
         }
 
-        public async Task<List<T>> GetAllAsync(Expression<Func<T, bool>>? where, params Expression<Func<T, object>>[] inculude)
+        public async Task<List<T>> GetAllAsync(Expression<Func<T, bool>>? where = null, params Expression<Func<T, object>>[] inculude)
         {
             IQueryable<T> query = Table;
 
