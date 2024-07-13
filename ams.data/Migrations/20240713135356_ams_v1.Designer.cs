@@ -12,7 +12,7 @@ using ams.data.Context;
 namespace ams.data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240707213237_ams_v1")]
+    [Migration("20240713135356_ams_v1")]
     partial class ams_v1
     {
         /// <inheritdoc />
@@ -53,7 +53,7 @@ namespace ams.data.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<bool?>("IsDeleted")
+                    b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<string>("IsStatus")
@@ -83,7 +83,7 @@ namespace ams.data.Migrations
                         {
                             Id = new Guid("db72e0e2-3201-414f-9753-190466e024f3"),
                             AccountName = "ABC A.Ş",
-                            CreateTime = new DateTime(2024, 7, 8, 0, 32, 36, 823, DateTimeKind.Local).AddTicks(5598),
+                            CreateTime = new DateTime(2024, 7, 13, 16, 53, 56, 439, DateTimeKind.Local).AddTicks(275),
                             Domain = "abc.com",
                             IsActive = true,
                             IsDeleted = false,
@@ -116,7 +116,7 @@ namespace ams.data.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<bool?>("IsDeleted")
+                    b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<string>("IsStatus")
@@ -150,7 +150,7 @@ namespace ams.data.Migrations
                         new
                         {
                             Id = new Guid("a2b3d904-401c-431f-9845-7fa2652d87fc"),
-                            CreateTime = new DateTime(2024, 7, 8, 0, 32, 36, 823, DateTimeKind.Local).AddTicks(6651),
+                            CreateTime = new DateTime(2024, 7, 13, 16, 53, 56, 439, DateTimeKind.Local).AddTicks(1029),
                             IsActive = true,
                             IsDeleted = false,
                             ParentId = new Guid("00000000-0000-0000-0000-000000000000"),
@@ -187,7 +187,7 @@ namespace ams.data.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<bool?>("IsDeleted")
+                    b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<string>("IsStatus")
@@ -202,9 +202,14 @@ namespace ams.data.Migrations
                     b.Property<Guid?>("ModifiedUser")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AccountId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Apartments");
 
@@ -214,7 +219,25 @@ namespace ams.data.Migrations
                             Id = new Guid("d4033eef-ba92-4a1f-9ecb-1eee6996214a"),
                             AccountId = new Guid("db72e0e2-3201-414f-9753-190466e024f3"),
                             ApartmentName = "Huzur APT",
-                            CreateTime = new DateTime(2024, 7, 8, 0, 32, 36, 823, DateTimeKind.Local).AddTicks(7420),
+                            CreateTime = new DateTime(2024, 7, 13, 16, 53, 56, 439, DateTimeKind.Local).AddTicks(1713),
+                            IsActive = true,
+                            IsDeleted = false
+                        },
+                        new
+                        {
+                            Id = new Guid("16f885ff-6897-4d08-afa6-0640c40d2a05"),
+                            AccountId = new Guid("db72e0e2-3201-414f-9753-190466e024f3"),
+                            ApartmentName = "Sevinç APT",
+                            CreateTime = new DateTime(2024, 7, 13, 16, 53, 56, 439, DateTimeKind.Local).AddTicks(1719),
+                            IsActive = true,
+                            IsDeleted = false
+                        },
+                        new
+                        {
+                            Id = new Guid("d2977402-d13f-423f-bc0f-e639e4a610bb"),
+                            AccountId = new Guid("db72e0e2-3201-414f-9753-190466e024f3"),
+                            ApartmentName = "Güvenç APT",
+                            CreateTime = new DateTime(2024, 7, 13, 16, 53, 56, 439, DateTimeKind.Local).AddTicks(1729),
                             IsActive = true,
                             IsDeleted = false
                         });
@@ -251,21 +274,21 @@ namespace ams.data.Migrations
                         new
                         {
                             Id = new Guid("4271dd20-390a-46ce-b67d-59678a720270"),
-                            ConcurrencyStamp = "fa99ef65-6edb-42e0-b6d2-c2ce9d95fedd",
+                            ConcurrencyStamp = "a818913d-5787-44ba-9053-78128c9c2ca8",
                             Name = "admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = new Guid("4438dff4-28d6-46c1-90eb-f6b2a233d97e"),
-                            ConcurrencyStamp = "3ede9a0f-26f3-43fe-87f6-7e15e9a9ca6d",
+                            ConcurrencyStamp = "0ad97f76-765a-4518-89a2-bdc7dfaffe17",
                             Name = "agent",
                             NormalizedName = "AGENT"
                         },
                         new
                         {
                             Id = new Guid("051004f1-a383-4746-a722-3b051d12aaea"),
-                            ConcurrencyStamp = "98e452e5-86b6-45c7-bc25-f17e148bf42d",
+                            ConcurrencyStamp = "f7ad1adc-5589-4094-a0d9-6b02dbef96fe",
                             Name = "user",
                             NormalizedName = "USER"
                         });
@@ -395,8 +418,9 @@ namespace ams.data.Migrations
                         {
                             Id = new Guid("6fa95f6e-2516-49e8-9ae6-7745e7743dbf"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "045ea4d2-7772-4801-af87-806bbb592b37",
-                            CreateTime = new DateTime(2024, 7, 8, 0, 32, 36, 824, DateTimeKind.Local).AddTicks(8638),
+                            AccountId = new Guid("db72e0e2-3201-414f-9753-190466e024f3"),
+                            ConcurrencyStamp = "fbe9a25c-f658-4c46-b8f1-3b200ae738fc",
+                            CreateTime = new DateTime(2024, 7, 13, 16, 53, 56, 440, DateTimeKind.Local).AddTicks(1931),
                             Email = "yayirgul@gmail.com",
                             EmailConfirmed = true,
                             Firstname = "Yunus",
@@ -405,10 +429,10 @@ namespace ams.data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "YAYIRGUL@GMAIL.COM",
                             NormalizedUserName = "YAYIRGUL@GMAIL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEB3cM9raBiYDolpPP7wPpz0avlkKGhLOErKByloGqFcx4vGOGpbPwIC8SIcNi2ugcQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEEvxog6KGnnwprZuoW67ahvuQ0ELLZ5N+FpfG/TEu4U2LJsvHrbhg8Z1lnVg8KLAfw==",
                             PhoneNumber = "+905558008040",
                             PhoneNumberConfirmed = true,
-                            SecurityStamp = "2e2a8b70-9f3d-40fe-bcf0-80a2451038d9",
+                            SecurityStamp = "c8d66621-0009-46ca-a958-f181b39e5397",
                             TwoFactorEnabled = false,
                             UserName = "yayirgul@gmail.com"
                         },
@@ -416,8 +440,9 @@ namespace ams.data.Migrations
                         {
                             Id = new Guid("89da7c75-8291-4baf-9060-028a07393dde"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "a2e4bac1-8f97-41bd-ac7e-6cefa4ca8920",
-                            CreateTime = new DateTime(2024, 7, 8, 0, 32, 36, 860, DateTimeKind.Local).AddTicks(7795),
+                            AccountId = new Guid("db72e0e2-3201-414f-9753-190466e024f3"),
+                            ConcurrencyStamp = "83e7586a-e71f-4775-acec-7a40036b977a",
+                            CreateTime = new DateTime(2024, 7, 13, 16, 53, 56, 474, DateTimeKind.Local).AddTicks(6731),
                             Email = "erdem@makronet.com",
                             EmailConfirmed = true,
                             Firstname = "Erdem",
@@ -426,10 +451,10 @@ namespace ams.data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ERDEM@MAKRONET.COM",
                             NormalizedUserName = "ERDEM@MAKRONET.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEA9GX165YpgvRxBDRhEZpdlz4TJKFpXNGHiMvhvIQ+26K3Z0RGm+8PKd8a9L9zaHcA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEPfo3h0sKc9NB/ygAnIhJL4OB8dN+3a/fMyABthGgJGBGcOI/MI1YmQorZzg9iWvlg==",
                             PhoneNumber = "+905558008050",
                             PhoneNumberConfirmed = true,
-                            SecurityStamp = "a1a84793-b072-49be-88b4-5c1c3cbf6881",
+                            SecurityStamp = "462cf40b-2f32-498a-bf80-f8e83fd93beb",
                             TwoFactorEnabled = false,
                             UserName = "erdem@makronet.com"
                         },
@@ -437,8 +462,9 @@ namespace ams.data.Migrations
                         {
                             Id = new Guid("a35a610d-689f-4ab4-9324-cc227bfdbfba"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "b94c447b-dd8b-4d8f-84a1-66a1e79051c5",
-                            CreateTime = new DateTime(2024, 7, 8, 0, 32, 36, 898, DateTimeKind.Local).AddTicks(8510),
+                            AccountId = new Guid("db72e0e2-3201-414f-9753-190466e024f3"),
+                            ConcurrencyStamp = "40363a45-9f9b-4692-8605-9393b094413e",
+                            CreateTime = new DateTime(2024, 7, 13, 16, 53, 56, 508, DateTimeKind.Local).AddTicks(5885),
                             Email = "umut@makronet.com",
                             EmailConfirmed = true,
                             Firstname = "Umut",
@@ -447,10 +473,10 @@ namespace ams.data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "UMUT@MAKRONET.COM",
                             NormalizedUserName = "UMUT@MAKRONET.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEDez6OPAgB7WEEGM46NKXnFxU3LEGrWucmwqBuDIwcryQxNhjIQoW5W8sGObpGEYxg==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEFO0jg58FqnLkOXssDZTAN6P3kbrr8+Kszv2INkifHqSmWKYiiDh34WJLHFYGz357A==",
                             PhoneNumber = "+905558008060",
                             PhoneNumberConfirmed = true,
-                            SecurityStamp = "d694df45-4f0c-4451-b6b1-c3610d0d6d05",
+                            SecurityStamp = "55f05295-11a7-4364-8b7e-a5257f82029c",
                             TwoFactorEnabled = false,
                             UserName = "umut@makronet.com"
                         });
@@ -590,7 +616,7 @@ namespace ams.data.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<bool?>("IsDeleted")
+                    b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<string>("IsStatus")
@@ -659,7 +685,7 @@ namespace ams.data.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<bool?>("IsDeleted")
+                    b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsFixed")
@@ -723,7 +749,7 @@ namespace ams.data.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<bool?>("IsDeleted")
+                    b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<string>("IsStatus")
@@ -757,7 +783,7 @@ namespace ams.data.Migrations
                             Id = new Guid("709a770b-66c6-4adc-bd19-6438117bf646"),
                             AccountId = new Guid("db72e0e2-3201-414f-9753-190466e024f3"),
                             ApartmentId = new Guid("d4033eef-ba92-4a1f-9ecb-1eee6996214a"),
-                            CreateTime = new DateTime(2024, 7, 8, 0, 32, 36, 935, DateTimeKind.Local).AddTicks(4399),
+                            CreateTime = new DateTime(2024, 7, 13, 16, 53, 56, 544, DateTimeKind.Local).AddTicks(607),
                             HousingName = "Daire 1",
                             IsActive = true,
                             IsDeleted = false
@@ -797,7 +823,7 @@ namespace ams.data.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<bool?>("IsDeleted")
+                    b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<string>("IsStatus")
@@ -834,7 +860,7 @@ namespace ams.data.Migrations
                             AccountId = new Guid("db72e0e2-3201-414f-9753-190466e024f3"),
                             Amount = 100m,
                             ApartmentId = new Guid("d4033eef-ba92-4a1f-9ecb-1eee6996214a"),
-                            CreateTime = new DateTime(2024, 7, 8, 0, 32, 36, 935, DateTimeKind.Local).AddTicks(5018),
+                            CreateTime = new DateTime(2024, 7, 13, 16, 53, 56, 544, DateTimeKind.Local).AddTicks(1086),
                             HousingId = new Guid("709a770b-66c6-4adc-bd19-6438117bf646"),
                             IsActive = true,
                             IsDeleted = false
@@ -847,7 +873,13 @@ namespace ams.data.Migrations
                         .WithMany("Apartments")
                         .HasForeignKey("AccountId");
 
+                    b.HasOne("ams.entity.Entities.AppUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
                     b.Navigation("Accounts");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ams.entity.Entities.AppRoleClaim", b =>

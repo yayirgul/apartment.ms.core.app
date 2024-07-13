@@ -28,7 +28,7 @@ namespace ams.data.Migrations
                     CreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
                     DeletedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     IsStatus = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     LanguageId = table.Column<int>(type: "int", nullable: true)
@@ -53,7 +53,7 @@ namespace ams.data.Migrations
                     CreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
                     DeletedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     IsStatus = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     LanguageId = table.Column<int>(type: "int", nullable: true)
@@ -113,34 +113,6 @@ namespace ams.data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Apartments",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    AccountId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    ApartmentName = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: true),
-                    CreateUser = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    ModifiedUser = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    DeletedUser = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    CreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ModifiedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    DeletedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: true),
-                    IsStatus = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    LanguageId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Apartments", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Apartments_Accounts_AccountId",
-                        column: x => x.AccountId,
-                        principalTable: "Accounts",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -159,6 +131,40 @@ namespace ams.data.Migrations
                         principalTable: "AspNetRoles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Apartments",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    AccountId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    ApartmentName = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: true),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    CreateUser = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    ModifiedUser = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    DeletedUser = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    CreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ModifiedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DeletedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    IsStatus = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    LanguageId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Apartments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Apartments_Accounts_AccountId",
+                        column: x => x.AccountId,
+                        principalTable: "Accounts",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Apartments_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -265,7 +271,7 @@ namespace ams.data.Migrations
                     CreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
                     DeletedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     IsStatus = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     LanguageId = table.Column<int>(type: "int", nullable: true)
@@ -302,7 +308,7 @@ namespace ams.data.Migrations
                     CreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
                     DeletedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     IsStatus = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     LanguageId = table.Column<int>(type: "int", nullable: true)
@@ -347,7 +353,7 @@ namespace ams.data.Migrations
                     CreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
                     DeletedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     IsStatus = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     LanguageId = table.Column<int>(type: "int", nullable: true)
@@ -391,7 +397,7 @@ namespace ams.data.Migrations
                     CreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
                     DeletedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     IsStatus = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     LanguageId = table.Column<int>(type: "int", nullable: true)
@@ -427,21 +433,21 @@ namespace ams.data.Migrations
             migrationBuilder.InsertData(
                 table: "Accounts",
                 columns: new[] { "Id", "AccountName", "CreateTime", "CreateUser", "DeletedTime", "DeletedUser", "Domain", "IsActive", "IsDeleted", "IsStatus", "IsTrial", "LanguageId", "ModifiedTime", "ModifiedUser", "TrialEndDate" },
-                values: new object[] { new Guid("db72e0e2-3201-414f-9753-190466e024f3"), "ABC A.Ş", new DateTime(2024, 7, 8, 0, 32, 36, 823, DateTimeKind.Local).AddTicks(5598), null, null, null, "abc.com", true, false, null, true, null, null, null, null });
+                values: new object[] { new Guid("db72e0e2-3201-414f-9753-190466e024f3"), "ABC A.Ş", new DateTime(2024, 7, 13, 16, 53, 56, 439, DateTimeKind.Local).AddTicks(275), null, null, null, "abc.com", true, false, null, true, null, null, null, null });
 
             migrationBuilder.InsertData(
                 table: "AdxMenus",
                 columns: new[] { "Id", "CreateTime", "CreateUser", "DeletedTime", "DeletedUser", "Icons", "IsActive", "IsDeleted", "IsStatus", "LanguageId", "ModifiedTime", "ModifiedUser", "ParentId", "Title", "Urls" },
-                values: new object[] { new Guid("a2b3d904-401c-431f-9845-7fa2652d87fc"), new DateTime(2024, 7, 8, 0, 32, 36, 823, DateTimeKind.Local).AddTicks(6651), null, null, null, null, true, false, null, null, null, null, new Guid("00000000-0000-0000-0000-000000000000"), "Pano", "/" });
+                values: new object[] { new Guid("a2b3d904-401c-431f-9845-7fa2652d87fc"), new DateTime(2024, 7, 13, 16, 53, 56, 439, DateTimeKind.Local).AddTicks(1029), null, null, null, null, true, false, null, null, null, null, new Guid("00000000-0000-0000-0000-000000000000"), "Pano", "/" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { new Guid("051004f1-a383-4746-a722-3b051d12aaea"), "98e452e5-86b6-45c7-bc25-f17e148bf42d", "user", "USER" },
-                    { new Guid("4271dd20-390a-46ce-b67d-59678a720270"), "fa99ef65-6edb-42e0-b6d2-c2ce9d95fedd", "admin", "ADMIN" },
-                    { new Guid("4438dff4-28d6-46c1-90eb-f6b2a233d97e"), "3ede9a0f-26f3-43fe-87f6-7e15e9a9ca6d", "agent", "AGENT" }
+                    { new Guid("051004f1-a383-4746-a722-3b051d12aaea"), "f7ad1adc-5589-4094-a0d9-6b02dbef96fe", "user", "USER" },
+                    { new Guid("4271dd20-390a-46ce-b67d-59678a720270"), "a818913d-5787-44ba-9053-78128c9c2ca8", "admin", "ADMIN" },
+                    { new Guid("4438dff4-28d6-46c1-90eb-f6b2a233d97e"), "0ad97f76-765a-4518-89a2-bdc7dfaffe17", "agent", "AGENT" }
                 });
 
             migrationBuilder.InsertData(
@@ -449,15 +455,20 @@ namespace ams.data.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "AccountId", "ConcurrencyStamp", "CreateTime", "CreateUser", "DeletedTime", "DeletedUser", "Email", "EmailConfirmed", "Firstname", "IsActive", "Lastname", "LockoutEnabled", "LockoutEnd", "ModifiedTime", "ModifiedUser", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { new Guid("6fa95f6e-2516-49e8-9ae6-7745e7743dbf"), 0, null, "045ea4d2-7772-4801-af87-806bbb592b37", new DateTime(2024, 7, 8, 0, 32, 36, 824, DateTimeKind.Local).AddTicks(8638), null, null, null, "yayirgul@gmail.com", true, "Yunus", false, "AYIRGÜL", false, null, null, null, "YAYIRGUL@GMAIL.COM", "YAYIRGUL@GMAIL.COM", "AQAAAAIAAYagAAAAEB3cM9raBiYDolpPP7wPpz0avlkKGhLOErKByloGqFcx4vGOGpbPwIC8SIcNi2ugcQ==", "+905558008040", true, "2e2a8b70-9f3d-40fe-bcf0-80a2451038d9", false, "yayirgul@gmail.com" },
-                    { new Guid("89da7c75-8291-4baf-9060-028a07393dde"), 0, null, "a2e4bac1-8f97-41bd-ac7e-6cefa4ca8920", new DateTime(2024, 7, 8, 0, 32, 36, 860, DateTimeKind.Local).AddTicks(7795), null, null, null, "erdem@makronet.com", true, "Erdem", false, "Tekin", false, null, null, null, "ERDEM@MAKRONET.COM", "ERDEM@MAKRONET.COM", "AQAAAAIAAYagAAAAEA9GX165YpgvRxBDRhEZpdlz4TJKFpXNGHiMvhvIQ+26K3Z0RGm+8PKd8a9L9zaHcA==", "+905558008050", true, "a1a84793-b072-49be-88b4-5c1c3cbf6881", false, "erdem@makronet.com" },
-                    { new Guid("a35a610d-689f-4ab4-9324-cc227bfdbfba"), 0, null, "b94c447b-dd8b-4d8f-84a1-66a1e79051c5", new DateTime(2024, 7, 8, 0, 32, 36, 898, DateTimeKind.Local).AddTicks(8510), null, null, null, "umut@makronet.com", true, "Umut", false, "Arslan", false, null, null, null, "UMUT@MAKRONET.COM", "UMUT@MAKRONET.COM", "AQAAAAIAAYagAAAAEDez6OPAgB7WEEGM46NKXnFxU3LEGrWucmwqBuDIwcryQxNhjIQoW5W8sGObpGEYxg==", "+905558008060", true, "d694df45-4f0c-4451-b6b1-c3610d0d6d05", false, "umut@makronet.com" }
+                    { new Guid("6fa95f6e-2516-49e8-9ae6-7745e7743dbf"), 0, new Guid("db72e0e2-3201-414f-9753-190466e024f3"), "fbe9a25c-f658-4c46-b8f1-3b200ae738fc", new DateTime(2024, 7, 13, 16, 53, 56, 440, DateTimeKind.Local).AddTicks(1931), null, null, null, "yayirgul@gmail.com", true, "Yunus", false, "AYIRGÜL", false, null, null, null, "YAYIRGUL@GMAIL.COM", "YAYIRGUL@GMAIL.COM", "AQAAAAIAAYagAAAAEEvxog6KGnnwprZuoW67ahvuQ0ELLZ5N+FpfG/TEu4U2LJsvHrbhg8Z1lnVg8KLAfw==", "+905558008040", true, "c8d66621-0009-46ca-a958-f181b39e5397", false, "yayirgul@gmail.com" },
+                    { new Guid("89da7c75-8291-4baf-9060-028a07393dde"), 0, new Guid("db72e0e2-3201-414f-9753-190466e024f3"), "83e7586a-e71f-4775-acec-7a40036b977a", new DateTime(2024, 7, 13, 16, 53, 56, 474, DateTimeKind.Local).AddTicks(6731), null, null, null, "erdem@makronet.com", true, "Erdem", false, "Tekin", false, null, null, null, "ERDEM@MAKRONET.COM", "ERDEM@MAKRONET.COM", "AQAAAAIAAYagAAAAEPfo3h0sKc9NB/ygAnIhJL4OB8dN+3a/fMyABthGgJGBGcOI/MI1YmQorZzg9iWvlg==", "+905558008050", true, "462cf40b-2f32-498a-bf80-f8e83fd93beb", false, "erdem@makronet.com" },
+                    { new Guid("a35a610d-689f-4ab4-9324-cc227bfdbfba"), 0, new Guid("db72e0e2-3201-414f-9753-190466e024f3"), "40363a45-9f9b-4692-8605-9393b094413e", new DateTime(2024, 7, 13, 16, 53, 56, 508, DateTimeKind.Local).AddTicks(5885), null, null, null, "umut@makronet.com", true, "Umut", false, "Arslan", false, null, null, null, "UMUT@MAKRONET.COM", "UMUT@MAKRONET.COM", "AQAAAAIAAYagAAAAEFO0jg58FqnLkOXssDZTAN6P3kbrr8+Kszv2INkifHqSmWKYiiDh34WJLHFYGz357A==", "+905558008060", true, "55f05295-11a7-4364-8b7e-a5257f82029c", false, "umut@makronet.com" }
                 });
 
             migrationBuilder.InsertData(
                 table: "Apartments",
-                columns: new[] { "Id", "AccountId", "ApartmentName", "CreateTime", "CreateUser", "DeletedTime", "DeletedUser", "IsActive", "IsDeleted", "IsStatus", "LanguageId", "ModifiedTime", "ModifiedUser" },
-                values: new object[] { new Guid("d4033eef-ba92-4a1f-9ecb-1eee6996214a"), new Guid("db72e0e2-3201-414f-9753-190466e024f3"), "Huzur APT", new DateTime(2024, 7, 8, 0, 32, 36, 823, DateTimeKind.Local).AddTicks(7420), null, null, null, true, false, null, null, null, null });
+                columns: new[] { "Id", "AccountId", "ApartmentName", "CreateTime", "CreateUser", "DeletedTime", "DeletedUser", "IsActive", "IsDeleted", "IsStatus", "LanguageId", "ModifiedTime", "ModifiedUser", "UserId" },
+                values: new object[,]
+                {
+                    { new Guid("16f885ff-6897-4d08-afa6-0640c40d2a05"), new Guid("db72e0e2-3201-414f-9753-190466e024f3"), "Sevinç APT", new DateTime(2024, 7, 13, 16, 53, 56, 439, DateTimeKind.Local).AddTicks(1719), null, null, null, true, false, null, null, null, null, null },
+                    { new Guid("d2977402-d13f-423f-bc0f-e639e4a610bb"), new Guid("db72e0e2-3201-414f-9753-190466e024f3"), "Güvenç APT", new DateTime(2024, 7, 13, 16, 53, 56, 439, DateTimeKind.Local).AddTicks(1729), null, null, null, true, false, null, null, null, null, null },
+                    { new Guid("d4033eef-ba92-4a1f-9ecb-1eee6996214a"), new Guid("db72e0e2-3201-414f-9753-190466e024f3"), "Huzur APT", new DateTime(2024, 7, 13, 16, 53, 56, 439, DateTimeKind.Local).AddTicks(1713), null, null, null, true, false, null, null, null, null, null }
+                });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
@@ -472,17 +483,22 @@ namespace ams.data.Migrations
             migrationBuilder.InsertData(
                 table: "Housings",
                 columns: new[] { "Id", "AccountId", "ApartmentId", "CreateTime", "CreateUser", "DeletedTime", "DeletedUser", "HousingName", "IsActive", "IsDeleted", "IsStatus", "LanguageId", "ModifiedTime", "ModifiedUser", "UserId" },
-                values: new object[] { new Guid("709a770b-66c6-4adc-bd19-6438117bf646"), new Guid("db72e0e2-3201-414f-9753-190466e024f3"), new Guid("d4033eef-ba92-4a1f-9ecb-1eee6996214a"), new DateTime(2024, 7, 8, 0, 32, 36, 935, DateTimeKind.Local).AddTicks(4399), null, null, null, "Daire 1", true, false, null, null, null, null, null });
+                values: new object[] { new Guid("709a770b-66c6-4adc-bd19-6438117bf646"), new Guid("db72e0e2-3201-414f-9753-190466e024f3"), new Guid("d4033eef-ba92-4a1f-9ecb-1eee6996214a"), new DateTime(2024, 7, 13, 16, 53, 56, 544, DateTimeKind.Local).AddTicks(607), null, null, null, "Daire 1", true, false, null, null, null, null, null });
 
             migrationBuilder.InsertData(
                 table: "HousingSafes",
                 columns: new[] { "Id", "AccountId", "Amount", "ApartmentId", "CreateTime", "CreateUser", "DeletedTime", "DeletedUser", "HousingId", "IsActive", "IsDeleted", "IsStatus", "LanguageId", "ModifiedTime", "ModifiedUser", "UserId" },
-                values: new object[] { new Guid("666776f7-518b-4805-a726-eba238e03fc4"), new Guid("db72e0e2-3201-414f-9753-190466e024f3"), 100m, new Guid("d4033eef-ba92-4a1f-9ecb-1eee6996214a"), new DateTime(2024, 7, 8, 0, 32, 36, 935, DateTimeKind.Local).AddTicks(5018), null, null, null, new Guid("709a770b-66c6-4adc-bd19-6438117bf646"), true, false, null, null, null, null, null });
+                values: new object[] { new Guid("666776f7-518b-4805-a726-eba238e03fc4"), new Guid("db72e0e2-3201-414f-9753-190466e024f3"), 100m, new Guid("d4033eef-ba92-4a1f-9ecb-1eee6996214a"), new DateTime(2024, 7, 13, 16, 53, 56, 544, DateTimeKind.Local).AddTicks(1086), null, null, null, new Guid("709a770b-66c6-4adc-bd19-6438117bf646"), true, false, null, null, null, null, null });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Apartments_AccountId",
                 table: "Apartments",
                 column: "AccountId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Apartments_UserId",
+                table: "Apartments",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -624,10 +640,10 @@ namespace ams.data.Migrations
                 name: "Apartments");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "Accounts");
 
             migrationBuilder.DropTable(
-                name: "Accounts");
+                name: "AspNetUsers");
         }
     }
 }

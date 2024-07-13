@@ -1,26 +1,21 @@
-﻿using ams.service.Services.Abstractions;
-using ams.web.Models;
-using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
-
-namespace ams.web.Controllers
+﻿namespace ams.web.Controllers
 {
+    using ams.web.Models;
+    using Microsoft.AspNetCore.Mvc;
+    using System.Diagnostics;
+
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly IApartmentService ApartmentService;
 
-        public HomeController(ILogger<HomeController> logger, IApartmentService ApartmentService)
+        public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
-            this.ApartmentService = ApartmentService;
         }
 
         public async Task<IActionResult> Index()
         {
-            var r = await ApartmentService.GetAllAsync();
-
-            return View();
+            return await Task.FromResult(View());
         }
 
 
