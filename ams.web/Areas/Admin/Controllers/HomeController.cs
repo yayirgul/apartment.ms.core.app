@@ -2,10 +2,11 @@
 
 namespace ams.web.Areas.Admin.Controllers
 {
-	[Area("Admin")]
+	[Area("admin")]
 	public class HomeController : Controller
 	{
-		public IActionResult Index()
+        [Route("ams/dashboard")]
+        public IActionResult Index()
 		{
 			return View();
 		}

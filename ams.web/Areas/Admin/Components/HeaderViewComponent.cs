@@ -1,7 +1,8 @@
-﻿namespace ams.web.Components
-{
-    using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
+namespace ams.web.Areas.Admin.Components
+{
+    [Area("admin")]
     public class HeaderViewComponent : ViewComponent
     {
         public async Task<IViewComponentResult> InvokeAsync()
