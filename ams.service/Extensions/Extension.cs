@@ -12,6 +12,7 @@
             //var assembly = Assembly.GetExecutingAssembly();
 
             services.AddScoped<IApartmentService, ApartmentService>();
+            services.AddScoped<IExpenseService, ExpenseService>();
 
 
             return services;

@@ -1,9 +1,8 @@
 ﻿namespace ams.service.Services.Abstractions
 {
-    using ams.entity.DTOs;
-    using ams.entity.Entities;
+	using ams.entity.DTOs;
 
-    public interface IApartmentService
+	public interface IApartmentService
     {
         Task<List<ApartmentDTO.ListView>> GetAllAsync();
     }
