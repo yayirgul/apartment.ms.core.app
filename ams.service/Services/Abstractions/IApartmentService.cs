@@ -4,6 +4,7 @@
 
 	public interface IApartmentService
     {
+        Task<List<ApartmentDTO.ComboListView>> GetComboApartment(bool is_active);
         Task<List<ApartmentDTO.ListView>> GetAllAsync();
     }
 }

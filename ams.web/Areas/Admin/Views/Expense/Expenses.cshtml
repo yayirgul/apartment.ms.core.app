@@ -141,27 +141,41 @@
                         <input type="hidden" name="ExpenseId" />
 
                         <div class="col-xl-12 mb-6">
-                            <label>* Apartmanlar</label>
+                            <label>* Gider Adı</label>
+                            <input type="text" name="ExpenseName" class="form-control money" placeholder="">
+                        </div>
+
+                        <div class="col-xl-12 mb-6">
+                            <label>* Apartman</label>
                             <select class="form-control" name="ExpApartments" id="combo-expense-apartments">
-                                <option value="">Tümü</option>
+@*                                 <option value="">Tümü</option>
                                 <option value="d4033eef-ba92-4a1f-9ecb-1eee6996214a" selected="selected">Huzur APT</option>
                                 <option value="2">Sevinç APT</option>
-                                <option value="3">Güvenç APT</option>
+                                <option value="3">Güvenç APT</option> *@
                             </select>
                         </div>
 
                         <div class="col-xl-6 mb-6">
-                            <label>* Aylar</label>
-                            <select class="form-control" id="combo-debit-months">
+                            <label>* Ay</label>
+                            <select class="form-control" id="combo-expense-months">
                                 <option value="1">Ocak</option>
                                 <option value="2">Şubat</option>
                                 <option value="3">Mart</option>
+                                <option value="4">Nisan</option>
+                                <option value="5">Mayıs</option>
+                                <option value="6">Haziran</option>
+                                <option value="7">Temmuz</option>
+                                <option value="8">Ağustos</option>
+                                <option value="9">Eylül</option>
+                                <option value="10">Ekim</option>
+                                <option value="11">Kasım</option>
+                                <option value="12">Aralık</option>
                             </select>
                         </div>
 
                         <div class="col-xl-6">
-                            <label>* Yıllar</label>
-                            <select class="form-control" id="combo-debit-years">
+                            <label>* Yıl</label>
+                            <select class="form-control" id="combo-expense-years">
                                 <option value="2024">2024</option>
                                 <option value="2023">2023</option>
                             </select>
@@ -169,7 +183,7 @@
 
                         <div class="col-xl-12">
                             <label>* Tutar</label>
-                            <input type="text" name="Amount" class="form-control money" id="kt_money_input" maxlength="22" placeholder="10,00">
+                            <input type="text" name="Amount" class="form-control money" id="kt_money_input" maxlength="22" placeholder="0,00">
                         </div>
 
                     </div>
@@ -259,6 +273,13 @@
             table: "#t-expenses",
             input: {
                 expense_id: "[name='ExpenseId']",
+                expense_name: "[name='ExpenseName']",
+                expense_amount: "[name='Amount']"
+            },
+            combo: {
+                expense_months: '#combo-expense-months',
+                expense_year: '#combo-expense-years',
+                expense_apartments: '#combo-expense-apartments'
             },
             modal: {
                 expense: '#modal-expense',
@@ -332,22 +353,35 @@
                 }
             };
         }();
+        
+        
+        function combo_apartments() {
+
+            $.ajax({
+                type: 'GET',
+                url: "/ams/app/combo-apartments",
+                async: false,
+                dataType: 'json',
+                success: function (data) {
+
+                    $.each(data, function (i, v) {
+                        // $(qcs.combo.expense_apartments).append($("<option selected='selected'></option>").val(v.id).html(v.apartmentName));
+                        $(qcs.combo.expense_apartments).append('<option value=' + v.id + '>' + v.apartmentName + '</option>');
+                    });
+
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log('Could not get posts, server response: ' + textStatus + ': ' + errorThrown);
+                }
+            });
+
+        } 
 
 
+        // $(qcs.modal_user_email).modal('hide');
 
 
-
-
-
-
-
-        //    expense-edit         expense-add-edit
-
-
-
-
-
-        function dd() {
+        function expenses() {
 
             const fv_form_expense = document.getElementById('fv-form-expense');
             const fv_expense_save = document.getElementById('fv-expense-save');
@@ -367,7 +401,6 @@
                             }
                         }
                     },
-
 
                 },
                 plugins: {
@@ -389,19 +422,56 @@
 
                             var apartment_id = $("select[name='ExpApartments']").val();
 
-                            console.log(apartment_id);
+                            var dm = {
+                                Id: $(qcs.input.expense_id).val(),
+                                ExpenseName: $(qcs.input.expense_name).val(),
+                                ApartmentId: apartment_id,
+                                Month: $(qcs.combo.expense_months).val(),
+                                Year: $(qcs.combo.expense_year).val(),
+                                Amount: $(qcs.input.expense_amount).val(),
+                            };
 
-                            var dm = { Id: $(qcs.input.expense_id).val(), ApartmentId: apartment_id };
+                            console.log(dm);
 
-                            // $.post("/----", dm, function (d) {
+                            $.post("/ams/app/expense-edit", dm, function (d) {
 
-                            // }).done(function () {
 
-                            // }).fail(function (jqXHR, textStatus, errorThrown) {
+                                Swal.fire({
+                                    title: "Tebrikler",
+                                    text: "Yeni gider oluşturuldu.",
+                                    icon: "success",
+                                    timer: 5000,
+                                    onOpen: function () {
+                                        Swal.showLoading()
+                                    },
+                                    allowOutsideClick: false,
+                                    allowEscapeKey: false,
+                                    buttonsStyling: false,
+                                    confirmButtonText: "<i class='la la-headphones'></i> I am game!",
+                                    showCancelButton: false,
+                                    cancelButtonText: "<i class='la la-thumbs-down'></i> No, thanks",
+                                    customClass: {
+                                        confirmButton: "btn btn-danger",
+                                        cancelButton: "btn btn-default"
+                                    }
+                                }).then(function (r) {
 
-                            // }).always(function () {
+                                    $(qcs.modal.expense).modal('hide');
 
-                            // });
+                                    if (r.dismiss === "timer") {
+
+                                    }
+
+                                });
+
+
+                            }).done(function () {
+
+                            }).fail(function (jqXHR, textStatus, errorThrown) {
+
+                            }).always(function () {
+
+                            });
 
                             break;
                         default:
@@ -420,13 +490,6 @@
 
 
 
-        }
-
-
-        // $(qcs.modal_user_email).modal('hide');
-
-
-        function expenses() {
 
             // TODO : Gider girebileceğimiz "Modal" açma
             $(document).delegate(qcs.modal.expense_new, 'click', function () {
@@ -651,6 +714,8 @@
 
         $(function () {
 
+            combo_apartments();
+
             expenses();
             l_expenses();
 
@@ -661,9 +726,7 @@
 
 
             KTMaskDemo.init();
-
-
-            dd();
+             
 
         });
 

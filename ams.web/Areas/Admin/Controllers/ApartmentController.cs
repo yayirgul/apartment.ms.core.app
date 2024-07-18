@@ -3,7 +3,7 @@
     using ams.service.Services.Abstractions;
     using Microsoft.AspNetCore.Mvc;
 
-    [Area("Admin")]
+    [Area("admin")]
     public class ApartmentController : Controller
 	{
 		private readonly IApartmentService ApartmentService;
@@ -13,12 +13,18 @@
 			this.ApartmentService = ApartmentService;
 		}
 
-		[HttpGet, Route("ams/app/apartments")]
+        [HttpGet, Route("ams/app/combo-apartments")]
+        public async Task<JsonResult> GetComboApartments()
+        {
+            var apartments = await ApartmentService.GetComboApartment(true);
+            return Json(apartments);
+        }
+
+        [HttpGet, Route("ams/app/apartments")]
         public async Task<JsonResult> ApartmentTables()
 		{
-			var r = await ApartmentService.GetAllAsync();
-
-			return Json(r);
+			var apartments = await ApartmentService.GetAllAsync();
+			return Json(apartments);
 		}
 
 		[Route("ams/apartments")]

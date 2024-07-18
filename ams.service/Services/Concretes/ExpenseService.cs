@@ -13,7 +13,54 @@
             Uow = uow;
         }
 
-        public async Task<List<ExpenseDTO.ListView>> GetAllAsync(bool is_active)
+        public async Task AddAsync(ExpenseDTO.Add dto)
+        {
+
+            //var test = Convert.ToDecimal(dto.Amount);
+
+
+            //string cadena = "96.23";
+
+            var amount = decimal.Parse(dto.Amount!.Replace(".", ","));
+
+
+
+            var expense = new Expense()
+            {
+                AccountId = dto.AccountId,
+                ApartmentId = dto.ApartmentId,
+                ExpenseName = dto.ExpenseName,
+                ExpenseCode = dto.ExpenseCode,
+                Amount = amount,
+                Month = dto.Month,
+                Year = dto.Year,
+                IsFixed = dto.IsFixed,
+                IsDeleted = false,
+                IsActive = true,
+            };
+
+            await Uow.GetRepository<Expense>().AddAsync(expense);
+            await Uow.SaveAsync();
+        }
+
+        public async Task<string> EditAsync(ExpenseDTO.Edit dto)
+        {
+            var expense = await Uow.GetRepository<Expense>().GetAsync(x => !x.IsDeleted && x.Id == dto.Id);
+
+            expense!.ExpenseName = dto.ExpenseName;
+            expense.Amount = dto.Amount;
+            expense.Month = dto.Month;
+            expense.Year = dto.Year;
+            expense.ModifiedTime = dto.ModifiedTime;
+            expense.ModifiedUser = dto.ModifiedUser;
+
+            await Uow.GetRepository<Expense>().UpdateAsync(expense);
+            await Uow.SaveAsync();
+
+            return expense.ExpenseName!;
+        }
+
+        public async Task<List<ExpenseDTO.ListView>> GetExpenses(bool is_active)
         {
             var r = await Uow.GetRepository<Expense>().GetAllAsync(x => !x.IsDeleted && x.IsActive == is_active);
 

@@ -14,6 +14,19 @@
             Uow = uow;
         }
 
+        public async Task<List<ApartmentDTO.ComboListView>> GetComboApartment(bool is_active)
+        {
+            var list = await Uow.GetRepository<Apartment>().GetAllAsync(x => !x.IsDeleted && !x.IsDeleted);
+
+            var apartments = list.ConvertAll(x => new ApartmentDTO.ComboListView
+            {
+                Id = x.Id,
+                ApartmentName = x.ApartmentName,
+            });
+
+            return apartments;
+        }
+
         public async Task<List<ApartmentDTO.ListView>> GetAllAsync()
         {
             var r = await Uow.GetRepository<Apartment>().GetAllAsync(x => !x.IsDeleted, y => y.User!);

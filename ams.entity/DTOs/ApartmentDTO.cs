@@ -2,6 +2,12 @@
 {
     public class ApartmentDTO
     {
+        public class ComboListView
+        {
+            public Guid Id { get; set; }
+            public string? ApartmentName { get; set; }
+        }
+
         public class ListView
         {
             //public Guid? AccountId { get; set; }
