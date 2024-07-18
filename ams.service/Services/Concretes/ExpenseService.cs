@@ -21,12 +21,13 @@
 
             var expenses = r.ConvertAll(x => new ExpenseDTO.ListView
             {
-                 ExpenseName = x.ExpenseName,
-                 ExpenseCode = x.ExpenseCode,
-                 ExpenseDate = x.Month + "/" + x.Year,
-                 Month = x.Month,
-                 Year = x.Year,
-                 Amount = x.Amount,
+                Id = x.Id,
+                ExpenseName = x.ExpenseName,
+                ExpenseCode = x.ExpenseCode,
+                ExpenseDate = x.Month + "/" + x.Year,
+                Month = x.Month,
+                Year = x.Year,
+                Amount = x.Amount,
                 _Amount = x.Amount.HasValue ? x.Amount.Value.ToString("#,##0.00") : "0",
                 _CreateTime = x.CreateTime != null ? x.CreateTime.ToString("dd/MM/yyyy") : "",
                 IsActive = x.IsActive ? 1 : 2,

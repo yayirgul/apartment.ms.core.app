@@ -4,10 +4,8 @@
 	{
 		public class ListView
 		{
-			//public Guid OwnerId { get; set; }
+			public Guid Id { get; set; }
 			public Guid AccountId { get; set; }
-
-			
 			public Guid ApartmentId { get; set; }
 
 			 

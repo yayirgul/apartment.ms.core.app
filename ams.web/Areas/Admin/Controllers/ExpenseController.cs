@@ -13,12 +13,17 @@
             this.ExpenseService = ExpenseService;
         }
 
-        [HttpGet, Route("ams/app/expenses")]
-        public async Task<JsonResult> ApartmentTables()
+        [HttpGet, Route("ams/app/expense-edit")]
+        public async Task<JsonResult> ExpenseEdit()
         {
-            var r = await ExpenseService.GetAllAsync(true);
+            return Json("");
+        }
 
-            return Json(r);
+        [HttpGet, Route("ams/app/expenses")]
+        public async Task<JsonResult> ExpenseTable()
+        {
+            var expenses = await ExpenseService.GetAllAsync(true);
+            return Json(expenses);
         }
 
         [Route("ams/expenses")]

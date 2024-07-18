@@ -32,7 +32,8 @@
                         <h3 class="card-label">Giderler</h3>
                     </div>
                     <div class="card-toolbar">
-                        <a href="javascript:;" class="btn btn-primary font-weight-bolder">
+
+                        <a href="javascript:;" id="modal-expense-new" class="btn btn-primary font-weight-bolder">
                             Yeni Gider
                         </a>
                     </div>
@@ -44,51 +45,6 @@
                         <div class="row align-items-center">
                             <div class="col-lg-12 col-xl-12">
                                 <div class="row align-items-center">
-
-
-                                    <div class="col-md-2 my-2 my-md-0">
-                                        <div class="d-flex align-items-center">
-                                            @* <label class="mr-3 mb-0 d-none d-md-block">Apartmanlar:</label> *@
-                                            <select class="form-control" id="combo-apartments">
-                                                <option value="">Tümü</option>
-                                                <option value="1" selected="selected">Huzur APT</option>
-                                                <option value="2">Sevinç APT</option>
-                                                <option value="3">Güvenç APT</option>
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-1 my-2 my-md-0">
-                                        <div class="d-flex align-items-center">
-                                            @* <label class="mr-3 mb-0 d-none d-md-block">Ay:</label> *@
-                                            <select class="form-control" id="combo-months">
-                                                <option value="1">Ocak</option>
-                                                <option value="2">Şubat</option>
-                                                <option value="3">Mart</option>
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-1 my-2 my-md-0">
-                                        <div class="d-flex align-items-center">
-                                            @* <label class="mr-3 mb-0 d-none d-md-block">Ay:</label> *@
-                                            <select class="form-control" id="combo-years">
-                                                <option value="2024">2024</option>
-                                                <option value="2023">2023</option>
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-1 my-2 my-md-0">
-                                        <div class="d-flex align-items-center">
-                                            <a href="javascript:;" class="btn btn-primary font-weight-bolder">
-                                                Borçlandır
-                                            </a>
-                                        </div>
-                                    </div>
-
-
-
 
                                     <div class="col-md-3 my-2 my-md-0">
                                         <div class="input-icon">
@@ -102,11 +58,47 @@
                                     <div class="col-md-1 my-2 my-md-0">
                                         <div class="d-flex align-items-center">
                                             @* <label class="mr-3 mb-0 d-none d-md-block">Status:</label> *@
-                                            <select class="form-control" id="kt_datatable_search_status">
+                                            <select class="form-control" id="combof-status">
                                                 <option value="">Tümü</option>
                                                 <option value="1" selected="selected">Aktif</option>
                                                 <option value="2">Pasif</option>
                                             </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-1 my-2 my-md-0">
+                                        <div class="d-flex align-items-center">
+                                            @* <label class="mr-3 mb-0 d-none d-md-block">Ay:</label> *@
+                                            <select class="form-control" id="combof-months">
+                                                <option value="1">Ocak</option>
+                                                <option value="2">Şubat</option>
+                                                <option value="3">Mart</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-1 my-2 my-md-0">
+                                        <div class="d-flex align-items-center">
+                                            @* <label class="mr-3 mb-0 d-none d-md-block">Ay:</label> *@
+                                            <select class="form-control" id="combof-years">
+                                                <option value="2024">2024</option>
+                                                <option value="2023">2023</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+
+
+
+
+
+
+
+                                    <div class="col-md-6 my-2 my-md-0">
+                                        <div class="d-flex align-items-center justify-content-end">
+                                            <a href="javascript:;" id="modal-debit-new" class="btn btn-danger font-weight-bolder mr-5">
+                                                Borçlandır
+                                            </a>
                                         </div>
                                     </div>
 
@@ -130,6 +122,127 @@
     </div>
 </div>
 
+
+<div class="modal fade" id="modal-expense" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-expense-title">Yeni Gider</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <form class="form" id="fv-form-expense">
+
+                    <div class="form-group mb-0 row">
+
+                        <input type="hidden" name="ExpenseId" />
+
+                        <div class="col-xl-12 mb-6">
+                            <label>* Apartmanlar</label>
+                            <select class="form-control" name="ExpApartments" id="combo-expense-apartments">
+                                <option value="">Tümü</option>
+                                <option value="d4033eef-ba92-4a1f-9ecb-1eee6996214a" selected="selected">Huzur APT</option>
+                                <option value="2">Sevinç APT</option>
+                                <option value="3">Güvenç APT</option>
+                            </select>
+                        </div>
+
+                        <div class="col-xl-6 mb-6">
+                            <label>* Aylar</label>
+                            <select class="form-control" id="combo-debit-months">
+                                <option value="1">Ocak</option>
+                                <option value="2">Şubat</option>
+                                <option value="3">Mart</option>
+                            </select>
+                        </div>
+
+                        <div class="col-xl-6">
+                            <label>* Yıllar</label>
+                            <select class="form-control" id="combo-debit-years">
+                                <option value="2024">2024</option>
+                                <option value="2023">2023</option>
+                            </select>
+                        </div>
+
+                        <div class="col-xl-12">
+                            <label>* Tutar</label>
+                            <input type="text" name="Amount" class="form-control money" id="kt_money_input" maxlength="22" placeholder="10,00">
+                        </div>
+
+                    </div>
+
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                @*<button type="button" class="btn btn-light-primary font-weight-bold" data-dismiss="modal">Close</button>*@
+                <button type="button" id="fv-expense-save" class="btn btn-primary font-weight-bold">Kaydet</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="modal-debit" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-user-title">Apartman Borçlandır</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <form class="form" id="form-user">
+
+                    <div class="form-group mb-0 row">
+
+                        <div class="col-xl-12 mb-6">
+                            <label id="label-username">* Apartmanlar</label>
+                            <select class="form-control" id="combo-debit-apartments">
+                                <option value="">Tümü</option>
+                                <option value="1" selected="selected">Huzur APT</option>
+                                <option value="2">Sevinç APT</option>
+                                <option value="3">Güvenç APT</option>
+                            </select>
+                        </div>
+
+                        <div class="col-xl-12 mb-6">
+                            <label>* Aylar</label>
+                            <select class="form-control" id="combo-debit-months">
+                                <option value="1">Ocak</option>
+                                <option value="2">Şubat</option>
+                                <option value="3">Mart</option>
+                            </select>
+                        </div>
+
+                        <div class="col-xl-12">
+                            <label>* Yıllar</label>
+                            <select class="form-control" id="combo-debit-years">
+                                <option value="2024">2024</option>
+                                <option value="2023">2023</option>
+                            </select>
+                        </div>
+
+                    </div>
+
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                @*<button type="button" class="btn btn-light-primary font-weight-bold" data-dismiss="modal">Close</button>*@
+                <button type="button" id="fv-user-save" class="btn btn-primary font-weight-bold">Borçlandır</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
 @section Scripts {
 
     <script src="~/lib/theme/plugins/custom/datatables/datatables.bundle.js"></script>
@@ -144,10 +257,206 @@
         // Query Component Selector
         const qcs = {
             table: "#t-expenses",
+            input: {
+                expense_id: "[name='ExpenseId']",
+            },
+            modal: {
+                expense: '#modal-expense',
+                debit: '#modal-debit',
+                expense_new: '#modal-expense-new',
+                expense_edit: '#modal-expense-edit',
+                debit_new: '#modal-debit-new'
+            }
         }
 
 
-        function expenses() { 
+
+
+        var KTMaskDemo = function () {
+
+            // private functions
+            var demos = function () {
+                $('#kt_date_input').mask('00/00/0000', {
+                    placeholder: "dd/mm/yyyy"
+                });
+
+                $('#kt_time_input').mask('00:00:00', {
+                    placeholder: "hh:mm:ss"
+                });
+
+                $('#kt_date_time_input').mask('00/00/0000 00:00:00', {
+                    placeholder: "dd/mm/yyyy hh:mm:ss"
+                });
+
+                $('#kt_cep_input').mask('00000-000', {
+                    placeholder: "99999-999"
+                });
+
+                $('#kt_phone_input').mask('0000-0000', {
+                    placeholder: "9999-9999"
+                });
+
+                $('#kt_phone_with_ddd_input').mask('(00) 0000-0000', {
+                    placeholder: "(99) 9999-9999"
+                });
+
+                $('#kt_cpf_input').mask('000.000.000-00', {
+                    reverse: true
+                });
+
+                $('#kt_cnpj_input').mask('00.000.000/0000-00', {
+                    reverse: true
+                });
+
+                $('#kt_money_input').mask('000.000.000.000.000,00', {
+                    reverse: true
+                });
+
+                $('#kt_money2_input').mask("#.##0,00", {
+                    reverse: true
+                });
+
+                $('#kt_percent_input').mask('##0,00%', {
+                    reverse: true
+                });
+
+                $('#kt_clear_if_not_match_input').mask("00/00/0000", {
+                    clearIfNotMatch: true
+                });
+            }
+
+            return {
+                // public functions
+                init: function () {
+                    demos();
+                }
+            };
+        }();
+
+
+
+
+
+
+
+
+
+        //    expense-edit         expense-add-edit
+
+
+
+
+
+        function dd() {
+
+            const fv_form_expense = document.getElementById('fv-form-expense');
+            const fv_expense_save = document.getElementById('fv-expense-save');
+
+            const fv = FormValidation.formValidation(fv_form_expense, {
+
+                fields: {
+
+                    Amount: {
+                        validators: {
+                            notEmpty: {
+                                message: 'Tutar alanı boş geçilemez.'
+                            },
+                            stringLength: {
+                                min: 1,
+                                message: 'Tutar minimum 1 olmalıdır'
+                            }
+                        }
+                    },
+
+
+                },
+                plugins: {
+                    trigger: new FormValidation.plugins.Trigger(),
+                    bootstrap: new FormValidation.plugins.Bootstrap(),
+                },
+            }).on('core.form.validating', function () {
+                fv_expense_save.innerHTML = 'Doğrulanıyor ...';
+            });
+
+            fv_expense_save.addEventListener('click', function () {
+
+                fv.validate().then(function (status) {
+
+                    fv_expense_save.innerHTML = status === 'Valid' ? 'Güncelleniyor...' : 'Lütfen tekrar deneyin';
+
+                    switch (status) {
+                        case "Valid":
+
+                            var apartment_id = $("select[name='ExpApartments']").val();
+
+                            console.log(apartment_id);
+
+                            var dm = { Id: $(qcs.input.expense_id).val(), ApartmentId: apartment_id };
+
+                            // $.post("/----", dm, function (d) {
+
+                            // }).done(function () {
+
+                            // }).fail(function (jqXHR, textStatus, errorThrown) {
+
+                            // }).always(function () {
+
+                            // });
+
+                            break;
+                        default:
+                    }
+
+                });
+            });
+
+
+
+
+
+
+
+
+
+
+
+        }
+
+
+        // $(qcs.modal_user_email).modal('hide');
+
+
+        function expenses() {
+
+            // TODO : Gider girebileceğimiz "Modal" açma
+            $(document).delegate(qcs.modal.expense_new, 'click', function () {
+
+                $(qcs.modal.expense).modal();
+
+            });
+
+            // TODO : Gider düzenleyeceğimiz "Modal" açma
+            $(document).delegate(qcs.modal.expense_edit, 'click', function () {
+
+                // var user = { id: $(this).data('user-id'), email: $(this).data('user-email') };
+
+                $(qcs.modal.expense).modal();
+
+            });
+
+            // TODO : Apartmana bağlı konutları borçlandırma "Modal" açma
+            $(document).delegate(qcs.modal.debit_new, 'click', function () {
+
+                // var user = { id: $(this).data('user-id'), email: $(this).data('user-email') };
+
+                $(qcs.modal.debit).modal();
+
+            });
+
+        }
+
+
+        function l_expenses() {
 
             var ds = $.ajax({
                 type: 'GET',
@@ -187,6 +496,7 @@
                     input: $('#kt_datatable_search_query'),
                     key: 'generalSearch',
                 },
+
                 // columns definition
                 columns: [
                     {
@@ -200,7 +510,7 @@
                     },
                     {
                         field: 'expenseName',
-                        title: 'Apartman',
+                        title: 'Gider',
                         template: function (row) {
                             return row.expenseName;
                         },
@@ -210,10 +520,26 @@
                         title: 'Kayıt Tarihi',
                         type: 'date',
                         // format: 'MM/DD/YYYY',
-                    }, {
+                    },
+                    {
                         field: 'createUser',
                         title: 'Oluşturan',
-                    }, {
+                    },
+                    {
+                        field: 'Month',
+                        title: 'Ay/Yıl',
+                        template: function (row) {
+                            return row.month + '/' + row.year;
+                        },
+                    },
+                    {
+                        field: 'Amount',
+                        title: 'Tutar',
+                        template: function (row) {
+                            return row._Amount;
+                        },
+                    },
+                    {
                         field: 'isActive',
                         title: 'Durum',
                         template: function (row) {
@@ -264,14 +590,14 @@
 
 
                             return '\
-                                                                <a href="javascript:;" class="btn btn-sm btn-clean btn-icon  modal-apartment-open" data-apartment-id=' + row.apartmentId + ' data-toggle="tooltip" data-theme="dark" title="Edit" >\
-                                                            <i class="la la-pencil"></i>\
-                                                                        </a>\
-                                                                      \
-                                                                     <a href="javascript:;" class="btn btn-sm btn-clean btn-icon" data-delete-id='+ row.apartmentId + ' data-toggle="tooltip" data-theme="dark" title="Delete">\
-                                                                            <i class="la fa-trash"></i>\
-                                                                        </a>\
-                                                                    ';
+                                                                        <a href="javascript:;" class="btn btn-sm btn-clean btn-icon  modal-expense-edit" data-expense-id=' + row.id + ' data-toggle="tooltip" data-theme="dark" title="Edit" >\
+                                                                    <i class="la la-pencil"></i>\
+                                                                                </a>\
+                                                                              \
+                                                                                     <a href="javascript:;" class="btn btn-sm btn-clean btn-icon" data-delete-id='+ row.id + ' data-toggle="tooltip" data-theme="dark" title="Delete">\
+                                                                                    <i class="la fa-trash"></i>\
+                                                                                </a>\
+                                                                            ';
 
 
 
@@ -279,7 +605,7 @@
                     }],
             });
 
-            $('#kt_datatable_search_status').on('change', function (e) {
+            $('#combof-status').on('change', function (e) {
 
                 // console.log(e.target.value);
                 // console.log($(this).val().toLowerCase());
@@ -288,6 +614,17 @@
                 datatable.search(status, 'isActive');
 
             });
+
+            $('#combof-months').on('change', function (e) {
+
+
+
+            });
+
+
+
+
+
 
             // $('#kt_datatable_search_type').on('change', function () {
             //     datatable.search($(this).val().toLowerCase(), 'Type');
@@ -315,6 +652,7 @@
         $(function () {
 
             expenses();
+            l_expenses();
 
             $(qcs.table).tooltip({
                 selector: '[data-toggle=tooltip]',
@@ -322,10 +660,10 @@
             });
 
 
+            KTMaskDemo.init();
 
 
-
-
+            dd();
 
         });
 
