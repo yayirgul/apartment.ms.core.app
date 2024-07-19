@@ -1,7 +1,9 @@
 ﻿namespace ams.web.Areas.Admin.Controllers
 {
+    using ams.core.Units;
     using ams.entity.DTOs;
     using ams.entity.Entities;
+    using ams.web.Helpers;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
@@ -34,7 +36,7 @@
 
         [AllowAnonymous]
         [HttpPost]
-        public async Task<IActionResult> Login(UserDTO.LoginDTO dto)
+        public async Task<IActionResult> Login(UserDTO.Login dto)
         {
             if (ModelState.IsValid)
             {
@@ -59,6 +61,17 @@
 
                         // TODO : Kullanıcının bitiş süresini sıfırlıyorum.
                         await UserManager.SetLockoutEndDateAsync(user, null);
+
+                        var session_user = new UserDTO.User()
+                        {
+                            Id = user.Id,
+                            AccountId = user.AccountId,
+                            Firstname = user.Firstname,
+                            Lastname = user.Lastname,
+                            Email = dto.Email,
+                        };
+
+                        HttpContext.Session.SetSession<UserDTO.User>(Unit.Constants.SESSION_USER, session_user);
 
                         return RedirectToAction("Index", "Home", new { Area = "Admin" });
                     }

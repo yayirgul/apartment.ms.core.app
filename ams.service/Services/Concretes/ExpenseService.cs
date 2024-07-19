@@ -4,6 +4,7 @@
     using ams.entity.DTOs;
     using ams.entity.Entities;
     using ams.service.Services.Abstractions;
+    using System.Globalization;
 
     public class ExpenseService : IExpenseService
     {
@@ -16,14 +17,16 @@
         public async Task AddAsync(ExpenseDTO.Add dto)
         {
 
-            //var test = Convert.ToDecimal(dto.Amount);
+
+            decimal amount;
+
+            CultureInfo culture = new CultureInfo("tr-TR");
+            decimal.TryParse(dto.Amount, NumberStyles.Number, culture, out amount);
 
 
-            //string cadena = "96.23";
+          //  var amount = decimal.Parse(dto.Amount!.Replace(".", ","));
 
-            var amount = decimal.Parse(dto.Amount!.Replace(".", ","));
-
-
+         
 
             var expense = new Expense()
             {
@@ -60,9 +63,9 @@
             return expense.ExpenseName!;
         }
 
-        public async Task<List<ExpenseDTO.ListView>> GetExpenses(bool is_active)
+        public async Task<List<ExpenseDTO.ListView>> GetExpenses(bool is_active, Guid apartment_id, int month, int year)
         {
-            var r = await Uow.GetRepository<Expense>().GetAllAsync(x => !x.IsDeleted && x.IsActive == is_active);
+            var r = await Uow.GetRepository<Expense>().GetAllAsync(x => !x.IsDeleted && x.IsActive == is_active && x.ApartmentId == apartment_id && x.Month == month && x.Year == year);
 
             //var pr = await Uow.GetRepository<Apartment>().GetAllAsync(x => !x.IsDeleted, y => y.User!);
 
@@ -78,7 +81,7 @@
                 _Amount = x.Amount.HasValue ? x.Amount.Value.ToString("#,##0.00") : "0",
                 _CreateTime = x.CreateTime != null ? x.CreateTime.ToString("dd/MM/yyyy") : "",
                 IsActive = x.IsActive ? 1 : 2,
-            });
+            }).OrderBy(x => x.IsFixed).ToList();
 
             return expenses;
         }

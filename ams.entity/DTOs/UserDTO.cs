@@ -2,7 +2,16 @@
 {
     public class UserDTO
     {
-		public class LoggedDTO 
+        public class User
+        {
+            public Guid Id { get; set; }
+            public Guid? AccountId { get; set; }
+            public string? Firstname { get; set; }
+            public string? Lastname { get; set; }
+            public string Email { get; set; } = null!;
+        }
+
+        public class Logged
 		{
 			public Guid Id { get; set; }
 			public string Firstname { get; set; } = null!;
@@ -14,7 +23,7 @@
 			public string Role { get; set; } = null!;
 		}
 
-		public class LoginDTO
+		public class Login
         {
             public string Email { get; set; } = null!;
             public string Password { get; set; } = null!;

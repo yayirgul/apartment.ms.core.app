@@ -18,7 +18,7 @@ namespace ams.web.Areas.Admin.Components
         {
             var logged = await UserManager.GetUserAsync(HttpContext.User); 
 
-            var user = new UserDTO.LoggedDTO
+            var user = new UserDTO.Logged
             {
                 Id = logged!.Id,
                 Firstname = logged!.Firstname!,
