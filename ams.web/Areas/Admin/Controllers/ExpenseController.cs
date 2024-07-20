@@ -21,6 +21,9 @@
         {
             var User = HttpContext.Session.GetSession<UserDTO.User>(Unit.Constants.SESSION_USER);
 
+
+            var result = new Result.ViewResult();
+
             Guid expense_id;
 
             if (Guid.TryParse(dto.Id.ToString(), out expense_id) && dto.Id != Guid.Empty)
@@ -30,13 +33,15 @@
                     Id = expense_id,
                     AccountId = (Guid)User!.AccountId!,
                     ApartmentId = dto.ApartmentId,
+                    ExpenseName = dto.ExpenseName,
+                    Amount = dto.Amount,
                     Month = dto.Month,
                     Year = dto.Year,
                     ModifiedTime = DateTime.UtcNow,
                     ModifiedUser = User!.Id
                 };
 
-                var r = await ExpenseService.EditAsync(d);
+                result = await ExpenseService.EditAsync(d);
             }
             else
             {
@@ -46,7 +51,14 @@
                 await ExpenseService.AddAsync(dto);
             }
             
-            return Json("");
+            return Json(result);
+        }
+
+        [HttpGet, Route("ams/app/expense/{expense_id}")]
+        public async Task<JsonResult> GetExpense(Guid expense_id)
+        {
+            var expenses = await ExpenseService.GetExpense(expense_id);
+            return Json(expenses);
         }
 
         [HttpGet, Route("ams/app/expenses/{apartment_id}/{month}/{year}")]

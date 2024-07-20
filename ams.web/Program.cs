@@ -9,7 +9,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.DataHelper(builder.Configuration);
 builder.Services.ServiceHelper();
-builder.Services.AddSession();
+builder.Services.AddSession(opt =>
+{
+	opt.IdleTimeout = TimeSpan.FromMinutes(60);
+});
 
 
 // Add services to the container.

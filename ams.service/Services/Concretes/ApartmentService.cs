@@ -16,7 +16,7 @@
 
         public async Task<List<ApartmentDTO.ComboListView>> GetComboApartment(bool is_active)
         {
-            var list = await Uow.GetRepository<Apartment>().GetAllAsync(x => !x.IsDeleted && !x.IsDeleted);
+            var list = await Uow.GetRepository<Apartment>().GetAllAsync(x => !x.IsDeleted && !x.IsDeleted && x.IsActive == is_active);
 
             var apartments = list.ConvertAll(x => new ApartmentDTO.ComboListView
             {

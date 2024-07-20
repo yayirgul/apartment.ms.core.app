@@ -16,11 +16,19 @@
         public Apartment? Apartments { get; set; }
 
 
+        //[ForeignKey(nameof(AppCreateUser))]
+        //public Guid CreateUser { get; set; }
+        //public AppUser? AppCreateUser { get; set; }
+
+
+
+
         [StringLength(300)]
         public string? ExpenseName { get; set; }
         public string? ExpenseCode { get; set; }
 
-        [Column(TypeName = "decimal(18,2)")]
+        //[Column(TypeName = "decimal(18,2)")]
+        [Column(TypeName = "money")]
         public decimal? Amount { get; set; }
         public int? Month { get; set; }
         public int? Year { get; set; }
