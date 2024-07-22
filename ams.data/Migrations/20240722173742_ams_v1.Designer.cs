@@ -12,7 +12,7 @@ using ams.data.Context;
 namespace ams.data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240713135356_ams_v1")]
+    [Migration("20240722173742_ams_v1")]
     partial class ams_v1
     {
         /// <inheritdoc />
@@ -41,11 +41,11 @@ namespace ams.data.Migrations
                     b.Property<Guid?>("CreateUser")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("DeleteUser")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTime?>("DeletedTime")
                         .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("DeletedUser")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Domain")
                         .HasColumnType("nvarchar(max)");
@@ -57,7 +57,8 @@ namespace ams.data.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("IsStatus")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(80)
+                        .HasColumnType("nvarchar(80)");
 
                     b.Property<bool>("IsTrial")
                         .HasColumnType("bit");
@@ -76,6 +77,12 @@ namespace ams.data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CreateUser");
+
+                    b.HasIndex("DeleteUser");
+
+                    b.HasIndex("ModifiedUser");
+
                     b.ToTable("Accounts");
 
                     b.HasData(
@@ -83,7 +90,8 @@ namespace ams.data.Migrations
                         {
                             Id = new Guid("db72e0e2-3201-414f-9753-190466e024f3"),
                             AccountName = "ABC A.Ş",
-                            CreateTime = new DateTime(2024, 7, 13, 16, 53, 56, 439, DateTimeKind.Local).AddTicks(275),
+                            CreateTime = new DateTime(2024, 7, 22, 20, 37, 42, 511, DateTimeKind.Local).AddTicks(5054),
+                            CreateUser = new Guid("6fa95f6e-2516-49e8-9ae6-7745e7743dbf"),
                             Domain = "abc.com",
                             IsActive = true,
                             IsDeleted = false,
@@ -100,14 +108,8 @@ namespace ams.data.Migrations
                     b.Property<DateTime>("CreateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("CreateUser")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<DateTime?>("DeletedTime")
                         .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("DeletedUser")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Icons")
                         .HasMaxLength(50)
@@ -120,16 +122,14 @@ namespace ams.data.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("IsStatus")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(80)
+                        .HasColumnType("nvarchar(80)");
 
                     b.Property<int?>("LanguageId")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("ModifiedTime")
                         .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("ModifiedUser")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("ParentId")
                         .HasColumnType("uniqueidentifier");
@@ -150,7 +150,7 @@ namespace ams.data.Migrations
                         new
                         {
                             Id = new Guid("a2b3d904-401c-431f-9845-7fa2652d87fc"),
-                            CreateTime = new DateTime(2024, 7, 13, 16, 53, 56, 439, DateTimeKind.Local).AddTicks(1029),
+                            CreateTime = new DateTime(2024, 7, 22, 20, 37, 42, 511, DateTimeKind.Local).AddTicks(5788),
                             IsActive = true,
                             IsDeleted = false,
                             ParentId = new Guid("00000000-0000-0000-0000-000000000000"),
@@ -178,11 +178,11 @@ namespace ams.data.Migrations
                     b.Property<Guid?>("CreateUser")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("DeleteUser")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTime?>("DeletedTime")
                         .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("DeletedUser")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
@@ -191,7 +191,8 @@ namespace ams.data.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("IsStatus")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(80)
+                        .HasColumnType("nvarchar(80)");
 
                     b.Property<int?>("LanguageId")
                         .HasColumnType("int");
@@ -202,14 +203,15 @@ namespace ams.data.Migrations
                     b.Property<Guid?>("ModifiedUser")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
                     b.HasIndex("AccountId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("CreateUser");
+
+                    b.HasIndex("DeleteUser");
+
+                    b.HasIndex("ModifiedUser");
 
                     b.ToTable("Apartments");
 
@@ -219,7 +221,8 @@ namespace ams.data.Migrations
                             Id = new Guid("d4033eef-ba92-4a1f-9ecb-1eee6996214a"),
                             AccountId = new Guid("db72e0e2-3201-414f-9753-190466e024f3"),
                             ApartmentName = "Huzur APT",
-                            CreateTime = new DateTime(2024, 7, 13, 16, 53, 56, 439, DateTimeKind.Local).AddTicks(1713),
+                            CreateTime = new DateTime(2024, 7, 22, 20, 37, 42, 511, DateTimeKind.Local).AddTicks(6277),
+                            CreateUser = new Guid("6fa95f6e-2516-49e8-9ae6-7745e7743dbf"),
                             IsActive = true,
                             IsDeleted = false
                         },
@@ -228,7 +231,8 @@ namespace ams.data.Migrations
                             Id = new Guid("16f885ff-6897-4d08-afa6-0640c40d2a05"),
                             AccountId = new Guid("db72e0e2-3201-414f-9753-190466e024f3"),
                             ApartmentName = "Sevinç APT",
-                            CreateTime = new DateTime(2024, 7, 13, 16, 53, 56, 439, DateTimeKind.Local).AddTicks(1719),
+                            CreateTime = new DateTime(2024, 7, 22, 20, 37, 42, 511, DateTimeKind.Local).AddTicks(6284),
+                            CreateUser = new Guid("6fa95f6e-2516-49e8-9ae6-7745e7743dbf"),
                             IsActive = true,
                             IsDeleted = false
                         },
@@ -237,7 +241,8 @@ namespace ams.data.Migrations
                             Id = new Guid("d2977402-d13f-423f-bc0f-e639e4a610bb"),
                             AccountId = new Guid("db72e0e2-3201-414f-9753-190466e024f3"),
                             ApartmentName = "Güvenç APT",
-                            CreateTime = new DateTime(2024, 7, 13, 16, 53, 56, 439, DateTimeKind.Local).AddTicks(1729),
+                            CreateTime = new DateTime(2024, 7, 22, 20, 37, 42, 511, DateTimeKind.Local).AddTicks(6286),
+                            CreateUser = new Guid("6fa95f6e-2516-49e8-9ae6-7745e7743dbf"),
                             IsActive = true,
                             IsDeleted = false
                         });
@@ -274,21 +279,21 @@ namespace ams.data.Migrations
                         new
                         {
                             Id = new Guid("4271dd20-390a-46ce-b67d-59678a720270"),
-                            ConcurrencyStamp = "a818913d-5787-44ba-9053-78128c9c2ca8",
+                            ConcurrencyStamp = "6119d03b-7930-4955-a28e-e95ec04f322b",
                             Name = "admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = new Guid("4438dff4-28d6-46c1-90eb-f6b2a233d97e"),
-                            ConcurrencyStamp = "0ad97f76-765a-4518-89a2-bdc7dfaffe17",
+                            ConcurrencyStamp = "e8dc9981-052c-41a6-99c6-0dac40c332bd",
                             Name = "agent",
                             NormalizedName = "AGENT"
                         },
                         new
                         {
                             Id = new Guid("051004f1-a383-4746-a722-3b051d12aaea"),
-                            ConcurrencyStamp = "f7ad1adc-5589-4094-a0d9-6b02dbef96fe",
+                            ConcurrencyStamp = "b90e39b6-ec70-4260-8c58-062b42cbe2f3",
                             Name = "user",
                             NormalizedName = "USER"
                         });
@@ -340,11 +345,11 @@ namespace ams.data.Migrations
                     b.Property<Guid?>("CreateUser")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("DeleteUser")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTime?>("DeletedTime")
                         .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("DeletedUser")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -403,6 +408,12 @@ namespace ams.data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CreateUser");
+
+                    b.HasIndex("DeleteUser");
+
+                    b.HasIndex("ModifiedUser");
+
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
 
@@ -419,8 +430,8 @@ namespace ams.data.Migrations
                             Id = new Guid("6fa95f6e-2516-49e8-9ae6-7745e7743dbf"),
                             AccessFailedCount = 0,
                             AccountId = new Guid("db72e0e2-3201-414f-9753-190466e024f3"),
-                            ConcurrencyStamp = "fbe9a25c-f658-4c46-b8f1-3b200ae738fc",
-                            CreateTime = new DateTime(2024, 7, 13, 16, 53, 56, 440, DateTimeKind.Local).AddTicks(1931),
+                            ConcurrencyStamp = "03737677-1e84-46f7-bf3d-b81e814f87e3",
+                            CreateTime = new DateTime(2024, 7, 22, 20, 37, 42, 513, DateTimeKind.Local).AddTicks(128),
                             Email = "yayirgul@gmail.com",
                             EmailConfirmed = true,
                             Firstname = "Yunus",
@@ -429,10 +440,10 @@ namespace ams.data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "YAYIRGUL@GMAIL.COM",
                             NormalizedUserName = "YAYIRGUL@GMAIL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEEvxog6KGnnwprZuoW67ahvuQ0ELLZ5N+FpfG/TEu4U2LJsvHrbhg8Z1lnVg8KLAfw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAECIbEvh5gayGROfahGNm7apM2z1vs+70wIHtaraiddi/zyOVXt9AcmcnoyG2Lz45GA==",
                             PhoneNumber = "+905558008040",
                             PhoneNumberConfirmed = true,
-                            SecurityStamp = "c8d66621-0009-46ca-a958-f181b39e5397",
+                            SecurityStamp = "93193a71-fe69-433c-87be-03734265e798",
                             TwoFactorEnabled = false,
                             UserName = "yayirgul@gmail.com"
                         },
@@ -441,44 +452,44 @@ namespace ams.data.Migrations
                             Id = new Guid("89da7c75-8291-4baf-9060-028a07393dde"),
                             AccessFailedCount = 0,
                             AccountId = new Guid("db72e0e2-3201-414f-9753-190466e024f3"),
-                            ConcurrencyStamp = "83e7586a-e71f-4775-acec-7a40036b977a",
-                            CreateTime = new DateTime(2024, 7, 13, 16, 53, 56, 474, DateTimeKind.Local).AddTicks(6731),
-                            Email = "erdem@makronet.com",
+                            ConcurrencyStamp = "6b9fad65-b603-4613-8677-0939b0c0beb7",
+                            CreateTime = new DateTime(2024, 7, 22, 20, 37, 42, 549, DateTimeKind.Local).AddTicks(1369),
+                            Email = "kadirkeles@hotmail.com",
                             EmailConfirmed = true,
-                            Firstname = "Erdem",
+                            Firstname = "Kadir",
                             IsActive = false,
-                            Lastname = "Tekin",
+                            Lastname = "Keleş",
                             LockoutEnabled = false,
-                            NormalizedEmail = "ERDEM@MAKRONET.COM",
-                            NormalizedUserName = "ERDEM@MAKRONET.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEPfo3h0sKc9NB/ygAnIhJL4OB8dN+3a/fMyABthGgJGBGcOI/MI1YmQorZzg9iWvlg==",
+                            NormalizedEmail = "KADIRKELES@HOTMAIL.COM",
+                            NormalizedUserName = "KADIRKELES@HOTMAIL.COM",
+                            PasswordHash = "AQAAAAIAAYagAAAAEGpXI6qerECfc5VVgs4Zu//uRwnBph8u1AtiP5ZVnUMBIMFLex0LK3WY1a3MYgfacA==",
                             PhoneNumber = "+905558008050",
                             PhoneNumberConfirmed = true,
-                            SecurityStamp = "462cf40b-2f32-498a-bf80-f8e83fd93beb",
+                            SecurityStamp = "cdcb6781-65d0-4bc4-99c0-458fd5469451",
                             TwoFactorEnabled = false,
-                            UserName = "erdem@makronet.com"
+                            UserName = "kadirkeles@hotmail.com"
                         },
                         new
                         {
                             Id = new Guid("a35a610d-689f-4ab4-9324-cc227bfdbfba"),
                             AccessFailedCount = 0,
                             AccountId = new Guid("db72e0e2-3201-414f-9753-190466e024f3"),
-                            ConcurrencyStamp = "40363a45-9f9b-4692-8605-9393b094413e",
-                            CreateTime = new DateTime(2024, 7, 13, 16, 53, 56, 508, DateTimeKind.Local).AddTicks(5885),
-                            Email = "umut@makronet.com",
+                            ConcurrencyStamp = "5b068333-3255-4914-9049-02e6a9fd7f5f",
+                            CreateTime = new DateTime(2024, 7, 22, 20, 37, 42, 585, DateTimeKind.Local).AddTicks(289),
+                            Email = "lokmanyilmaz@hotmail.com",
                             EmailConfirmed = true,
-                            Firstname = "Umut",
+                            Firstname = "Lokman",
                             IsActive = false,
-                            Lastname = "Arslan",
+                            Lastname = "Yılmaz",
                             LockoutEnabled = false,
-                            NormalizedEmail = "UMUT@MAKRONET.COM",
-                            NormalizedUserName = "UMUT@MAKRONET.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEFO0jg58FqnLkOXssDZTAN6P3kbrr8+Kszv2INkifHqSmWKYiiDh34WJLHFYGz357A==",
+                            NormalizedEmail = "LOKMANYILMAZ@HOTMAIL.COM",
+                            NormalizedUserName = "LOKMANYILMAZ@HOTMAIL.COM",
+                            PasswordHash = "AQAAAAIAAYagAAAAEIaod5oZe7y0mM8/gDsKCfs0XZCZKUkeKwmTBpDHDea7hUH1m23y4KkFKsTyPDq5Jw==",
                             PhoneNumber = "+905558008060",
                             PhoneNumberConfirmed = true,
-                            SecurityStamp = "55f05295-11a7-4364-8b7e-a5257f82029c",
+                            SecurityStamp = "69a73d0f-1fb7-48ff-85b1-d1fdc44cf70e",
                             TwoFactorEnabled = false,
-                            UserName = "umut@makronet.com"
+                            UserName = "lokmanyilmaz@hotmail.com"
                         });
                 });
 
@@ -590,7 +601,7 @@ namespace ams.data.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal?>("Amount")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("money");
 
                     b.Property<Guid>("ApartmentId")
                         .HasColumnType("uniqueidentifier");
@@ -601,16 +612,19 @@ namespace ams.data.Migrations
                     b.Property<Guid?>("CreateUser")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("DebitUser")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("DeleteUser")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTime?>("DeletedTime")
                         .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("DeletedUser")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ExpenseCode")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("HousingId")
+                    b.Property<Guid?>("HousingId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("IsActive")
@@ -620,7 +634,8 @@ namespace ams.data.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("IsStatus")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(80)
+                        .HasColumnType("nvarchar(80)");
 
                     b.Property<int?>("LanguageId")
                         .HasColumnType("int");
@@ -629,9 +644,6 @@ namespace ams.data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<Guid?>("ModifiedUser")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("OwnerId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("Paid")
@@ -643,7 +655,15 @@ namespace ams.data.Migrations
 
                     b.HasIndex("ApartmentId");
 
+                    b.HasIndex("CreateUser");
+
+                    b.HasIndex("DebitUser");
+
+                    b.HasIndex("DeleteUser");
+
                     b.HasIndex("HousingId");
+
+                    b.HasIndex("ModifiedUser");
 
                     b.ToTable("Debits");
                 });
@@ -658,9 +678,9 @@ namespace ams.data.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal?>("Amount")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("money");
 
-                    b.Property<Guid>("ApartmentId")
+                    b.Property<Guid?>("ApartmentId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreateTime")
@@ -669,11 +689,11 @@ namespace ams.data.Migrations
                     b.Property<Guid?>("CreateUser")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("DeleteUser")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTime?>("DeletedTime")
                         .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("DeletedUser")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ExpenseCode")
                         .HasColumnType("nvarchar(max)");
@@ -692,7 +712,8 @@ namespace ams.data.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("IsStatus")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(80)
+                        .HasColumnType("nvarchar(80)");
 
                     b.Property<int?>("LanguageId")
                         .HasColumnType("int");
@@ -715,6 +736,12 @@ namespace ams.data.Migrations
 
                     b.HasIndex("ApartmentId");
 
+                    b.HasIndex("CreateUser");
+
+                    b.HasIndex("DeleteUser");
+
+                    b.HasIndex("ModifiedUser");
+
                     b.ToTable("Expenses");
                 });
 
@@ -727,7 +754,7 @@ namespace ams.data.Migrations
                     b.Property<Guid>("AccountId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ApartmentId")
+                    b.Property<Guid?>("ApartmentId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreateTime")
@@ -736,15 +763,18 @@ namespace ams.data.Migrations
                     b.Property<Guid?>("CreateUser")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("DeleteUser")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTime?>("DeletedTime")
                         .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("DeletedUser")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("HousingName")
                         .HasMaxLength(300)
                         .HasColumnType("nvarchar(300)");
+
+                    b.Property<Guid?>("HousingUser")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
@@ -753,7 +783,8 @@ namespace ams.data.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("IsStatus")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(80)
+                        .HasColumnType("nvarchar(80)");
 
                     b.Property<int?>("LanguageId")
                         .HasColumnType("int");
@@ -764,16 +795,19 @@ namespace ams.data.Migrations
                     b.Property<Guid?>("ModifiedUser")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
                     b.HasIndex("AccountId");
 
                     b.HasIndex("ApartmentId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("CreateUser");
+
+                    b.HasIndex("DeleteUser");
+
+                    b.HasIndex("HousingUser");
+
+                    b.HasIndex("ModifiedUser");
 
                     b.ToTable("Housings");
 
@@ -783,7 +817,7 @@ namespace ams.data.Migrations
                             Id = new Guid("709a770b-66c6-4adc-bd19-6438117bf646"),
                             AccountId = new Guid("db72e0e2-3201-414f-9753-190466e024f3"),
                             ApartmentId = new Guid("d4033eef-ba92-4a1f-9ecb-1eee6996214a"),
-                            CreateTime = new DateTime(2024, 7, 13, 16, 53, 56, 544, DateTimeKind.Local).AddTicks(607),
+                            CreateTime = new DateTime(2024, 7, 22, 20, 37, 42, 623, DateTimeKind.Local).AddTicks(3175),
                             HousingName = "Daire 1",
                             IsActive = true,
                             IsDeleted = false
@@ -800,7 +834,7 @@ namespace ams.data.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal?>("Amount")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("money");
 
                     b.Property<Guid>("ApartmentId")
                         .HasColumnType("uniqueidentifier");
@@ -811,13 +845,16 @@ namespace ams.data.Migrations
                     b.Property<Guid?>("CreateUser")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("DeleteUser")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTime?>("DeletedTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("DeletedUser")
+                    b.Property<Guid?>("HousingId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("HousingId")
+                    b.Property<Guid?>("HousingSafeUser")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("IsActive")
@@ -827,7 +864,8 @@ namespace ams.data.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("IsStatus")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(80)
+                        .HasColumnType("nvarchar(80)");
 
                     b.Property<int?>("LanguageId")
                         .HasColumnType("int");
@@ -838,18 +876,21 @@ namespace ams.data.Migrations
                     b.Property<Guid?>("ModifiedUser")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
                     b.HasIndex("AccountId");
 
                     b.HasIndex("ApartmentId");
 
+                    b.HasIndex("CreateUser");
+
+                    b.HasIndex("DeleteUser");
+
                     b.HasIndex("HousingId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("HousingSafeUser");
+
+                    b.HasIndex("ModifiedUser");
 
                     b.ToTable("HousingSafes");
 
@@ -860,11 +901,32 @@ namespace ams.data.Migrations
                             AccountId = new Guid("db72e0e2-3201-414f-9753-190466e024f3"),
                             Amount = 100m,
                             ApartmentId = new Guid("d4033eef-ba92-4a1f-9ecb-1eee6996214a"),
-                            CreateTime = new DateTime(2024, 7, 13, 16, 53, 56, 544, DateTimeKind.Local).AddTicks(1086),
+                            CreateTime = new DateTime(2024, 7, 22, 20, 37, 42, 623, DateTimeKind.Local).AddTicks(4311),
                             HousingId = new Guid("709a770b-66c6-4adc-bd19-6438117bf646"),
                             IsActive = true,
                             IsDeleted = false
                         });
+                });
+
+            modelBuilder.Entity("ams.entity.Entities.Account", b =>
+                {
+                    b.HasOne("ams.entity.Entities.AppUser", "CreateTheUser")
+                        .WithMany()
+                        .HasForeignKey("CreateUser");
+
+                    b.HasOne("ams.entity.Entities.AppUser", "DeleteTheUser")
+                        .WithMany()
+                        .HasForeignKey("DeleteUser");
+
+                    b.HasOne("ams.entity.Entities.AppUser", "ModifiedTheUser")
+                        .WithMany()
+                        .HasForeignKey("ModifiedUser");
+
+                    b.Navigation("CreateTheUser");
+
+                    b.Navigation("DeleteTheUser");
+
+                    b.Navigation("ModifiedTheUser");
                 });
 
             modelBuilder.Entity("ams.entity.Entities.Apartment", b =>
@@ -873,13 +935,25 @@ namespace ams.data.Migrations
                         .WithMany("Apartments")
                         .HasForeignKey("AccountId");
 
-                    b.HasOne("ams.entity.Entities.AppUser", "User")
+                    b.HasOne("ams.entity.Entities.AppUser", "CreateTheUser")
                         .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("CreateUser");
+
+                    b.HasOne("ams.entity.Entities.AppUser", "DeleteTheUser")
+                        .WithMany()
+                        .HasForeignKey("DeleteUser");
+
+                    b.HasOne("ams.entity.Entities.AppUser", "ModifiedTheUser")
+                        .WithMany()
+                        .HasForeignKey("ModifiedUser");
 
                     b.Navigation("Accounts");
 
-                    b.Navigation("User");
+                    b.Navigation("CreateTheUser");
+
+                    b.Navigation("DeleteTheUser");
+
+                    b.Navigation("ModifiedTheUser");
                 });
 
             modelBuilder.Entity("ams.entity.Entities.AppRoleClaim", b =>
@@ -889,6 +963,27 @@ namespace ams.data.Migrations
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("ams.entity.Entities.AppUser", b =>
+                {
+                    b.HasOne("ams.entity.Entities.AppUser", "CreateTheUser")
+                        .WithMany()
+                        .HasForeignKey("CreateUser");
+
+                    b.HasOne("ams.entity.Entities.AppUser", "DeleteTheUser")
+                        .WithMany()
+                        .HasForeignKey("DeleteUser");
+
+                    b.HasOne("ams.entity.Entities.AppUser", "ModifiedTheUser")
+                        .WithMany()
+                        .HasForeignKey("ModifiedUser");
+
+                    b.Navigation("CreateTheUser");
+
+                    b.Navigation("DeleteTheUser");
+
+                    b.Navigation("ModifiedTheUser");
                 });
 
             modelBuilder.Entity("ams.entity.Entities.AppUserClaim", b =>
@@ -947,17 +1042,39 @@ namespace ams.data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("ams.entity.Entities.AppUser", "CreateTheUser")
+                        .WithMany()
+                        .HasForeignKey("CreateUser");
+
+                    b.HasOne("ams.entity.Entities.AppUser", "DebitTheUser")
+                        .WithMany()
+                        .HasForeignKey("DebitUser");
+
+                    b.HasOne("ams.entity.Entities.AppUser", "DeleteTheUser")
+                        .WithMany()
+                        .HasForeignKey("DeleteUser");
+
                     b.HasOne("ams.entity.Entities.Housing", "Housing")
                         .WithMany("Debits")
-                        .HasForeignKey("HousingId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("HousingId");
+
+                    b.HasOne("ams.entity.Entities.AppUser", "ModifiedTheUser")
+                        .WithMany()
+                        .HasForeignKey("ModifiedUser");
 
                     b.Navigation("Account");
 
                     b.Navigation("Apartment");
 
+                    b.Navigation("CreateTheUser");
+
+                    b.Navigation("DebitTheUser");
+
+                    b.Navigation("DeleteTheUser");
+
                     b.Navigation("Housing");
+
+                    b.Navigation("ModifiedTheUser");
                 });
 
             modelBuilder.Entity("ams.entity.Entities.Expense", b =>
@@ -970,13 +1087,29 @@ namespace ams.data.Migrations
 
                     b.HasOne("ams.entity.Entities.Apartment", "Apartments")
                         .WithMany()
-                        .HasForeignKey("ApartmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ApartmentId");
+
+                    b.HasOne("ams.entity.Entities.AppUser", "CreateTheUser")
+                        .WithMany()
+                        .HasForeignKey("CreateUser");
+
+                    b.HasOne("ams.entity.Entities.AppUser", "DeleteTheUser")
+                        .WithMany()
+                        .HasForeignKey("DeleteUser");
+
+                    b.HasOne("ams.entity.Entities.AppUser", "ModifiedTheUser")
+                        .WithMany()
+                        .HasForeignKey("ModifiedUser");
 
                     b.Navigation("Accounts");
 
                     b.Navigation("Apartments");
+
+                    b.Navigation("CreateTheUser");
+
+                    b.Navigation("DeleteTheUser");
+
+                    b.Navigation("ModifiedTheUser");
                 });
 
             modelBuilder.Entity("ams.entity.Entities.Housing", b =>
@@ -989,19 +1122,35 @@ namespace ams.data.Migrations
 
                     b.HasOne("ams.entity.Entities.Apartment", "Apartment")
                         .WithMany()
-                        .HasForeignKey("ApartmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ApartmentId");
 
-                    b.HasOne("ams.entity.Entities.AppUser", "User")
+                    b.HasOne("ams.entity.Entities.AppUser", "CreateTheUser")
                         .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("CreateUser");
+
+                    b.HasOne("ams.entity.Entities.AppUser", "DeleteTheUser")
+                        .WithMany()
+                        .HasForeignKey("DeleteUser");
+
+                    b.HasOne("ams.entity.Entities.AppUser", "HousingTheUser")
+                        .WithMany()
+                        .HasForeignKey("HousingUser");
+
+                    b.HasOne("ams.entity.Entities.AppUser", "ModifiedTheUser")
+                        .WithMany()
+                        .HasForeignKey("ModifiedUser");
 
                     b.Navigation("Account");
 
                     b.Navigation("Apartment");
 
-                    b.Navigation("User");
+                    b.Navigation("CreateTheUser");
+
+                    b.Navigation("DeleteTheUser");
+
+                    b.Navigation("HousingTheUser");
+
+                    b.Navigation("ModifiedTheUser");
                 });
 
             modelBuilder.Entity("ams.entity.Entities.HousingSafe", b =>
@@ -1018,23 +1167,39 @@ namespace ams.data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("ams.entity.Entities.AppUser", "CreateTheUser")
+                        .WithMany()
+                        .HasForeignKey("CreateUser");
+
+                    b.HasOne("ams.entity.Entities.AppUser", "DeleteTheUser")
+                        .WithMany()
+                        .HasForeignKey("DeleteUser");
+
                     b.HasOne("ams.entity.Entities.Housing", "Housing")
                         .WithMany()
-                        .HasForeignKey("HousingId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("HousingId");
 
-                    b.HasOne("ams.entity.Entities.AppUser", "User")
+                    b.HasOne("ams.entity.Entities.AppUser", "HousingSafeTheUser")
                         .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("HousingSafeUser");
+
+                    b.HasOne("ams.entity.Entities.AppUser", "ModifiedTheUser")
+                        .WithMany()
+                        .HasForeignKey("ModifiedUser");
 
                     b.Navigation("Account");
 
                     b.Navigation("Apartment");
 
+                    b.Navigation("CreateTheUser");
+
+                    b.Navigation("DeleteTheUser");
+
                     b.Navigation("Housing");
 
-                    b.Navigation("User");
+                    b.Navigation("HousingSafeTheUser");
+
+                    b.Navigation("ModifiedTheUser");
                 });
 
             modelBuilder.Entity("ams.entity.Entities.Account", b =>

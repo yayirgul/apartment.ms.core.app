@@ -7,19 +7,25 @@
 
     public class Expense : EntityBase // TODO : Giderler
     {
-        //public Guid OwnerId { get; set; }
         public Guid AccountId { get; set; }
         public Account? Accounts { get; set; }
 
-
-        public Guid ApartmentId { get; set; }
+        public Guid? ApartmentId { get; set; }
         public Apartment? Apartments { get; set; }
 
 
-        //[ForeignKey(nameof(AppCreateUser))]
-        //public Guid CreateUser { get; set; }
-        //public AppUser? AppCreateUser { get; set; }
 
+        public Guid? CreateUser { get; set; }
+        [ForeignKey("CreateUser")]
+        public AppUser? CreateTheUser { get; set; }
+
+        public Guid? ModifiedUser { get; set; }
+        [ForeignKey("ModifiedUser")]
+        public AppUser? ModifiedTheUser { get; set; }
+
+        public Guid? DeleteUser { get; set; }
+        [ForeignKey("DeleteUser")]
+        public AppUser? DeleteTheUser { get; set; }
 
 
 

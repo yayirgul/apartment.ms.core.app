@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ams.data.Context;
 
@@ -11,9 +12,11 @@ using ams.data.Context;
 namespace ams.data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240722192059_ams_mig_v1")]
+    partial class ams_mig_v1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -87,7 +90,7 @@ namespace ams.data.Migrations
                         {
                             Id = new Guid("db72e0e2-3201-414f-9753-190466e024f3"),
                             AccountName = "ABC A.Ş",
-                            CreateTime = new DateTime(2024, 7, 22, 22, 24, 4, 932, DateTimeKind.Local).AddTicks(5161),
+                            CreateTime = new DateTime(2024, 7, 22, 22, 20, 59, 221, DateTimeKind.Local).AddTicks(7013),
                             CreateUser = new Guid("6fa95f6e-2516-49e8-9ae6-7745e7743dbf"),
                             Domain = "abc.com",
                             IsActive = true,
@@ -147,7 +150,7 @@ namespace ams.data.Migrations
                         new
                         {
                             Id = new Guid("a2b3d904-401c-431f-9845-7fa2652d87fc"),
-                            CreateTime = new DateTime(2024, 7, 22, 22, 24, 4, 932, DateTimeKind.Local).AddTicks(5965),
+                            CreateTime = new DateTime(2024, 7, 22, 22, 20, 59, 221, DateTimeKind.Local).AddTicks(7818),
                             IsActive = true,
                             IsDeleted = false,
                             ParentId = new Guid("00000000-0000-0000-0000-000000000000"),
@@ -218,7 +221,7 @@ namespace ams.data.Migrations
                             Id = new Guid("d4033eef-ba92-4a1f-9ecb-1eee6996214a"),
                             AccountId = new Guid("db72e0e2-3201-414f-9753-190466e024f3"),
                             ApartmentName = "Huzur APT",
-                            CreateTime = new DateTime(2024, 7, 22, 22, 24, 4, 932, DateTimeKind.Local).AddTicks(6508),
+                            CreateTime = new DateTime(2024, 7, 22, 22, 20, 59, 221, DateTimeKind.Local).AddTicks(8315),
                             CreateUser = new Guid("6fa95f6e-2516-49e8-9ae6-7745e7743dbf"),
                             IsActive = true,
                             IsDeleted = false
@@ -228,7 +231,7 @@ namespace ams.data.Migrations
                             Id = new Guid("16f885ff-6897-4d08-afa6-0640c40d2a05"),
                             AccountId = new Guid("db72e0e2-3201-414f-9753-190466e024f3"),
                             ApartmentName = "Sevinç APT",
-                            CreateTime = new DateTime(2024, 7, 22, 22, 24, 4, 932, DateTimeKind.Local).AddTicks(6513),
+                            CreateTime = new DateTime(2024, 7, 22, 22, 20, 59, 221, DateTimeKind.Local).AddTicks(8320),
                             CreateUser = new Guid("6fa95f6e-2516-49e8-9ae6-7745e7743dbf"),
                             IsActive = true,
                             IsDeleted = false
@@ -238,7 +241,7 @@ namespace ams.data.Migrations
                             Id = new Guid("d2977402-d13f-423f-bc0f-e639e4a610bb"),
                             AccountId = new Guid("db72e0e2-3201-414f-9753-190466e024f3"),
                             ApartmentName = "Güvenç APT",
-                            CreateTime = new DateTime(2024, 7, 22, 22, 24, 4, 932, DateTimeKind.Local).AddTicks(6516),
+                            CreateTime = new DateTime(2024, 7, 22, 22, 20, 59, 221, DateTimeKind.Local).AddTicks(8323),
                             CreateUser = new Guid("6fa95f6e-2516-49e8-9ae6-7745e7743dbf"),
                             IsActive = true,
                             IsDeleted = false
@@ -276,21 +279,21 @@ namespace ams.data.Migrations
                         new
                         {
                             Id = new Guid("4271dd20-390a-46ce-b67d-59678a720270"),
-                            ConcurrencyStamp = "1ec970f4-0921-4b96-950b-07ce4800bf17",
+                            ConcurrencyStamp = "8253b17a-4020-4316-bdf4-3b8c1586a037",
                             Name = "admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = new Guid("4438dff4-28d6-46c1-90eb-f6b2a233d97e"),
-                            ConcurrencyStamp = "bd698e0d-e0d5-4fe3-b3f3-893aef20da07",
+                            ConcurrencyStamp = "65c3f4f1-74b7-4ace-85fe-824be00c82ad",
                             Name = "agent",
                             NormalizedName = "AGENT"
                         },
                         new
                         {
                             Id = new Guid("051004f1-a383-4746-a722-3b051d12aaea"),
-                            ConcurrencyStamp = "3120fc2a-41c0-4429-ab6e-373a7adad692",
+                            ConcurrencyStamp = "df3bfb58-a8e2-43c2-bb78-8e8bc87fe229",
                             Name = "user",
                             NormalizedName = "USER"
                         });
@@ -427,8 +430,8 @@ namespace ams.data.Migrations
                             Id = new Guid("6fa95f6e-2516-49e8-9ae6-7745e7743dbf"),
                             AccessFailedCount = 0,
                             AccountId = new Guid("db72e0e2-3201-414f-9753-190466e024f3"),
-                            ConcurrencyStamp = "4e646029-e817-4968-a19e-d590ef10cd50",
-                            CreateTime = new DateTime(2024, 7, 22, 22, 24, 4, 933, DateTimeKind.Local).AddTicks(8710),
+                            ConcurrencyStamp = "a9af99c8-9d06-480d-aa88-9edef90683ac",
+                            CreateTime = new DateTime(2024, 7, 22, 22, 20, 59, 223, DateTimeKind.Local).AddTicks(94),
                             Email = "yayirgul@gmail.com",
                             EmailConfirmed = true,
                             Firstname = "Yunus",
@@ -437,10 +440,10 @@ namespace ams.data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "YAYIRGUL@GMAIL.COM",
                             NormalizedUserName = "YAYIRGUL@GMAIL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEMzaMuGikYAJHGYw31MbIF1mOrzBl6BNZVGy2JnuPlnEh+cWBlofmYh8imABWIh8tA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEMcnPMRfJywi4fXj+mUSHQNeWA+DVbaUGQA6LBnJqn0+b/7JKK1AbaNVvQRoZ9y0GQ==",
                             PhoneNumber = "+905558008040",
                             PhoneNumberConfirmed = true,
-                            SecurityStamp = "a8a7e896-7ff2-49ff-bc6d-c9feca75755c",
+                            SecurityStamp = "23e4277c-68d3-4600-b09d-9a3c0178ae56",
                             TwoFactorEnabled = false,
                             UserName = "yayirgul@gmail.com"
                         },
@@ -449,8 +452,8 @@ namespace ams.data.Migrations
                             Id = new Guid("89da7c75-8291-4baf-9060-028a07393dde"),
                             AccessFailedCount = 0,
                             AccountId = new Guid("db72e0e2-3201-414f-9753-190466e024f3"),
-                            ConcurrencyStamp = "699e94f0-e53d-41f5-87a9-f2290d04380e",
-                            CreateTime = new DateTime(2024, 7, 22, 22, 24, 4, 969, DateTimeKind.Local).AddTicks(850),
+                            ConcurrencyStamp = "a057661c-8fcb-489c-94bf-8bc6bb3ae365",
+                            CreateTime = new DateTime(2024, 7, 22, 22, 20, 59, 259, DateTimeKind.Local).AddTicks(1991),
                             Email = "kadirkeles@hotmail.com",
                             EmailConfirmed = true,
                             Firstname = "Kadir",
@@ -459,10 +462,10 @@ namespace ams.data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "KADIRKELES@HOTMAIL.COM",
                             NormalizedUserName = "KADIRKELES@HOTMAIL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEIvNyFcME1MIEqX8QSw5jmCxrrFbobawuCTj1tzCNOBpKyAJHSP5Yyu17bgAR7FEKg==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEKke09yFgTvMub0FNzKM/eHpa9yFVeRWzskR7a+Issv5Zz5KxswNyEPOL1SK9N28JA==",
                             PhoneNumber = "+905558008050",
                             PhoneNumberConfirmed = true,
-                            SecurityStamp = "54c5a647-a7c2-4861-8fa3-1a51c06360a2",
+                            SecurityStamp = "3f3ae7f3-9d40-4442-9efc-484dc59def02",
                             TwoFactorEnabled = false,
                             UserName = "kadirkeles@hotmail.com"
                         },
@@ -471,8 +474,8 @@ namespace ams.data.Migrations
                             Id = new Guid("a35a610d-689f-4ab4-9324-cc227bfdbfba"),
                             AccessFailedCount = 0,
                             AccountId = new Guid("db72e0e2-3201-414f-9753-190466e024f3"),
-                            ConcurrencyStamp = "7be15d97-b3d5-4c1a-a152-d3ef399d4fc8",
-                            CreateTime = new DateTime(2024, 7, 22, 22, 24, 5, 5, DateTimeKind.Local).AddTicks(5441),
+                            ConcurrencyStamp = "5ee725f0-37cf-45b2-9aa1-8a2e37eb5218",
+                            CreateTime = new DateTime(2024, 7, 22, 22, 20, 59, 294, DateTimeKind.Local).AddTicks(7622),
                             Email = "lokmanyilmaz@hotmail.com",
                             EmailConfirmed = true,
                             Firstname = "Lokman",
@@ -481,10 +484,10 @@ namespace ams.data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "LOKMANYILMAZ@HOTMAIL.COM",
                             NormalizedUserName = "LOKMANYILMAZ@HOTMAIL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEG5dv7FtraANsNsM6TvDkGYQ8lOBE8T+kvlMf2QHey8fI69tkTLNeyt5UB7GfO586Q==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEEsah1e+sEnWOFfoKsqPZlkSkkACUHA1Da44AZCTTY1yT68jPdtDIkTrNme22Kxsag==",
                             PhoneNumber = "+905558008060",
                             PhoneNumberConfirmed = true,
-                            SecurityStamp = "891bded2-1430-4bb5-9637-235f796c5c87",
+                            SecurityStamp = "a0f1c979-a300-40d6-90eb-e18d09db45d7",
                             TwoFactorEnabled = false,
                             UserName = "lokmanyilmaz@hotmail.com"
                         });
@@ -773,6 +776,9 @@ namespace ams.data.Migrations
                     b.Property<Guid?>("HousingSafe")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("HousingSafeId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid?>("HousingUser")
                         .HasColumnType("uniqueidentifier");
 
@@ -821,7 +827,7 @@ namespace ams.data.Migrations
                             Id = new Guid("709a770b-66c6-4adc-bd19-6438117bf646"),
                             AccountId = new Guid("db72e0e2-3201-414f-9753-190466e024f3"),
                             ApartmentId = new Guid("d4033eef-ba92-4a1f-9ecb-1eee6996214a"),
-                            CreateTime = new DateTime(2024, 7, 22, 22, 24, 5, 42, DateTimeKind.Local).AddTicks(6216),
+                            CreateTime = new DateTime(2024, 7, 22, 22, 20, 59, 330, DateTimeKind.Local).AddTicks(3683),
                             CreateUser = new Guid("6fa95f6e-2516-49e8-9ae6-7745e7743dbf"),
                             HousingName = "Daire 1",
                             IsActive = true,
@@ -904,7 +910,7 @@ namespace ams.data.Migrations
                             AccountId = new Guid("db72e0e2-3201-414f-9753-190466e024f3"),
                             Amount = 100m,
                             ApartmentId = new Guid("d4033eef-ba92-4a1f-9ecb-1eee6996214a"),
-                            CreateTime = new DateTime(2024, 7, 22, 22, 24, 5, 42, DateTimeKind.Local).AddTicks(6799),
+                            CreateTime = new DateTime(2024, 7, 22, 22, 20, 59, 330, DateTimeKind.Local).AddTicks(4167),
                             HousingId = new Guid("709a770b-66c6-4adc-bd19-6438117bf646"),
                             IsActive = true,
                             IsDeleted = false

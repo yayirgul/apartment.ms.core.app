@@ -12,12 +12,14 @@
             {
                 Id = Guid.Parse("D4033EEF-BA92-4A1F-9ECB-1EEE6996214A"),
                 AccountId = Guid.Parse("DB72E0E2-3201-414F-9753-190466E024F3"),
+                CreateUser = Guid.Parse("6FA95F6E-2516-49E8-9AE6-7745E7743DBF"),
                 ApartmentName = "Huzur APT",
                 IsActive = true,
             },
             new Apartment {
                 Id = Guid.Parse("16F885FF-6897-4D08-AFA6-0640C40D2A05"),
                 AccountId = Guid.Parse("DB72E0E2-3201-414F-9753-190466E024F3"),
+                CreateUser = Guid.Parse("6FA95F6E-2516-49E8-9AE6-7745E7743DBF"),
                 ApartmentName = "Sevinç APT",
                 IsActive = true,
             },
@@ -25,6 +27,7 @@
             {
                 Id = Guid.Parse("D2977402-D13F-423F-BC0F-E639E4A610BB"),
                 AccountId = Guid.Parse("DB72E0E2-3201-414F-9753-190466E024F3"),
+                CreateUser = Guid.Parse("6FA95F6E-2516-49E8-9AE6-7745E7743DBF"),
                 ApartmentName = "Güvenç APT",
                 IsActive = true,
             });

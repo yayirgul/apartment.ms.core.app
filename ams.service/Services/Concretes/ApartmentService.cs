@@ -29,7 +29,7 @@
 
         public async Task<List<ApartmentDTO.ListView>> GetAllAsync()
         {
-            var r = await Uow.GetRepository<Apartment>().GetAllAsync(x => !x.IsDeleted, y => y.User!);
+            var r = await Uow.GetRepository<Apartment>().GetAllAsync(x => !x.IsDeleted, y => y.CreateTheUser!);
             
 
             var apartments = r.ConvertAll(x => new ApartmentDTO.ListView
@@ -38,7 +38,7 @@
                 ApartmentName = x.ApartmentName,
                 CreateTime = x.CreateTime,
                 _CreateTime = x.CreateTime != null ? x.CreateTime.ToString("dd/MM/yyyy") : "",
-                CreateUser = x.User != null ? x.User!.Firstname + " " + x.User.Lastname : "",
+                CreateUser = x.CreateTheUser != null ? x.CreateTheUser!.Firstname + " " + x.CreateTheUser.Lastname : "",
                 IsActive = x.IsActive ? 1 : 2,
             });
 

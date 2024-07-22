@@ -7,7 +7,7 @@
         <div class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
             <!--begin::Info-->
             <div class="d-flex align-items-center flex-wrap mr-2">
-                <h5 class="text-dark font-weight-bold mt-2 mb-2 mr-5">Daireler</h5>
+                <h5 class="text-dark font-weight-bold mt-2 mb-2 mr-5">Konutlar</h5>
                 <div class="subheader-separator subheader-separator-ver mt-2 mb-2 mr-4 bg-gray-200"></div>
                 <span class="text-muted font-weight-bold mr-4">#XRS-45670</span>
             </div>
@@ -20,4 +20,747 @@
     </div>
 }
 
-@section Scripts { }
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="card card-custom">
+                <div class="card-header">
+                    <div class="card-title">
+                        <span class="card-icon">
+                            <i class="far fa-building text-primary"></i>
+                        </span>
+                        <h3 class="card-label">Konutlar</h3>
+                    </div>
+                    <div class="card-toolbar">
+
+                        <a href="javascript:;" id="modal-housing-new" class="btn btn-primary font-weight-bolder">
+                            Yeni Konut
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+
+                    <div class="mb-7">
+                        <div class="row align-items-center">
+                            <div class="col-lg-12 col-xl-12">
+                                <div class="row align-items-center">
+
+                                    <div class="col-md-2 my-2 my-md-0">
+                                        <div class="d-flex align-items-center">
+                                            <select class="form-control" id="combo-filter-apartments">
+                                                @* <option value="">Tümü</option> *@
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-1 my-2 my-md-0">
+                                        <div class="d-flex align-items-center">
+                                            <select class="form-control" id="combof-status">
+                                                <option value="" selected="selected">Tümü</option>
+                                                <option value="1">Aktif</option>
+                                                <option value="2">Pasif</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+
+                                     
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="datatable datatable-bordered datatable-head-custom" id="t-housings"></div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-housing" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-housing-title">Yeni Konut</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <form class="form" id="fv-form-housing">
+
+                    <div class="form-group mb-0 row">
+
+                        <input type="hidden" name="HousingId" />
+
+                        <div class="col-xl-12 mb-6">
+                            <label>* Apartman</label>
+                            <select class="form-control" name="Apartments" id="combo-apartments"></select>
+                        </div>
+
+                        <div class="col-xl-12 mb-6">
+                            <label>* Konut Adı</label>
+                            <input type="text" name="HousingName" class="form-control" placeholder="">
+                        </div>
+
+                        <div class="col-xl-12 mb-6">
+                            <label>* Konut Sahibi</label>
+                            <select class="form-control" name="Users" id="combo-users"></select>
+                        </div>
+
+
+
+                        <div class="col-xl-6 mb-6">
+                            <label>* Ay</label>
+                            <select class="form-control" id="combo-expense-months">
+                                <option value="1">Ocak</option>
+                                <option value="2">Şubat</option>
+                                <option value="3">Mart</option>
+                                <option value="4">Nisan</option>
+                                <option value="5">Mayıs</option>
+                                <option value="6">Haziran</option>
+                                <option value="7">Temmuz</option>
+                                <option value="8">Ağustos</option>
+                                <option value="9">Eylül</option>
+                                <option value="10">Ekim</option>
+                                <option value="11">Kasım</option>
+                                <option value="12">Aralık</option>
+                            </select>
+                        </div>
+
+                        <div class="col-xl-6">
+                            <label>* Yıl</label>
+                            <select class="form-control" id="combo-expense-years">
+                                <option value="2024">2024</option>
+                                <option value="2023">2023</option>
+                            </select>
+                        </div>
+
+                        <div class="col-xl-12">
+                            <label>* Tutar</label>
+                            <input type="text" name="Amount" class="form-control money" id="kt_money_input" maxlength="22" placeholder="0,00">
+                        </div>
+
+                    </div>
+
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                @*<button type="button" class="btn btn-light-primary font-weight-bold" data-dismiss="modal">Close</button>*@
+                <button type="button" id="fv-housing-save" class="btn btn-primary font-weight-bold">Kaydet</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+@section Scripts {
+
+    <script src="~/lib/theme/plugins/custom/datatables/datatables.bundle.js"></script>
+
+    <script type="text/javascript">
+
+        var _date = new Date();
+
+        // Query Component Selector
+        const qcs = {
+            default: [
+                {
+                    month: _date.getMonth() + 1,
+                    year: _date.getFullYear(),
+                }
+            ],
+            table: "#t-housings",
+            input: {
+                housing_id: "[name='ExpenseId']",
+                housing_name: "[name='HousingName']",
+                expense_amount: "[name='Amount']"
+            },
+            combo: {
+                apartments: '#combo-apartments',
+                filter: {
+                    apartments: '#combo-filter-apartments',
+                }
+            },
+            modal: {
+                housing: '#modal-housing',
+                housing_new: '#modal-housing-new',
+                housing_edit: '.modal-housing-edit',
+            }
+        }
+
+        function combo_apartments() {
+
+            $.ajax({
+                type: 'GET',
+                url: "/ams/app/combo-apartments",
+                async: false,
+                dataType: 'json',
+                success: function (data) {
+
+                    $.each(data, function (i, v) {
+
+                        if (i == 0) {
+                            $(qcs.combo.filter.apartments).append('<option value=' + v.id + ' selected="selected">' + v.apartmentName + '</option>');
+                            $(qcs.combo.apartments).append('<option value=' + v.id + ' selected="selected">' + v.apartmentName + '</option>');
+                        } else {
+                            $(qcs.combo.filter.apartments).append('<option value=' + v.id + '>' + v.apartmentName + '</option>');
+                            $(qcs.combo.apartments).append('<option value=' + v.id + '>' + v.apartmentName + '</option>');
+                        }
+
+                    });
+
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log('Could not get posts, server response: ' + textStatus + ': ' + errorThrown);
+                }
+            });
+
+        }
+
+
+        // $(qcs.modal_user_email).modal('hide');
+
+
+        function housings() {
+
+            const fv_form_housing = document.getElementById('fv-form-housing');
+            const fv_housing_save = document.getElementById('fv-housing-save');
+
+            const fv = FormValidation.formValidation(fv_form_housing, {
+
+                fields: {
+
+                    HousingName: {
+                        validators: {
+                            notEmpty: {
+                                message: 'Konut ad alanı boş geçilemez.'
+                            },
+                            stringLength: {
+                                min: 5,
+                                max: 50,
+                                message: 'Konut adı minimum 5, maksimum 100 karakter olmalıdır.'
+                            }
+                        }
+                    },
+
+                    Apartments: {
+                        validators: {
+                            notEmpty: {
+                                message: 'Apartman alanı boş geçilemez.'
+                            }
+                        }
+                    },
+
+                    // Amount: {
+                    //     validators: {
+                    //         notEmpty: {
+                    //             message: 'Tutar alanı boş geçilemez.'
+                    //         },
+                    //         stringLength: {
+                    //             min: 1,
+                    //             message: 'Tutar minimum 1 olmalıdır'
+                    //         }
+                    //     }
+                    // },
+
+                },
+                plugins: {
+                    trigger: new FormValidation.plugins.Trigger(),
+                    bootstrap: new FormValidation.plugins.Bootstrap(),
+                },
+            }).on('core.form.validating', function () {
+                fv_housing_save.innerHTML = 'Doğrulanıyor ...';
+            });
+
+            fv_housing_save.addEventListener('click', function () {
+
+                fv.validate().then(function (status) {
+
+                    fv_housing_save.innerHTML = status === 'Valid' ? 'Güncelleniyor...' : 'Lütfen tekrar deneyin';
+
+                    switch (status) {
+                        case "Valid":
+
+                            var apartment_id = $("select[name='Apartments']").val();
+
+                            var dm = {
+                                Id: $(qcs.input.expense_id).val(),
+                                HousingName: $(qcs.input.housing_name).val(),
+                                ApartmentId: apartment_id,
+                                // Month: $(qcs.combo.expense_months).val(),
+                                // Year: $(qcs.combo.expense_years).val(),
+                                // Amount: $(qcs.input.expense_amount).val(),
+                            };
+
+                            console.log(dm);
+
+                            $.post("/ams/app/housing-edit", dm, function (d) {
+
+                                console.log(d);
+
+                                if (d.isSucceed) {
+                                    switch (d.statuses) {
+                                        case 'x-add':
+
+                                            Swal.fire({
+                                                title: "Tebrikler",
+                                                text: "Yeni konut oluşturuldu.",
+                                                icon: "success",
+                                                timer: 4000,
+                                                onOpen: function () {
+                                                    Swal.showLoading()
+                                                },
+                                                allowOutsideClick: false,
+                                                allowEscapeKey: false,
+                                                buttonsStyling: false,
+                                                confirmButtonText: "<i class='la la-headphones'></i> I am game!",
+                                                showCancelButton: false,
+                                                cancelButtonText: "<i class='la la-thumbs-down'></i> No, thanks",
+                                                customClass: {
+                                                    confirmButton: "btn btn-danger",
+                                                    cancelButton: "btn btn-default"
+                                                }
+                                            }).then(function (r) {
+
+                                                if (r.dismiss === "timer") {
+                                                    $(qcs.modal.housing).modal('hide');
+                                                    // l_expenses(dm.ApartmentId, dm.Month, dm.Year);
+                                                }
+
+                                            });
+
+                                            break;
+                                        case 'x-edit':
+
+                                            Swal.fire({
+                                                title: "Güncelleniyor",
+                                                text: "Konut bilgileri güncelleniyor.",
+                                                icon: "success",
+                                                timer: 4000,
+                                                onOpen: function () {
+                                                    Swal.showLoading()
+                                                },
+                                                allowOutsideClick: false,
+                                                allowEscapeKey: false,
+                                                buttonsStyling: false,
+                                                confirmButtonText: "<i class='la la-headphones'></i> I am game!",
+                                                showCancelButton: false,
+                                                cancelButtonText: "<i class='la la-thumbs-down'></i> No, thanks",
+                                                customClass: {
+                                                    confirmButton: "btn btn-danger",
+                                                    cancelButton: "btn btn-default"
+                                                }
+                                            }).then(function (r) {
+
+                                                if (r.dismiss === "timer") {
+                                                    $(qcs.modal.housing).modal('hide');
+                                                    // l_expenses(dm.ApartmentId, dm.Month, dm.Year);
+                                                }
+
+                                            });
+
+                                            break;
+                                        case 'x-fail':
+
+                                            Swal.fire({
+                                                title: "Hata",
+                                                text: "İstenmeyen bir hata oluştu.",
+                                                icon: "error",
+                                                timer: 4000,
+                                                onOpen: function () {
+                                                    Swal.showLoading()
+                                                },
+                                                allowOutsideClick: false,
+                                                allowEscapeKey: false,
+                                                buttonsStyling: false,
+                                                confirmButtonText: "<i class='la la-headphones'></i> I am game!",
+                                                showCancelButton: false,
+                                                cancelButtonText: "<i class='la la-thumbs-down'></i> No, thanks",
+                                                customClass: {
+                                                    confirmButton: "btn btn-danger",
+                                                    cancelButton: "btn btn-default"
+                                                }
+                                            }).then(function (r) {
+
+                                                if (r.dismiss === "timer") {
+                                                    $(qcs.modal.housing).modal('hide');
+                                                    // l_expenses(dm.ApartmentId, dm.Month, dm.Year);
+                                                }
+                                            });
+
+                                            break;
+                                    }
+                                }
+
+
+                            }).done(function () {
+
+                            }).fail(function (jqXHR, textStatus, errorThrown) {
+
+                            }).always(function () {
+
+                            });
+
+                            break;
+                        default:
+                    }
+
+                });
+            });
+
+            // ---------------------------------------------------------------------------------------------------
+
+            $(document).on("change", qcs.combo.filter.apartments, function () {
+
+                var filter = { apartment_id: $(this).val() }
+
+                $(qcs.combo.filter.apartments).children('option').removeAttr('selected');
+                $(qcs.combo.filter.apartments).find('option[value=' + filter.apartment_id + ']').attr('selected', 'selected');
+
+                l_housings(filter.apartment_id);
+
+            });
+
+            // TODO : Gider girebileceğimiz "Modal" açma
+            $(document).delegate(qcs.modal.housing_new, 'click', function () {
+
+                // fv.resetForm("fv-form-expense");
+                // fv_expense_save.innerHTML = "Kaydet";
+
+                $(qcs.modal.housing).modal();
+
+            });
+
+            // TODO : Gider düzenleyeceğimiz "Modal" açma
+            $(document).delegate(qcs.modal.housing_edit, 'click', function () {
+
+                // fv_expense_save.innerHTML = "Kaydet";
+                // var filter = { id: $(this).data('expense-id') }
+
+                // g_expense(filter.id);
+
+                $(qcs.modal.housing).modal();
+
+            });
+
+        }
+
+
+        function g_expense(expense_id) {
+
+            // var dm = { Id: expense_id };
+
+            $.get("/ams/app/expense/" + expense_id, function (d) {
+
+                console.log("EXPENSE DETAIL :::::::");
+                console.log(d);
+
+                $(qcs.input.expense_id).val(d.id);
+                $(qcs.input.expense_name).val(d.expenseName);
+                $(qcs.input.expense_amount).val(d._Amount);
+
+
+                // $(qcs.input.expense_amount).inputmask(d._Amount);
+
+                // $(qcs.label_username).attr("data-label-username", d.View.Username);
+                // $(qcs.modal_user_title).text(d.View.Firstname + ' ' + d.View.Lastname);
+
+                // $(qcs.label_email).attr("data-label-email", d.View.Email);
+
+
+                $(qcs.combo.expense_apartments + " option[value=" + d.apartmentId + "]").removeAttr('selected').attr('selected', 'selected');
+                $(qcs.combo.expense_months + " option[value=" + d.month + "]").removeAttr('selected').attr('selected', 'selected');
+                $(qcs.combo.expense_years + " option[value=" + d.year + "]").removeAttr('selected').attr('selected', 'selected');
+
+                // $(qcs.user_email_valid).val(d.View.Email);
+
+
+                // KTMaskDemo.init();
+
+
+                // $(qcs.input.expense_amount).on('click', '')
+
+
+                setTimeout(function () {
+
+                    // KTMaskDemo.init();
+
+                }, 1000);
+
+
+
+            }).done(function (d) {
+
+                KTMaskDemo.init();
+
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+
+                Swal.fire({
+                    title: "Hata",
+                    text: "Hata Kodu : " + textStatus,
+                    icon: "error",
+                    timer: 4000,
+                    onOpen: function () {
+                        Swal.showLoading()
+                    },
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    buttonsStyling: false,
+                    confirmButtonText: "<i class='la la-headphones'></i> I am game!",
+                    showCancelButton: false,
+                    cancelButtonText: "<i class='la la-thumbs-down'></i> No, thanks",
+                    customClass: {
+                        confirmButton: "btn btn-danger",
+                        cancelButton: "btn btn-default"
+                    }
+                }).then(function (r) {
+
+                    if (r.dismiss === "timer") { }
+
+                });
+
+            }).always(function (d) {
+
+            });
+
+        }
+
+
+        function l_housings(apartment_id) {
+
+            $(qcs.table).KTDatatable('destroy');
+
+            var ds = $.ajax({
+                type: 'GET',
+                url: '/ams/app/housings/' + apartment_id,
+                async: false,
+                dataType: 'json',
+                done: function (data) {
+                    return data;
+                },
+                fail: function (jqXHR, textStatus, errorThrown) {
+                    console.log('Could not get posts, server response: ' + textStatus + ': ' + errorThrown);
+                }
+            }).responseJSON;
+
+            console.table(ds);
+
+
+            var datatable = $(qcs.table).KTDatatable({
+                // datasource definition
+                data: {
+                    // type: 'local',
+                    // source: dataJSONArray,
+                    source: ds,
+                    pageSize: 10,
+                },
+
+                // layout definition
+                layout: {
+                    scroll: false, // enable/disable datatable scroll both horizontal and vertical when needed.
+                    // height: 450, // datatable's body's fixed height
+                    footer: false, // display/hide footer
+                },
+                // column sorting
+                sortable: true,
+                pagination: true,
+                search: {
+                    input: $('#kt_datatable_search_query'),
+                    key: 'generalSearch',
+                },
+
+                // columns definition
+                columns: [
+                    {
+                        field: 'apartmentId',
+                        title: '#',
+                        sortable: false,
+                        width: 20,
+                        type: 'number',
+                        selector: true,
+                        textAlign: 'center',
+                    },
+                    {
+                        field: 'housingName',
+                        title: 'Konut',
+                        template: function (row) {
+                            return row.housingName;
+                        },
+                    },
+                    {
+                        field: 'housingUser',
+                        title: 'Konut Sahibi',
+                    },
+                    {
+                        field: '_CreateTime',
+                        title: 'Kayıt Tarihi',
+                        type: 'date',
+                        // format: 'MM/DD/YYYY',
+                    },
+                    {
+                        field: '_ModifiedTime',
+                        title: 'Güncellenme Tarihi',
+                    },
+                    {
+                        field: 'createUser',
+                        title: 'Oluşturan',
+                    },
+
+                    {
+                        field: 'Amount',
+                        title: 'Kasa Tutarı',
+                        template: function (row) {
+                            return row._Amount;
+                        },
+                    },
+                    {
+                        field: 'isActive',
+                        title: 'Durum',
+                        template: function (row) {
+                            var status = {
+                                1: {
+                                    'title': 'Aktif',
+                                    'class': ' label-light-success',
+                                },
+                                2: {
+                                    'title': 'Pasif',
+                                    'class': ' label-light-danger',
+                                },
+                            };
+                            return '<span class="label font-weight-bold label-lg ' + status[row.isActive].class + ' label-inline">' + status[row.isActive].title + '</span>';
+                        },
+                    },
+                    // {
+                    //     field: 'Type',
+                    //     title: 'Type',
+                    //     autoHide: false,
+                    //     template: function (row) {
+                    //         var status = {
+                    //             1: {
+                    //                 'title': 'Online',
+                    //                 'state': 'danger',
+                    //             },
+                    //             2: {
+                    //                 'title': 'Retail',
+                    //                 'state': 'primary',
+                    //             },
+                    //             3: {
+                    //                 'title': 'Direct',
+                    //                 'state': 'success',
+                    //             },
+                    //         };
+                    //         return '<span class="label label-' + status[row.Type].state + ' label-dot mr-2"></span><span class="font-weight-bold text-' + status[row.Type].state + '">' +
+                    //             status[row.Type].title + '</span>';
+                    //     },
+                    // },
+                    {
+                        field: 'Actions',
+                        title: 'İşlem',
+                        sortable: false,
+                        width: 125,
+                        overflow: 'visible',
+                        autoHide: false,
+                        template: function (row) {
+
+
+                            return '\
+                                                                                                                <a href="javascript:;" class="btn btn-sm btn-clean btn-icon  modal-expense-edit" data-expense-id=' + row.id + ' data-toggle="tooltip" data-theme="dark" title="Edit" >\
+                                                                                                            <i class="la la-pencil"></i>\
+                                                                                                                        </a>\
+                                                                                                                      \
+                                                                                                                             <a href="javascript:;" class="btn btn-sm btn-clean btn-icon" data-delete-id='+ row.id + ' data-toggle="tooltip" data-theme="dark" title="Delete">\
+                                                                                                                            <i class="la fa-trash"></i>\
+                                                                                                                        </a>\
+                                                                                                                    ';
+
+
+
+                        },
+                    }],
+            });
+
+            $('#combof-status').on('change', function (e) {
+
+                // console.log(e.target.value);
+                // console.log($(this).val().toLowerCase());
+
+                var status = $(this).val().toLowerCase();
+                datatable.search(status, 'isActive');
+
+            });
+
+            $('#combof-months').on('change', function (e) {
+
+
+
+            });
+
+
+
+
+
+
+            // $('#kt_datatable_search_type').on('change', function () {
+            //     datatable.search($(this).val().toLowerCase(), 'Type');
+            // });
+
+            // $('#kt_datatable_search_status, #kt_datatable_search_type').selectpicker();
+
+
+            $('#kt_subheader').on('click', function (e) {
+
+                e.preventDefault();
+
+                $('.datatable-input').each(function () {
+                    $(this).val('');
+                    datatable.column($(this).data('col-index')).search('', false, false);
+                });
+                datatable.table().draw();
+            });
+
+
+        }
+
+
+        $(function () {
+
+            combo_apartments();
+
+            $(qcs.combo.filter.months).find('option[value=' + qcs.default[0].month + ']').attr('selected', 'selected');
+
+
+
+            var filter = {
+                apartment_id: $(qcs.combo.filter.apartments).val(),
+            }
+
+            // console.log(filter);
+
+
+
+            housings();
+            l_housings(filter.apartment_id, filter.month, filter.year);
+
+            $(qcs.table).tooltip({
+                selector: '[data-toggle=tooltip]',
+                container: 'body'
+            });
+
+ 
+
+
+        });
+
+
+
+    </script>
+
+}

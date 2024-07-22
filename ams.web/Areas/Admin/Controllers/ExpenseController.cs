@@ -21,7 +21,6 @@
         {
             var User = HttpContext.Session.GetSession<UserDTO.User>(Unit.Constants.SESSION_USER);
 
-
             var result = new Result.ViewResult();
 
             Guid expense_id;
@@ -40,7 +39,6 @@
                     ModifiedTime = DateTime.UtcNow,
                     ModifiedUser = User!.Id
                 };
-
                 result = await ExpenseService.EditAsync(d);
             }
             else
@@ -48,7 +46,7 @@
                 dto.CreateUser = User!.Id;
                 dto.AccountId = (Guid)User!.AccountId!;
                 dto.ExpenseCode = "01" + dto.Month + dto.Year;
-                await ExpenseService.AddAsync(dto);
+                result = await ExpenseService.AddAsync(dto);
             }
             
             return Json(result);
@@ -64,7 +62,7 @@
         [HttpGet, Route("ams/app/expenses/{apartment_id}/{month}/{year}")]
         public async Task<JsonResult> GetTableExpenses(Guid apartment_id, int month, int year)
         {
-            var expenses = await ExpenseService.GetExpenses(true, apartment_id, month, year);
+            var expenses = await ExpenseService.GetExpenses(apartment_id, month, year);
             return Json(expenses);
         }
 

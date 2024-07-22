@@ -13,6 +13,7 @@
 
             services.AddScoped<IApartmentService, ApartmentService>();
             services.AddScoped<IExpenseService, ExpenseService>();
+            services.AddScoped<IHousingService, HousingService>();
 
 
             return services;

@@ -52,7 +52,7 @@
             public Guid Id { get; set; }
 
 
-            public Guid ApartmentId { get; set; }
+            public Guid? ApartmentId { get; set; }
 
 
             public string? ExpenseName { get; set; }
@@ -87,6 +87,7 @@
 
 
             public string? CreateUser { get; set; }
+            public string? UpdateUser { get; set; }
 
 
             public decimal? Amount { get; set; }

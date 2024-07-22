@@ -54,13 +54,11 @@
                                         </div>
                                     </div>
 
-
-
                                     <div class="col-md-1 my-2 my-md-0">
                                         <div class="d-flex align-items-center">
                                             <select class="form-control" id="combof-status">
-                                                <option value="">Tümü</option>
-                                                <option value="1" selected="selected">Aktif</option>
+                                                <option value="" selected="selected">Tümü</option>
+                                                <option value="1">Aktif</option>
                                                 <option value="2">Pasif</option>
                                             </select>
                                         </div>
@@ -326,9 +324,6 @@
             }
         }
 
-
-
-
         var KTMaskDemo = function () {
 
             // private functions
@@ -498,7 +493,7 @@
                                  
                                 if (d.isSucceed) {
                                     switch (d.statuses) {
-                                        case 'add':
+                                        case 'x-add':
 
                                             Swal.fire({
                                                 title: "Tebrikler",
@@ -528,7 +523,7 @@
                                             });
 
                                             break;
-                                        case 'edit':
+                                        case 'x-edit':
 
                                             Swal.fire({
                                                 title: "Güncelleniyor",
@@ -559,7 +554,7 @@
                                             });
 
                                             break;
-                                        case 'fail':
+                                        case 'x-fail':
 
                                             Swal.fire({
                                                 title: "Hata",
@@ -590,11 +585,6 @@
                                             break;
                                     }
                                 }
-
-
-
-
-
 
 
                             }).done(function () {

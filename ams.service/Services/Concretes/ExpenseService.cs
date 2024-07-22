@@ -18,7 +18,7 @@
             Culture = new CultureInfo("tr-TR");
         }
 
-        public async Task AddAsync(ExpenseDTO.Add dto)
+        public async Task<Result.ViewResult> AddAsync(ExpenseDTO.Add dto)
         {
             decimal amount;
             decimal.TryParse(dto.Amount, NumberStyles.Number, Culture, out amount);
@@ -29,6 +29,7 @@
                 ApartmentId = dto.ApartmentId,
                 ExpenseName = dto.ExpenseName,
                 ExpenseCode = dto.ExpenseCode,
+                CreateUser = dto.CreateUser,
 
                 Amount = amount,
 
@@ -40,7 +41,23 @@
             };
 
             await Uow.GetRepository<Expense>().AddAsync(expense);
-            await Uow.SaveAsync();
+            var result = await Uow.SaveAsync();
+
+            var view = new Result.ViewResult();
+
+            switch (result)
+            {
+                case 1:
+                    view.IsSucceed = true;
+                    view.Statuses = "x-add";
+                    break;
+                case 0:
+                    view.IsSucceed = true;
+                    view.Statuses = "x-fail";
+                    break;
+            }
+
+            return view;
         }
 
         public async Task<Result.ViewResult> EditAsync(ExpenseDTO.Edit dto)
@@ -68,11 +85,11 @@
             {
                 case 1:
                     view.IsSucceed = true;
-                    view.Statuses = "edit";
+                    view.Statuses = "x-edit";
                     break;
                 case 0:
                     view.IsSucceed = true;
-                    view.Statuses = "fail";
+                    view.Statuses = "x-fail";
                     break;
             }
 
@@ -106,10 +123,9 @@
             return expense;
         }
 
-        public async Task<List<ExpenseDTO.ListView>> GetExpenses(bool is_active, Guid apartment_id, int month, int year)
+        public async Task<List<ExpenseDTO.ListView>> GetExpenses(Guid apartment_id, int month, int year)
         {
-            var l = await Uow.GetRepository<Expense>().GetAllAsync(x => !x.IsDeleted && x.IsActive == is_active && x.ApartmentId == apartment_id && x.Month == month && x.Year == year);
-
+            var l = await Uow.GetRepository<Expense>().GetAllAsync(x => !x.IsDeleted && x.ApartmentId == apartment_id && x.Month == month && x.Year == year, y => y.CreateTheUser!, z => z.ModifiedTheUser!);
 
             var expenses = l.ConvertAll(x => new ExpenseDTO.ListView
             {
@@ -124,7 +140,8 @@
                 _Amount = x.Amount.HasValue ? x.Amount.Value.ToString("N2", Culture) : "0",
                 _CreateTime = x.CreateTime != null ? x.CreateTime.ToString("dd/MM/yyyy") : "",
                 IsActive = x.IsActive ? 1 : 2,
-                CreateUser = ""
+                CreateUser = x.CreateTheUser != null ? x.CreateTheUser.Firstname + " " + x.CreateTheUser.Lastname : "-",
+                UpdateUser = x.ModifiedTheUser != null ? x.ModifiedTheUser.Firstname + " " + x.ModifiedTheUser.Lastname : "-",
                 
             }).OrderBy(x => x.IsFixed).ToList();
 

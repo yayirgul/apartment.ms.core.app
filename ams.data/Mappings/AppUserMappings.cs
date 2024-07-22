@@ -64,15 +64,15 @@
             {
                 Id = Guid.Parse("89DA7C75-8291-4BAF-9060-028A07393DDE"),
                 AccountId = Guid.Parse("DB72E0E2-3201-414F-9753-190466E024F3"),
-                UserName = "erdem@makronet.com",
-                NormalizedUserName = "ERDEM@MAKRONET.COM",
-                Email = "erdem@makronet.com",
-                NormalizedEmail = "ERDEM@MAKRONET.COM",
+                UserName = "kadirkeles@hotmail.com",
+                NormalizedUserName = "KADIRKELES@HOTMAIL.COM",
+                Email = "kadirkeles@hotmail.com",
+                NormalizedEmail = "KADIRKELES@HOTMAIL.COM",
                 EmailConfirmed = true,
                 PhoneNumber = "+905558008050",
                 PhoneNumberConfirmed = true,
-                Firstname = "Erdem",
-                Lastname = "Tekin",
+                Firstname = "Kadir",
+                Lastname = "Keleş",
                 SecurityStamp = Guid.NewGuid().ToString(),
             };
             agent.PasswordHash = CreatePasswordHash(agent, "1");
@@ -81,15 +81,15 @@
             {
                 Id = Guid.Parse("A35A610D-689F-4AB4-9324-CC227BFDBFBA"),
                 AccountId = Guid.Parse("DB72E0E2-3201-414F-9753-190466E024F3"),
-                UserName = "umut@makronet.com",
-                NormalizedUserName = "UMUT@MAKRONET.COM",
-                Email = "umut@makronet.com",
-                NormalizedEmail = "UMUT@MAKRONET.COM",
+                UserName = "lokmanyilmaz@hotmail.com",
+                NormalizedUserName = "LOKMANYILMAZ@HOTMAIL.COM",
+                Email = "lokmanyilmaz@hotmail.com",
+                NormalizedEmail = "LOKMANYILMAZ@HOTMAIL.COM",
                 EmailConfirmed = true,
                 PhoneNumber = "+905558008060",
                 PhoneNumberConfirmed = true,
-                Firstname = "Umut",
-                Lastname = "Arslan",
+                Firstname = "Lokman",
+                Lastname = "Yılmaz",
                 SecurityStamp = Guid.NewGuid().ToString(),
             };
             user.PasswordHash = CreatePasswordHash(user, "1");
