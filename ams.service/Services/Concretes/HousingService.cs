@@ -63,7 +63,6 @@
             await Uow.GetRepository<Housing>().UpdateAsync(housing);
             var result = await Uow.SaveAsync();
 
-
             var view = new Result.ViewResult();
 
             switch (result)
@@ -76,6 +75,49 @@
                     view.IsSucceed = true;
                     view.Statuses = "x-fail";
                     break;
+            }
+
+            return view;
+        }
+
+        public async Task<Result.ViewResult<HousingDTO.Detail>> GetHousing(Guid housing_id)
+        {
+            var detail = await Uow.GetRepository<Housing>().GetAsync(x => !x.IsDeleted && x.Id == housing_id);
+
+            //decimal amount; 
+            //decimal.TryParse(view!.Amount.ToString(), NumberStyles.Any, CultureInfo.InvariantCulture, out amount);
+
+
+            var view = new Result.ViewResult<HousingDTO.Detail>();
+
+
+            if (detail != null)
+            {
+                //var housing = new HousingDTO.Detail()
+                //{
+                //    Id = detail!.Id,
+                //    ApartmentId = detail.ApartmentId,
+                //    HousingName = detail!.HousingName, 
+                //};
+
+
+                //_Amount = view.Amount.HasValue ? view.Amount!.Value.ToString("#,##0.00") : ""
+                //_Amount = view.Amount.HasValue ? amount.ToString("N2", Culture) : "",
+                //_Amount = view.Amount.HasValue ? view.Amount.Value.ToString("N2", Culture) : "",
+
+
+                view.View = new HousingDTO.Detail() {
+                    Id = detail!.Id,
+                    ApartmentId = detail.ApartmentId,
+                    HousingName = detail!.HousingName,
+                    HousingUser = detail!.HousingUser,
+                };
+                view.IsSucceed = true;
+                view.Statuses = "x-detail";
+            } else
+            {
+                view.IsSucceed = false;
+                view.Statuses = "x-fail";
             }
 
             return view;
@@ -96,11 +138,7 @@
                 IsActive = x.IsActive ? 1 : 2,
                 CreateUser = x.CreateTheUser != null ? x.CreateTheUser.Firstname + " " + x.CreateTheUser.Lastname : "-",
                 ModifiedUser = x.ModifiedTheUser != null ? x.ModifiedTheUser.Firstname + " " + x.ModifiedTheUser.Lastname : "-",
-
-
                 HousingUser = x.HousingTheUser != null ? x.HousingTheUser.Firstname + " " + x.HousingTheUser.Lastname : "-",
-
-
                 _Amount = x.HousingTheSafe != null ? x.HousingTheSafe.Amount!.Value.ToString("N2", Culture) : "0"
             }).ToList();
 

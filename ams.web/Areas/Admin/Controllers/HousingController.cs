@@ -17,8 +17,14 @@ namespace ams.web.Areas.Admin.Controllers
             this.HousingService = HousingService;
         }
 
+        [Route("ams/housing-safe")]
+        public IActionResult HousingSafe()
+        {
+            return View();
+        }
+
         [HttpPost, Route("ams/app/housing-edit")]
-        public async Task<JsonResult> ExpenseEdit(HousingDTO.Add dto)
+        public async Task<JsonResult> HousingEdit(HousingDTO.Add dto)
         {
             var User = HttpContext.Session.GetSession<UserDTO.User>(Unit.Constants.SESSION_USER);
 
@@ -51,8 +57,14 @@ namespace ams.web.Areas.Admin.Controllers
             return Json(result);
         }
 
+        [HttpGet, Route("ams/app/housing/{housing_id}")]
+        public async Task<JsonResult> GetHousing(Guid housing_id)
+        {
+            return Json(await HousingService.GetHousing(housing_id));
+        }
+
         [HttpGet, Route("ams/app/housings/{apartment_id}")]
-        public async Task<JsonResult> GetTableHousings(Guid apartment_id)
+        public async Task<JsonResult> GetHousings(Guid apartment_id)
         {
             var housing = await HousingService.GetHousings(apartment_id);
             return Json(housing);

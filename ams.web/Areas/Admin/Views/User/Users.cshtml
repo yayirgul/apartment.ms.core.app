@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "Giderler";
+    ViewData["Title"] = "Kullanıcılar";
 }
 
 @section Subheader {
@@ -7,7 +7,7 @@
         <div class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
             <!--begin::Info-->
             <div class="d-flex align-items-center flex-wrap mr-2">
-                <h5 class="text-dark font-weight-bold mt-2 mb-2 mr-5">Konutlar</h5>
+                <h5 class="text-dark font-weight-bold mt-2 mb-2 mr-5">Kullanıcılar</h5>
                 <div class="subheader-separator subheader-separator-ver mt-2 mb-2 mr-4 bg-gray-200"></div>
                 <span class="text-muted font-weight-bold mr-4">#XRS-45670</span>
             </div>
@@ -29,12 +29,12 @@
                         <span class="card-icon">
                             <i class="far fa-building text-primary"></i>
                         </span>
-                        <h3 class="card-label">Konutlar</h3>
+                        <h3 class="card-label">Kullanıcılar</h3>
                     </div>
                     <div class="card-toolbar">
 
                         <a href="javascript:;" id="modal-housing-new" class="btn btn-primary font-weight-bolder">
-                            Yeni Konut
+                            Yeni Kullanıcı
                         </a>
                     </div>
                 </div>
@@ -64,102 +64,20 @@
                                     </div>
 
 
-                                     
+
                                 </div>
                             </div>
 
                         </div>
                     </div>
 
-                    <div class="datatable datatable-bordered datatable-head-custom" id="t-housings"></div>
+                    <div class="datatable datatable-bordered datatable-head-custom" id="t-users"></div>
 
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-<div class="modal fade" id="modal-housing" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modal-housing-title">Yeni Konut</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <i aria-hidden="true" class="ki ki-close"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-
-                <form class="form" id="fv-form-housing">
-
-                    <div class="form-group mb-0 row">
-
-                        <input type="hidden" name="HousingId" />
-
-                        <div class="col-xl-12 mb-6">
-                            <label>* Apartman</label>
-                            <select class="form-control" name="Apartments" id="combo-apartments"></select>
-                        </div>
-
-                        <div class="col-xl-12 mb-6">
-                            <label>* Konut Adı</label>
-                            <input type="text" name="HousingName" class="form-control" placeholder="">
-                        </div>
-
-                        <div class="col-xl-12 mb-6">
-                            <label>* Konut Sahibi</label>
-                            <select class="form-control" name="Users" id="combo-users"></select>
-                        </div>
-
-
-
-                        <div class="col-xl-6 mb-6">
-                            <label>* Ay</label>
-                            <select class="form-control" id="combo-expense-months">
-                                <option value="1">Ocak</option>
-                                <option value="2">Şubat</option>
-                                <option value="3">Mart</option>
-                                <option value="4">Nisan</option>
-                                <option value="5">Mayıs</option>
-                                <option value="6">Haziran</option>
-                                <option value="7">Temmuz</option>
-                                <option value="8">Ağustos</option>
-                                <option value="9">Eylül</option>
-                                <option value="10">Ekim</option>
-                                <option value="11">Kasım</option>
-                                <option value="12">Aralık</option>
-                            </select>
-                        </div>
-
-                        <div class="col-xl-6">
-                            <label>* Yıl</label>
-                            <select class="form-control" id="combo-expense-years">
-                                <option value="2024">2024</option>
-                                <option value="2023">2023</option>
-                            </select>
-                        </div>
-
-                        <div class="col-xl-12">
-                            <label>* Tutar</label>
-                            <input type="text" name="Amount" class="form-control money" id="kt_money_input" maxlength="22" placeholder="0,00">
-                        </div>
-
-                    </div>
-
-                </form>
-
-            </div>
-            <div class="modal-footer">
-                @*<button type="button" class="btn btn-light-primary font-weight-bold" data-dismiss="modal">Close</button>*@
-                <button type="button" id="fv-housing-save" class="btn btn-primary font-weight-bold">Kaydet</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-
-
 
 @section Scripts {
 
@@ -196,69 +114,7 @@
                 housing_edit: '.modal-housing-edit',
             }
         }
-
-
-        function combo_users() {
-
-            $.ajax({
-                type: 'GET',
-                url: "/ams/app/combo-users",
-                async: false,
-                dataType: 'json',
-                success: function (data) {
-
-                    console.log(data);
-
-                    $.each(data, function (i, v) {
-
-                        if (i == 0) {
-                            $(qcs.combo.users).append('<option value=' + v.id + ' selected="selected">' + v.firstname + '</option>');
-                        } else {
-                            $(qcs.combo.users).append('<option value=' + v.id + '>' + v.firstname + '</option>');
-                        }
-
-                    });
-
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    console.log('Could not get posts, server response: ' + textStatus + ': ' + errorThrown);
-                }
-            });
-
-        }
-
-        function combo_apartments() {
-
-            $.ajax({
-                type: 'GET',
-                url: "/ams/app/combo-apartments",
-                async: false,
-                dataType: 'json',
-                success: function (data) {
-
-                    $.each(data, function (i, v) {
-
-                        if (i == 0) {
-                            $(qcs.combo.filter.apartments).append('<option value=' + v.id + ' selected="selected">' + v.apartmentName + '</option>');
-                            $(qcs.combo.apartments).append('<option value=' + v.id + ' selected="selected">' + v.apartmentName + '</option>');
-                        } else {
-                            $(qcs.combo.filter.apartments).append('<option value=' + v.id + '>' + v.apartmentName + '</option>');
-                            $(qcs.combo.apartments).append('<option value=' + v.id + '>' + v.apartmentName + '</option>');
-                        }
-
-                    });
-
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    console.log('Could not get posts, server response: ' + textStatus + ': ' + errorThrown);
-                }
-            });
-
-        }
-
-
-        // $(qcs.modal_user_email).modal('hide');
-
+         
 
         function housings() {
 
@@ -519,7 +375,7 @@
 
                             // $(qcs.user_email_valid).val(d.View.Email);
 
-                         
+
                             break;
 
                         case 'x-fail':
@@ -553,11 +409,11 @@
                             break;
                     }
                 }
-                 
+
 
             }).done(function (d) {
 
-                
+
 
             }).fail(function (jqXHR, textStatus, errorThrown) {
 
@@ -730,14 +586,14 @@
 
 
                             return '\
-                                                                                                                        <a href="javascript:;" class="btn btn-sm btn-clean btn-icon  modal-housing-edit" data-housing-id=' + row.id + ' data-toggle="tooltip" data-theme="dark" title="Edit" >\
-                                                                                                            <i class="la la-pencil"></i>\
-                                                                                                                        </a>\
-                                                                                                                      \
-                                                                                                                             <a href="javascript:;" class="btn btn-sm btn-clean btn-icon" data-delete-id='+ row.id + ' data-toggle="tooltip" data-theme="dark" title="Delete">\
-                                                                                                                            <i class="la fa-trash"></i>\
-                                                                                                                        </a>\
-                                                                                                                    ';
+                                                                                                                                <a href="javascript:;" class="btn btn-sm btn-clean btn-icon  modal-housing-edit" data-housing-id=' + row.id + ' data-toggle="tooltip" data-theme="dark" title="Edit" >\
+                                                                                                                    <i class="la la-pencil"></i>\
+                                                                                                                                </a>\
+                                                                                                                              \
+                                                                                                                                     <a href="javascript:;" class="btn btn-sm btn-clean btn-icon" data-delete-id='+ row.id + ' data-toggle="tooltip" data-theme="dark" title="Delete">\
+                                                                                                                                    <i class="la fa-trash"></i>\
+                                                                                                                                </a>\
+                                                                                                                            ';
 
 
 
@@ -790,30 +646,19 @@
 
         $(function () {
 
-            combo_users();
-            combo_apartments();
-
-            $(qcs.combo.filter.months).find('option[value=' + qcs.default[0].month + ']').attr('selected', 'selected');
+          
 
 
 
-            var filter = {
-                apartment_id: $(qcs.combo.filter.apartments).val(),
-            }
-
-            // console.log(filter);
-
-
-
-            housings();
-            l_housings(filter.apartment_id, filter.month, filter.year);
+            // housings();
+            // l_housings(filter.apartment_id, filter.month, filter.year);
 
             $(qcs.table).tooltip({
                 selector: '[data-toggle=tooltip]',
                 container: 'body'
             });
 
- 
+
 
 
         });

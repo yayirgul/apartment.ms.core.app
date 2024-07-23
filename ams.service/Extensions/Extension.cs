@@ -14,6 +14,7 @@
             services.AddScoped<IApartmentService, ApartmentService>();
             services.AddScoped<IExpenseService, ExpenseService>();
             services.AddScoped<IHousingService, HousingService>();
+            services.AddScoped<IUserService, UserService>();
 
 
             return services;
