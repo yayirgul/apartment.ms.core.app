@@ -20,6 +20,24 @@
             this.RoleManager = RoleManager;
         }
 
+        public async Task<List<UserDTO.ComboList>> GetComboUsers()
+        {
+            var l = await UserManager.Users.Where(x => x.IsActive == true).ToListAsync();
+  
+            var users = new List<UserDTO.ComboList>();
+
+            foreach (var user in l)
+            {
+                users.Add(new UserDTO.ComboList()
+                {
+                    Id = user.Id,
+                    DisplayName = user.Firstname +  " " + user.Lastname,
+                });
+            }
+
+            return users;
+        }
+
         public async Task<List<UserDTO.List>> GetUsers()
         {
             var l = await UserManager.Users.ToListAsync();
@@ -47,13 +65,14 @@
                 {
                     Id = user.Id,
                     AccountId = user.AccountId,
-                    Role = string.Join("-", await UserManager.GetRolesAsync(fuser!)),
+                    Role = string.Join("-", await UserManager.GetRolesAsync(fuser!)).ToUpper(),
                     Firstname = user.Firstname,
+                    DisplayName = user.Firstname + " " + user.Lastname,
+                    IsActive = user.IsActive ? 1 : 2,
+                    _CreateTime = user.CreateTime != null ? user.CreateTime.ToString("dd/MM/yyyy") : "-",
+                    _ModifiedTime = user.ModifiedTime != null ? user.ModifiedTime.Value.ToString("dd/MM/yyyy") : "-",
                 });
             }
-
-
-
 
             return users;
         }

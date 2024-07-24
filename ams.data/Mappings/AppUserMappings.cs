@@ -57,6 +57,7 @@
                 Firstname = "Yunus",
                 Lastname = "AYIRGÜL",
                 SecurityStamp = Guid.NewGuid().ToString(),
+                IsActive = true,
             };
             admin.PasswordHash = CreatePasswordHash(admin, "1");
 
@@ -74,6 +75,7 @@
                 Firstname = "Kadir",
                 Lastname = "Keleş",
                 SecurityStamp = Guid.NewGuid().ToString(),
+                IsActive = true,
             };
             agent.PasswordHash = CreatePasswordHash(agent, "1");
 
@@ -91,6 +93,7 @@
                 Firstname = "Lokman",
                 Lastname = "Yılmaz",
                 SecurityStamp = Guid.NewGuid().ToString(),
+                IsActive = true,
             };
             user.PasswordHash = CreatePasswordHash(user, "1");
 

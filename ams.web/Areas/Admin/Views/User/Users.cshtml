@@ -40,31 +40,31 @@
                 </div>
                 <div class="card-body">
 
+                    <!--begin::Search Form-->
                     <div class="mb-7">
                         <div class="row align-items-center">
                             <div class="col-lg-12 col-xl-12">
                                 <div class="row align-items-center">
 
                                     <div class="col-md-2 my-2 my-md-0">
-                                        <div class="d-flex align-items-center">
-                                            <select class="form-control" id="combo-filter-apartments">
-                                                @* <option value="">Tümü</option> *@
-                                            </select>
+                                        <div class="input-icon">
+                                            <input type="text" class="form-control" placeholder="Search..." id="kt_datatable_search_query" />
+                                            <span>
+                                                <i class="flaticon2-search-1 text-muted"></i>
+                                            </span>
                                         </div>
                                     </div>
 
                                     <div class="col-md-1 my-2 my-md-0">
                                         <div class="d-flex align-items-center">
-                                            <select class="form-control" id="combof-status">
-                                                <option value="" selected="selected">Tümü</option>
+                                            <select class="form-control" id="kt_datatable_search_status">
+                                                <option value="">Tümü</option>
                                                 <option value="1">Aktif</option>
                                                 <option value="2">Pasif</option>
                                             </select>
                                         </div>
                                     </div>
-
-
-
+                                     
                                 </div>
                             </div>
 
@@ -95,7 +95,7 @@
                     year: _date.getFullYear(),
                 }
             ],
-            table: "#t-housings",
+            table: "#t-users",
             input: {
                 housing_id: "[name='HousingId']",
                 housing_name: "[name='HousingName']",
@@ -448,13 +448,13 @@
         }
 
 
-        function l_housings(apartment_id) {
+        function l_users() {
 
             $(qcs.table).KTDatatable('destroy');
 
             var ds = $.ajax({
                 type: 'GET',
-                url: '/ams/app/housings/' + apartment_id,
+                url: '/ams/app/users/',
                 async: false,
                 dataType: 'json',
                 done: function (data) {
@@ -494,7 +494,7 @@
                 // columns definition
                 columns: [
                     {
-                        field: 'apartmentId',
+                        field: 'id',
                         title: '#',
                         sortable: false,
                         width: 20,
@@ -503,14 +503,14 @@
                         textAlign: 'center',
                     },
                     {
-                        field: 'housingName',
-                        title: 'Konut',
+                        field: 'displayName',
+                        title: 'Kullancı',
                         template: function (row) {
-                            return row.housingName;
+                            return row.displayName;
                         },
                     },
                     {
-                        field: 'housingUser',
+                        field: 'role',
                         title: 'Konut Sahibi',
                     },
                     {
@@ -528,13 +528,6 @@
                         title: 'Oluşturan',
                     },
 
-                    {
-                        field: 'Amount',
-                        title: 'Kasa Tutarı',
-                        template: function (row) {
-                            return row._Amount;
-                        },
-                    },
                     {
                         field: 'isActive',
                         title: 'Durum',
@@ -646,12 +639,7 @@
 
         $(function () {
 
-          
-
-
-
-            // housings();
-            // l_housings(filter.apartment_id, filter.month, filter.year);
+            l_users();
 
             $(qcs.table).tooltip({
                 selector: '[data-toggle=tooltip]',

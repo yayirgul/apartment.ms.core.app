@@ -2,6 +2,12 @@
 {
     public class UserDTO
     {
+        public class ComboList
+        {
+            public Guid Id { get; set; }
+            public string? DisplayName { get; set; }
+        }
+
         public class List
         {
             public Guid Id { get; set; }
@@ -10,6 +16,10 @@
             public string? Lastname { get; set; }
             public string Email { get; set; } = null!;
             public string? Role { get; set; }
+            public string? DisplayName { get; set; }
+            public int IsActive { get; set; }
+            public string? _CreateTime { get; set; }
+            public string? _ModifiedTime { get; set; }
         }
 
         public class User

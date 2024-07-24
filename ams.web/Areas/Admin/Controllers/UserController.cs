@@ -14,6 +14,12 @@
         }
 
         [HttpGet, Route("ams/app/combo-users")]
+        public async Task<JsonResult> GetComboUsers()
+        {
+            return Json(await UserService.GetComboUsers());
+        }
+
+        [HttpGet, Route("ams/app/users")]
         public async Task<JsonResult> GetUsers()
         {
             return Json(await UserService.GetUsers());

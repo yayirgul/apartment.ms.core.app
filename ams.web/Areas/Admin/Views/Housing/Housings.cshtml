@@ -111,39 +111,6 @@
                             <select class="form-control" name="Users" id="combo-users"></select>
                         </div>
 
-
-
-                        <div class="col-xl-6 mb-6">
-                            <label>* Ay</label>
-                            <select class="form-control" id="combo-expense-months">
-                                <option value="1">Ocak</option>
-                                <option value="2">Şubat</option>
-                                <option value="3">Mart</option>
-                                <option value="4">Nisan</option>
-                                <option value="5">Mayıs</option>
-                                <option value="6">Haziran</option>
-                                <option value="7">Temmuz</option>
-                                <option value="8">Ağustos</option>
-                                <option value="9">Eylül</option>
-                                <option value="10">Ekim</option>
-                                <option value="11">Kasım</option>
-                                <option value="12">Aralık</option>
-                            </select>
-                        </div>
-
-                        <div class="col-xl-6">
-                            <label>* Yıl</label>
-                            <select class="form-control" id="combo-expense-years">
-                                <option value="2024">2024</option>
-                                <option value="2023">2023</option>
-                            </select>
-                        </div>
-
-                        <div class="col-xl-12">
-                            <label>* Tutar</label>
-                            <input type="text" name="Amount" class="form-control money" id="kt_money_input" maxlength="22" placeholder="0,00">
-                        </div>
-
                     </div>
 
                 </form>
@@ -212,9 +179,9 @@
                     $.each(data, function (i, v) {
 
                         if (i == 0) {
-                            $(qcs.combo.users).append('<option value=' + v.id + ' selected="selected">' + v.firstname + '</option>');
+                            $(qcs.combo.users).append('<option value=' + v.id + ' selected="selected">' + v.displayName + '</option>');
                         } else {
-                            $(qcs.combo.users).append('<option value=' + v.id + '>' + v.firstname + '</option>');
+                            $(qcs.combo.users).append('<option value=' + v.id + '>' + v.displayName + '</option>');
                         }
 
                     });
@@ -272,7 +239,7 @@
                     HousingName: {
                         validators: {
                             notEmpty: {
-                                message: 'Konut ad alanı boş geçilemez.'
+                                message: 'Konut adı boş geçilemez.'
                             },
                             stringLength: {
                                 min: 5,
