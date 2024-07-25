@@ -16,6 +16,13 @@
             this.ExpenseService = ExpenseService;
         }
 
+        [HttpGet, Route("ams/app/expense-debit-calc/{apartment_id}/{month}/{year}")]
+        public async Task<JsonResult> GetExpenseDebitCalc(Guid apartment_id, int month, int year)
+        {
+            var calc = await ExpenseService.GetExpenseDebitCalc(apartment_id, month, year);
+            return Json(calc);
+        }
+
         [HttpPost, Route("ams/app/expense-edit")]
         public async Task<JsonResult> ExpenseEdit(ExpenseDTO.Add dto)
         {
@@ -60,7 +67,7 @@
         }
 
         [HttpGet, Route("ams/app/expenses/{apartment_id}/{month}/{year}")]
-        public async Task<JsonResult> GetTableExpenses(Guid apartment_id, int month, int year)
+        public async Task<JsonResult> GetExpenses(Guid apartment_id, int month, int year)
         {
             var expenses = await ExpenseService.GetExpenses(apartment_id, month, year);
             return Json(expenses);

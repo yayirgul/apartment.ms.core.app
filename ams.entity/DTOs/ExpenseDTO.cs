@@ -2,6 +2,12 @@
 {
 	public class ExpenseDTO
 	{
+        public class Calc
+        {
+            public string? TotalAmount { get; set; }
+            public string? CalcAmount { get; set; }
+        }
+
         public class Add
         {
             public Guid? Id { get; set; }

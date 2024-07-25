@@ -166,12 +166,7 @@
 
                         <div class="col-xl-12 mb-6">
                             <label>* Apartman</label>
-                            <select class="form-control" name="ExpApartments" id="combo-expense-apartments">
-                                @*                                 <option value="">Tümü</option>
-                                <option value="d4033eef-ba92-4a1f-9ecb-1eee6996214a" selected="selected">Huzur APT</option>
-                                <option value="2">Sevinç APT</option>
-                                <option value="3">Güvenç APT</option> *@
-                            </select>
+                            <select class="form-control" name="ExpApartments" id="combo-expense-apartments"></select>
                         </div>
 
                         <div class="col-xl-6 mb-6">
@@ -223,7 +218,7 @@
     <div class="modal-dialog modal-dialog-centered modal-md" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modal-user-title">Apartman Borçlandır</h5>
+                <h5 class="modal-title" id="modal-user-title">Borçlandır</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <i aria-hidden="true" class="ki ki-close"></i>
                 </button>
@@ -234,32 +229,61 @@
 
                     <div class="form-group mb-0 row">
 
-                        <div class="col-xl-12 mb-6">
-                            <label id="label-username">* Apartmanlar</label>
-                            <select class="form-control" id="combo-debit-apartments">
-                                <option value="">Tümü</option>
-                                <option value="1" selected="selected">Huzur APT</option>
-                                <option value="2">Sevinç APT</option>
-                                <option value="3">Güvenç APT</option>
-                            </select>
-                        </div>
-
-                        <div class="col-xl-12 mb-6">
-                            <label>* Aylar</label>
-                            <select class="form-control" id="combo-debit-months">
-                                <option value="1">Ocak</option>
-                                <option value="2">Şubat</option>
-                                <option value="3">Mart</option>
-                            </select>
-                        </div>
 
                         <div class="col-xl-12">
-                            <label>* Yıllar</label>
-                            <select class="form-control" id="combo-debit-years">
-                                <option value="2024">2024</option>
-                                <option value="2023">2023</option>
-                            </select>
-                        </div>
+
+                            <label class="option mb-0">
+
+                                <span class="option-label">
+                              @*       <span class="option-head">
+                                        <span class="option-title">Apartman</span>
+                                    </span> *@
+                                    <span class="option-body pt-0">
+
+                                        <div class="row">
+
+                                            <div class="col-xl-12">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <h6 class="font-size-sm text-dark mb-0">APARTMAN - AY / YIL</h6>
+                                                    <span class="btn btn-sm btn-text btn-light-primary font-weight-bold" id="label-apartment-month-year">Huzur APT - 7.2024</span>
+                                                </div>
+                                            </div>
+
+                                      @*       <div class="col-xl-12">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <h6 class="font-size-sm text-dark mb-0">AY / YIL</h6>
+                                                    <span class="btn btn-sm btn-text btn-light-success font-weight-bold">07.2024</span>
+                                                </div>
+                                            </div> *@
+                                              
+                                            <div class="col-xl-12">
+                                                <div class="separator separator-solid my-7"></div>
+                                            </div>
+
+                                            <div class="col-xl-12 mb-4">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <h6 class="font-size-sm text-dark mb-0">TOPLAM TUTAR</h6>
+                                                    <span class="btn btn-sm btn-text btn-light-danger font-weight-bold" id="label-apartment-total-amount">0 ₺</span>
+                                                </div>
+                                            </div> 
+
+                                            <div class="col-xl-12">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <h6 class="font-size-sm text-dark mb-0">HESAPLANAN KONUT TUTARI</h6>
+                                                    <span class="btn btn-sm btn-text btn-light-danger font-weight-bold" id="label-apartment-calc-amount">0 ₺</span>
+                                                </div>
+                                            </div>
+                                             
+                                        </div>
+
+                                    </span>
+                                </span>
+                            </label>
+                        </div> 
+
+               
+
+ 
 
                     </div>
 
@@ -305,10 +329,18 @@
                 expense_name: "[name='ExpenseName']",
                 expense_amount: "[name='Amount']"
             },
+            label: {
+                apartment_month_year: '#label-apartment-month-year',
+                apartment_total_amount: '#label-apartment-total-amount',
+                apartment_calc_amount: '#label-apartment-calc-amount'
+            },
             combo: {
                 expense_months: '#combo-expense-months',
                 expense_years: '#combo-expense-years',
                 expense_apartments: '#combo-expense-apartments',
+                debit_months: '#combo-debit-months',
+                debit_years: '#combo-debit-years',
+                debit_apartments: '#combo-debit-apartments',
                 filter: {
                     apartments: '#combo-filter-apartments',
                     months: '#combo-filter-months',
@@ -683,6 +715,18 @@
             // TODO : Apartmana bağlı konutları borçlandırma "Modal" açma
             $(document).delegate(qcs.modal.debit_new, 'click', function () {
 
+
+                var apartment = {
+                    id: $(qcs.combo.filter.apartments).val(),
+                    title: $(qcs.combo.filter.apartments + " option:selected").text(),
+                    month: $(qcs.combo.filter.months).val(),
+                    year: $(qcs.combo.filter.years).val(),
+                };
+
+                console.log(apartment);
+
+
+                g_debit_calc(apartment.id, apartment.title, apartment.month, apartment.year);
                 $(qcs.modal.debit).modal();
 
             });
@@ -694,6 +738,97 @@
 
 
 
+
+        }
+
+
+        function g_debit_calc(id, title, month, year) {
+
+            // var dm = { Id: expense_id };
+
+            $.get("/ams/app/expense-debit-calc/" + id + "/" + month + "/" + year, function (d) {
+
+                console.log("CALC :::::::");
+                console.log(d);
+                 
+                if (d.isSucceed) {
+                    switch (d.statuses) {
+                        case 'x-calc':
+
+                            $(qcs.label.apartment_month_year).text(title + " - " + month + "." + year);
+                            $(qcs.label.apartment_total_amount).text(d.view.totalAmount);
+                            $(qcs.label.apartment_calc_amount).text(d.view.calcAmount);
+                         
+                            break;
+
+                        case 'x-fail':
+
+                            Swal.fire({
+                                title: "Hata",
+                                text: "İstenmeyen bir hata oluştu.",
+                                icon: "error",
+                                timer: 4000,
+                                onOpen: function () {
+                                    Swal.showLoading()
+                                },
+                                allowOutsideClick: false,
+                                allowEscapeKey: false,
+                                buttonsStyling: false,
+                                confirmButtonText: "<i class='la la-headphones'></i> I am game!",
+                                showCancelButton: false,
+                                cancelButtonText: "<i class='la la-thumbs-down'></i> No, thanks",
+                                customClass: {
+                                    confirmButton: "btn btn-danger",
+                                    cancelButton: "btn btn-default"
+                                }
+                            }).then(function (r) {
+
+                                if (r.dismiss === "timer") {
+                                    $(qcs.modal.housing).modal('hide');
+                                    // l_expenses(dm.ApartmentId, dm.Month, dm.Year);
+                                }
+                            });
+
+                            break;
+                    }
+                }
+
+
+
+
+
+
+            }).done(function (d) {
+
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+
+                Swal.fire({
+                    title: "Hata",
+                    text: "Hata Kodu : " + textStatus,
+                    icon: "error",
+                    timer: 4000,
+                    onOpen: function () {
+                        Swal.showLoading()
+                    },
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    buttonsStyling: false,
+                    confirmButtonText: "<i class='la la-headphones'></i> I am game!",
+                    showCancelButton: false,
+                    cancelButtonText: "<i class='la la-thumbs-down'></i> No, thanks",
+                    customClass: {
+                        confirmButton: "btn btn-danger",
+                        cancelButton: "btn btn-default"
+                    }
+                }).then(function (r) {
+
+                    if (r.dismiss === "timer") { }
+
+                });
+
+            }).always(function (d) {
+
+            });
 
         }
 
@@ -731,13 +866,6 @@
 
 
                 // $(qcs.input.expense_amount).on('click', '')
-
-
-                setTimeout(function () {
-
-                    // KTMaskDemo.init();
-
-                }, 1000);
 
 
 
@@ -978,6 +1106,9 @@
 
             $(qcs.combo.filter.months).find('option[value=' + qcs.default[0].month + ']').attr('selected', 'selected');
             $(qcs.combo.expense_months).find('option[value=' + qcs.default[0].month + ']').attr('selected', 'selected');
+
+            $(qcs.combo.filter.years).find('option[value=' + qcs.default[0].year + ']').attr('selected', 'selected');
+            $(qcs.combo.expense_years).find('option[value=' + qcs.default[0].year + ']').attr('selected', 'selected'); 
 
 
 
