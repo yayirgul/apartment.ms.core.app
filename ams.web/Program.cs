@@ -11,7 +11,7 @@ builder.Services.DataHelper(builder.Configuration);
 builder.Services.ServiceHelper();
 builder.Services.AddSession(opt =>
 {
-	opt.IdleTimeout = TimeSpan.FromMinutes(60);
+	opt.IdleTimeout = TimeSpan.FromMinutes(360);
 });
 
 

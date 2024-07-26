@@ -14,8 +14,7 @@
         public Apartment? Apartment { get; set; }
 
 
-        //public Guid HousingId { get; set; }
-
+        public Guid HousingId { get; set; }
         [ForeignKey("HousingId")]
         public Housing? Housing { get; set; } // 1 Borcun 1 konutu olur.
 

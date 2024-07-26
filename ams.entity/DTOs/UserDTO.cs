@@ -1,4 +1,7 @@
-﻿namespace ams.entity.DTOs
+﻿using ams.entity.Entities;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace ams.entity.DTOs
 {
     public class UserDTO
     {
@@ -6,6 +9,37 @@
         {
             public Guid Id { get; set; }
             public string? DisplayName { get; set; }
+        }
+
+        public class Add
+        {
+            public Guid Id { get; set; }
+            public Guid? AccountId { get; set; }
+            public Guid? CreateUser { get; set; }
+            public DateTime? ModifiedTime { get; set; }
+            public bool IsActive { get; set; }
+            public string? Firstname { get; set; }
+            public string? Lastname { get; set; }
+            public string? Email { get; set; }
+            public string? Phone { get; set; }
+            public string? Password { get; set; }
+            public string? ConfirmPassword { get; set; }
+            public Guid RoleId { get; set; }
+        }
+
+        public class Edit
+        {
+            public Guid Id { get; set; }
+            public Guid? ModifiedUser { get; set; }
+            public DateTime? ModifiedTime { get; set; }
+            public bool IsActive { get; set; }
+            public string? Firstname { get; set; }
+            public string? Lastname { get; set; }
+            public string? Email { get; set; }
+            public string? Phone { get; set; }
+            public string? Password { get; set; }
+            public string? ConfirmPassword { get; set; }
+            public Guid RoleId { get; set; }
         }
 
         public class List

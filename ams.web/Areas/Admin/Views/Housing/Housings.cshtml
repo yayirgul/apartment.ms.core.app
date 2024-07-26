@@ -34,7 +34,7 @@
                     <div class="card-toolbar">
 
                         <a href="javascript:;" id="modal-housing-new" class="btn btn-primary font-weight-bolder">
-                            Yeni Konut
+                            Yeni
                         </a>
                     </div>
                 </div>
@@ -83,7 +83,7 @@
     <div class="modal-dialog modal-dialog-centered modal-md" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modal-housing-title">Yeni Konut</h5>
+                <h5 class="modal-title" id="modal-housing-title">Yeni</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <i aria-hidden="true" class="ki ki-close"></i>
                 </button>
@@ -106,7 +106,7 @@
                             <input type="text" name="HousingName" class="form-control" placeholder="">
                         </div>
 
-                        <div class="col-xl-12 mb-6">
+                        <div class="col-xl-12">
                             <label>* Konut Sahibi</label>
                             <select class="form-control" name="Users" id="combo-users"></select>
                         </div>
@@ -149,6 +149,10 @@
                 housing_id: "[name='HousingId']",
                 housing_name: "[name='HousingName']",
                 // expense_amount: "[name='Amount']"
+            },
+            select: {
+                users: "select[name='Users']",
+                apartments: "select[name='Apartments']"
             },
             combo: {
                 apartments: '#combo-apartments',
@@ -270,6 +274,7 @@
                     // },
 
                 },
+
                 plugins: {
                     trigger: new FormValidation.plugins.Trigger(),
                     bootstrap: new FormValidation.plugins.Bootstrap(),
@@ -287,20 +292,14 @@
                     switch (status) {
                         case "Valid":
 
-                            var apartment_id = $("select[name='Apartments']").val();
-
                             var dm = {
-                                Id: $(qcs.input.expense_id).val(),
+                                Id: $(qcs.input.housing_id).val(),
                                 HousingName: $(qcs.input.housing_name).val(),
-                                ApartmentId: apartment_id,
-                                // Month: $(qcs.combo.expense_months).val(),
-                                // Year: $(qcs.combo.expense_years).val(),
-                                // Amount: $(qcs.input.expense_amount).val(),
+                                ApartmentId: $(qcs.select.apartments).val(),
+                                HousingUser: $(qcs.select.users).val(),
                             };
 
-                            console.log(dm);
-
-                            $.post("/ams/app/housing-edit", dm, function (d) {
+                            $.post("/ams/app/housing/add", dm, function (d) {
 
                                 console.log(d);
 
@@ -330,7 +329,7 @@
 
                                                 if (r.dismiss === "timer") {
                                                     $(qcs.modal.housing).modal('hide');
-                                                    // l_expenses(dm.ApartmentId, dm.Month, dm.Year);
+                                                    l_housings(dm.ApartmentId);
                                                 }
 
                                             });
@@ -360,7 +359,7 @@
 
                                                 if (r.dismiss === "timer") {
                                                     $(qcs.modal.housing).modal('hide');
-                                                    // l_expenses(dm.ApartmentId, dm.Month, dm.Year);
+                                                    l_housings(dm.ApartmentId);
                                                 }
 
                                             });
@@ -390,7 +389,7 @@
 
                                                 if (r.dismiss === "timer") {
                                                     $(qcs.modal.housing).modal('hide');
-                                                    // l_expenses(dm.ApartmentId, dm.Month, dm.Year);
+                                                    l_housings(dm.ApartmentId);
                                                 }
                                             });
 
@@ -431,8 +430,10 @@
             // TODO : Gider girebileceğimiz "Modal" açma
             $(document).delegate(qcs.modal.housing_new, 'click', function () {
 
-                // fv.resetForm("fv-form-expense");
-                // fv_expense_save.innerHTML = "Kaydet";
+                fv.resetForm("fv-form-expense");
+                fv_housing_save.innerHTML = "Kaydet";
+
+                $(qcs.input.housing_id).removeAttr("value");
 
                 $(qcs.modal.housing).modal();
 
@@ -482,7 +483,7 @@
 
 
                             $(qcs.combo.apartments + " option[value=" + d.view.apartmentId + "]").removeAttr('selected').attr('selected', 'selected');
-                            $(qcs.combo.users + " option[value=" + d.view.apartmentId + "]").removeAttr('selected').attr('selected', 'selected');
+                            $(qcs.combo.users + " option[value=" + d.view.housingUser + "]").removeAttr('selected').attr('selected', 'selected');
 
                             // $(qcs.user_email_valid).val(d.View.Email);
 

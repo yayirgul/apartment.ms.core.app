@@ -33,8 +33,8 @@
                     </div>
                     <div class="card-toolbar">
 
-                        <a href="javascript:;" id="modal-housing-new" class="btn btn-primary font-weight-bolder">
-                            Yeni Kullanıcı
+                        <a href="javascript:;" id="modal-user-new" class="btn btn-primary font-weight-bolder">
+                            Yeni
                         </a>
                     </div>
                 </div>
@@ -79,6 +79,67 @@
     </div>
 </div>
 
+<div class="modal fade" id="modal-user" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-expense-title">Yeni</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <form class="form" id="form-user">
+
+                    <div class="form-group mb-0 row">
+
+                        <input type="hidden" name="UserId" />
+
+                        <div class="col-xl-6 mb-6">
+                            <label>* Adınız</label>
+                            <input type="text" name="Firstname" class="form-control" placeholder="">
+                        </div>
+
+                        <div class="col-xl-6">
+                            <label>* Soyadınız</label>
+                            <input type="text" name="Lastname" class="form-control" placeholder="">
+                        </div>
+
+                        <div class="col-xl-12 mb-6">
+                            <label>* E-Posta</label>
+                            <input type="text" name="Email" class="form-control" placeholder="">
+                        </div>
+
+                        <div class="col-xl-12 mb-6">
+                            <label>* Rol</label>
+                            <select class="form-control" name="Roles" id="combo-roles"></select>
+                        </div>
+
+                        <div class="col-xl-6 mb-6">
+                            <label>* Parola</label>
+                            <input type="text" name="Password" class="form-control" placeholder="">
+                        </div>
+
+                        <div class="col-xl-6">
+                            <label>* Parola Onay</label>
+                            <input type="text" name="ConfirmPassword" class="form-control" placeholder="">
+                        </div>
+
+                    </div>
+
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                @*<button type="button" class="btn btn-light-primary font-weight-bold" data-dismiss="modal">Close</button>*@
+                <button type="button" id="button-user" class="btn btn-primary font-weight-bold">Kaydet</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 @section Scripts {
 
     <script src="~/lib/theme/plugins/custom/datatables/datatables.bundle.js"></script>
@@ -97,66 +158,151 @@
             ],
             table: "#t-users",
             input: {
-                housing_id: "[name='HousingId']",
-                housing_name: "[name='HousingName']",
-                // expense_amount: "[name='Amount']"
+                user_id: "[name='UserId']",
+                firstname: "[name='Firstname']",
+                lastname: "[name='Lastname']",
+                email: "[name='Email']",
+                password: "[name='Password']",
+                password_confirm: "[name='ConfirmPassword']"
+            },
+            select: {
+                roles: "select[name='Roles']"
             },
             combo: {
-                apartments: '#combo-apartments',
-                users: '#combo-users',
+                roles: '#combo-roles',
                 filter: {
                     apartments: '#combo-filter-apartments',
                 }
             },
             modal: {
-                housing: '#modal-housing',
-                housing_new: '#modal-housing-new',
-                housing_edit: '.modal-housing-edit',
+                user: '#modal-user',
+                user_new: '#modal-user-new',
+                user_edit: '.modal-user-edit',
             }
         }
-         
 
-        function housings() {
+        function combo_roles() {
 
-            const fv_form_housing = document.getElementById('fv-form-housing');
-            const fv_housing_save = document.getElementById('fv-housing-save');
+            $.ajax({
+                type: 'GET',
+                url: "/ams/app/combo-roles",
+                async: false,
+                dataType: 'json',
+                success: function (d) {
 
-            const fv = FormValidation.formValidation(fv_form_housing, {
+                    console.log(d);
+
+                    if (d.isSucceed) {
+                        switch (d.statuses) {
+                            case 'x-combo':
+
+                                $.each(d.listView, function (i, v) {
+
+                                    if (i == 0) {
+                                        $(qcs.combo.roles).append('<option value=' + v.id + ' selected="selected">' + v.displayName + '</option>');
+                                    } else {
+                                        $(qcs.combo.roles).append('<option value=' + v.id + '>' + v.displayName + '</option>');
+                                    }
+
+                                });
+
+                                break;
+
+                            case 'x-fail':
+                              
+                                break;
+                        }
+                    }
+
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log('Could not get posts, server response: ' + textStatus + ': ' + errorThrown);
+                }
+            });
+
+        }
+
+        function users() {
+
+            const form_user = document.getElementById('form-user');
+            const button_user = document.getElementById('button-user');
+
+            const fv = FormValidation.formValidation(form_user, {
 
                 fields: {
 
-                    HousingName: {
+                    Firstname: {
                         validators: {
                             notEmpty: {
-                                message: 'Konut ad alanı boş geçilemez.'
+                                message: 'Adınız boş geçilemez.'
+                            },
+                            stringLength: {
+                                min: 2,
+                                max: 50,
+                                message: 'Adınız minimum 2, maksimum 100 karakter olmalıdır.'
+                            }
+                        }
+                    },
+
+                    Lastname: {
+                        validators: {
+                            notEmpty: {
+                                message: 'Soyadınızı boş geçilemez.'
+                            },
+                            stringLength: {
+                                min: 2,
+                                max: 50,
+                                message: 'Soyadınızı minimum 2, maksimum 100 karakter olmalıdır.'
+                            }
+                        }
+                    },
+
+                    Email: {
+                        validators: {
+                            notEmpty: {
+                                message: 'E-posta boş geçilemez.'
+                            },
+                            emailAddress: {
+                                message: 'E-posta geçerli değil.'
                             },
                             stringLength: {
                                 min: 5,
                                 max: 50,
-                                message: 'Konut adı minimum 5, maksimum 100 karakter olmalıdır.'
+                                message: 'E-posta alanı minimum 5, maksimum 100 karakter olmalıdır.'
                             }
                         }
                     },
 
-                    Apartments: {
+                    Password: {
                         validators: {
                             notEmpty: {
-                                message: 'Apartman alanı boş geçilemez.'
+                                message: 'Parola boş geçilemez'
+                            },
+                            stringLength: {
+                                min: 8,
+                                message: 'Parola en az 8 karakter uzunluğunda olmalıdır.'
+                            },
+                            regexp: {
+                                regexp: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@@$!%*?&])[A-Za-z\d@@$!%*?&]{8,}$/,
+                                message: 'Parola en az bir küçük harf, bir büyük harf, bir sayısal rakam ve bir özel karakter içermelidir.'
                             }
                         }
                     },
 
-                    // Amount: {
-                    //     validators: {
-                    //         notEmpty: {
-                    //             message: 'Tutar alanı boş geçilemez.'
-                    //         },
-                    //         stringLength: {
-                    //             min: 1,
-                    //             message: 'Tutar minimum 1 olmalıdır'
-                    //         }
-                    //     }
-                    // },
+                    ConfirmPassword: {
+                        validators: {
+                            notEmpty: {
+                                message: 'Onay parolası boş geçilemez'
+                            },
+                            identical: {
+                                compare: function () {
+                                    return $(qcs.input.password).val();
+                                },
+                                message: 'Parolanız eşleşmiyor.'
+                            }
+                        }
+                    }
+
 
                 },
                 plugins: {
@@ -164,32 +310,31 @@
                     bootstrap: new FormValidation.plugins.Bootstrap(),
                 },
             }).on('core.form.validating', function () {
-                fv_housing_save.innerHTML = 'Doğrulanıyor ...';
+                button_user.innerHTML = 'Doğrulanıyor ...';
             });
 
-            fv_housing_save.addEventListener('click', function () {
+            button_user.addEventListener('click', function () {
 
                 fv.validate().then(function (status) {
 
-                    fv_housing_save.innerHTML = status === 'Valid' ? 'Güncelleniyor...' : 'Lütfen tekrar deneyin';
+                    button_user.innerHTML = status === 'Valid' ? 'Güncelleniyor...' : 'Lütfen tekrar deneyin';
 
                     switch (status) {
                         case "Valid":
-
-                            var apartment_id = $("select[name='Apartments']").val();
-
+                         
                             var dm = {
-                                Id: $(qcs.input.expense_id).val(),
-                                HousingName: $(qcs.input.housing_name).val(),
-                                ApartmentId: apartment_id,
-                                // Month: $(qcs.combo.expense_months).val(),
-                                // Year: $(qcs.combo.expense_years).val(),
-                                // Amount: $(qcs.input.expense_amount).val(),
+                                Id: $(qcs.input.user_id).val(),
+                                RoleId: $(qcs.select.roles).val(),
+                                Firstname: $(qcs.input.firstname).val(),
+                                Lastname: $(qcs.input.lastname).val(),
+                                Email: $(qcs.input.email).val(),
+                                Password: $(qcs.input.password).val(),
+                                ConfirmPassword: $(qcs.input.password_confirm).val(),
                             };
 
                             console.log(dm);
 
-                            $.post("/ams/app/housing-edit", dm, function (d) {
+                            $.post("/ams/app/user/add", dm, function (d) {
 
                                 console.log(d);
 
@@ -199,7 +344,7 @@
 
                                             Swal.fire({
                                                 title: "Tebrikler",
-                                                text: "Yeni konut oluşturuldu.",
+                                                text: "Yeni kullanıcı oluşturuldu.",
                                                 icon: "success",
                                                 timer: 4000,
                                                 onOpen: function () {
@@ -218,8 +363,8 @@
                                             }).then(function (r) {
 
                                                 if (r.dismiss === "timer") {
-                                                    $(qcs.modal.housing).modal('hide');
-                                                    // l_expenses(dm.ApartmentId, dm.Month, dm.Year);
+                                                    $(qcs.modal.user).modal('hide');
+                                                    l_users();
                                                 }
 
                                             });
@@ -229,7 +374,7 @@
 
                                             Swal.fire({
                                                 title: "Güncelleniyor",
-                                                text: "Konut bilgileri güncelleniyor.",
+                                                text: "Gider bilgileri güncelleniyor.",
                                                 icon: "success",
                                                 timer: 4000,
                                                 onOpen: function () {
@@ -248,41 +393,16 @@
                                             }).then(function (r) {
 
                                                 if (r.dismiss === "timer") {
-                                                    $(qcs.modal.housing).modal('hide');
-                                                    // l_expenses(dm.ApartmentId, dm.Month, dm.Year);
+
+                                                    $(qcs.modal.user).modal('hide');
+                                                    l_users();
                                                 }
 
                                             });
 
                                             break;
                                         case 'x-fail':
-
-                                            Swal.fire({
-                                                title: "Hata",
-                                                text: "İstenmeyen bir hata oluştu.",
-                                                icon: "error",
-                                                timer: 4000,
-                                                onOpen: function () {
-                                                    Swal.showLoading()
-                                                },
-                                                allowOutsideClick: false,
-                                                allowEscapeKey: false,
-                                                buttonsStyling: false,
-                                                confirmButtonText: "<i class='la la-headphones'></i> I am game!",
-                                                showCancelButton: false,
-                                                cancelButtonText: "<i class='la la-thumbs-down'></i> No, thanks",
-                                                customClass: {
-                                                    confirmButton: "btn btn-danger",
-                                                    cancelButton: "btn btn-default"
-                                                }
-                                            }).then(function (r) {
-
-                                                if (r.dismiss === "timer") {
-                                                    $(qcs.modal.housing).modal('hide');
-                                                    // l_expenses(dm.ApartmentId, dm.Month, dm.Year);
-                                                }
-                                            });
-
+                                          
                                             break;
                                     }
                                 }
@@ -301,52 +421,32 @@
                     }
 
                 });
-
             });
 
-            // ---------------------------------------------------------------------------------------------------
 
-            $(document).on("change", qcs.combo.filter.apartments, function () {
 
-                var filter = { apartment_id: $(this).val() }
 
-                $(qcs.combo.filter.apartments).children('option').removeAttr('selected');
-                $(qcs.combo.filter.apartments).find('option[value=' + filter.apartment_id + ']').attr('selected', 'selected');
+            // -------------------------------------------------------------------------------------------
 
-                l_housings(filter.apartment_id);
+            // TODO : Kullanıcı girebileceğimiz "Modal" açma
+            $(document).delegate(qcs.modal.user_new, 'click', function () {
 
-            });
-
-            // TODO : Gider girebileceğimiz "Modal" açma
-            $(document).delegate(qcs.modal.housing_new, 'click', function () {
-
-                // fv.resetForm("fv-form-expense");
-                // fv_expense_save.innerHTML = "Kaydet";
-
-                $(qcs.modal.housing).modal();
+                fv.resetForm("form-user");
+                button_user.innerHTML = "Kaydet";
+                  
+                $(qcs.modal.user).modal();
 
             });
-
-            // TODO : Gider düzenleyeceğimiz "Modal" açma
-            $(document).delegate(qcs.modal.housing_edit, 'click', function () {
-
-                // fv_expense_save.innerHTML = "Kaydet";
-                var filter = { id: $(this).data('housing-id') }
-
-                g_housing(filter.id);
-
-                $(qcs.modal.housing).modal();
-
-            });
+             
 
         }
 
 
-        function g_housing(housing_id) {
+        function g_users(user_id) {
 
             // var dm = { Id: expense_id };
 
-            $.get("/ams/app/housing/" + housing_id, function (d) {
+            $.get("/ams/app/housing/" + user_id, function (d) {
 
                 console.log("HOUSING DETAIL :::::::");
                 console.log(d);
@@ -639,7 +739,9 @@
 
         $(function () {
 
+            combo_roles();
             l_users();
+            users();
 
             $(qcs.table).tooltip({
                 selector: '[data-toggle=tooltip]',

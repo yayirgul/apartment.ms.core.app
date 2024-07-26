@@ -23,14 +23,12 @@ namespace ams.web.Areas.Admin.Controllers
             return View();
         }
 
-        [HttpPost, Route("ams/app/housing-edit")]
+        [HttpPost, Route("ams/app/housing/add")]
         public async Task<JsonResult> HousingEdit(HousingDTO.Add dto)
         {
             var User = HttpContext.Session.GetSession<UserDTO.User>(Unit.Constants.SESSION_USER);
 
             var result = new Result.ViewResult();
-
-            dto.HousingUser = Guid.Parse("6fa95f6e-2516-49e8-9ae6-7745e7743dbf"); // TODO : Combo'dan gelecek
 
             Guid housing_id;
 
@@ -43,7 +41,8 @@ namespace ams.web.Areas.Admin.Controllers
                     ApartmentId = dto.ApartmentId,
                     HousingName = dto.HousingName,
                     ModifiedTime = DateTime.UtcNow,
-                    ModifiedUser = User!.Id
+                    ModifiedUser = User!.Id,
+                    HousingUser = dto.HousingUser,
                 };
                 result = await HousingService.EditAsync(d);
             }
@@ -51,6 +50,7 @@ namespace ams.web.Areas.Admin.Controllers
             {
                 dto.CreateUser = User!.Id;
                 dto.AccountId = (Guid)User!.AccountId!;
+                dto.HousingUser = dto.HousingUser;
                 result = await HousingService.AddAsync(dto);
             }
 

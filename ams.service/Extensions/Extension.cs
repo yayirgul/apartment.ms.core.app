@@ -15,7 +15,7 @@
             services.AddScoped<IExpenseService, ExpenseService>();
             services.AddScoped<IHousingService, HousingService>();
             services.AddScoped<IUserService, UserService>();
-
+            services.AddScoped<IRoleService, RoleService>();
 
             return services;
         }

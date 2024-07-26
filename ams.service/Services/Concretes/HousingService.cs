@@ -135,12 +135,13 @@
                 HousingName = x.HousingName,
                 //_Amount = x.Amount.HasValue ? x.Amount.Value.ToString("N2", Culture) : "0",
                 _CreateTime = x.CreateTime != null ? x.CreateTime.ToString("dd/MM/yyyy") : "-",
+                _ModifiedTime = x.ModifiedTime != null ? x.ModifiedTime.Value.ToString("dd/MM/yyyy") : "-",
                 IsActive = x.IsActive ? 1 : 2,
                 CreateUser = x.CreateTheUser != null ? x.CreateTheUser.Firstname + " " + x.CreateTheUser.Lastname : "-",
                 ModifiedUser = x.ModifiedTheUser != null ? x.ModifiedTheUser.Firstname + " " + x.ModifiedTheUser.Lastname : "-",
                 HousingUser = x.HousingTheUser != null ? x.HousingTheUser.Firstname + " " + x.HousingTheUser.Lastname : "-",
                 _Amount = x.HousingTheSafe != null ? x.HousingTheSafe.Amount!.Value.ToString("N2", Culture) : "0"
-            }).ToList();
+            }).OrderBy(x => x.HousingName).ToList();
 
             return housing;
         }
