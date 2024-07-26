@@ -292,7 +292,7 @@
             </div>
             <div class="modal-footer">
                 @*<button type="button" class="btn btn-light-primary font-weight-bold" data-dismiss="modal">Close</button>*@
-                <button type="button" id="fv-user-save" class="btn btn-primary font-weight-bold">Borçlandır</button>
+                <button type="button" id="button-auto-debit" class="btn btn-primary font-weight-bold">Borçlandır</button>
             </div>
         </div>
     </div>
@@ -353,6 +353,9 @@
                 expense_new: '#modal-expense-new',
                 expense_edit: '.modal-expense-edit',
                 debit_new: '#modal-debit-new'
+            },
+            button: {
+                auto_debit: "#button-auto-debit",
             }
         }
 
@@ -728,6 +731,91 @@
 
                 g_debit_calc(apartment.id, apartment.title, apartment.month, apartment.year);
                 $(qcs.modal.debit).modal();
+
+            });
+
+
+            // TODO : Apartmana bağlı konutları borçlandır
+            $(document).delegate(qcs.button.auto_debit, 'click', function () {
+
+
+                var dm = {
+                    ApartmentId: $(qcs.combo.filter.apartments).val(),
+                    Month: $(qcs.combo.filter.months).val(),
+                    Year: $(qcs.combo.filter.years).val(),
+                };
+
+                console.log(dm);
+
+                $.post("/ams/app/auto/debit/add", dm, function (d) {
+
+                    console.log(d);
+
+                    if (d.isSucceed) {
+                        switch (d.statuses) {
+                            case 'x-debit':
+
+                                Swal.fire({
+                                    title: "Tebrikler",
+                                    text: "Konutlar borçlandırıldı.",
+                                    icon: "success",
+                                    timer: 4000,
+                                    onOpen: function () {
+                                        Swal.showLoading()
+                                    },
+                                    allowOutsideClick: false,
+                                    allowEscapeKey: false,
+                                    buttonsStyling: false,
+                                    confirmButtonText: "<i class='la la-headphones'></i> I am game!",
+                                    showCancelButton: false,
+                                    cancelButtonText: "<i class='la la-thumbs-down'></i> No, thanks",
+                                    customClass: {
+                                        confirmButton: "btn btn-danger",
+                                        cancelButton: "btn btn-default"
+                                    }
+                                }).then(function (r) {
+
+                                    if (r.dismiss === "timer") {
+                                        $(qcs.modal.expense).modal('hide');
+                                        l_expenses(dm.ApartmentId, dm.Month, dm.Year);
+                                    }
+
+                                });
+
+                                break;
+
+                        }
+                    }
+
+
+                }).done(function () {
+
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+
+                }).always(function () {
+
+                });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                // $(qcs.modal.debit).modal();
 
             });
 

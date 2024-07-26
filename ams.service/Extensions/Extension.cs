@@ -3,7 +3,6 @@
     using ams.service.Services.Abstractions;
     using ams.service.Services.Concretes;
     using Microsoft.Extensions.DependencyInjection;
-    using System.Reflection;
 
     public static class Extension
     {
@@ -16,6 +15,7 @@
             services.AddScoped<IHousingService, HousingService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IRoleService, RoleService>();
+            services.AddScoped<IDebitService, DebitService>();
 
             return services;
         }
