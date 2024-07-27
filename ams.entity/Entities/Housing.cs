@@ -46,8 +46,9 @@
 
         [StringLength(300)]
         public string? HousingName { get; set; }
+        public int HousingNo { get; set; }
 
-        
+
         public ICollection<Debit>? Debits { get; set; } // TODO : 1 konutun 1'den çok borcu olabilir
     }
 }

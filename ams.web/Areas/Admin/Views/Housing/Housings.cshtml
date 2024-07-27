@@ -101,9 +101,14 @@
                             <select class="form-control" name="Apartments" id="combo-apartments"></select>
                         </div>
 
-                        <div class="col-xl-12 mb-6">
+                        <div class="col-xl-9 mb-6">
                             <label>* Konut Adı</label>
                             <input type="text" name="HousingName" class="form-control" placeholder="">
+                        </div>
+
+                        <div class="col-xl-3 mb-6">
+                            <label>* Konut No</label>
+                            <input type="number" name="HousingNo" class="form-control" placeholder="" min="1">
                         </div>
 
                         <div class="col-xl-12">
@@ -148,6 +153,7 @@
             input: {
                 housing_id: "[name='HousingId']",
                 housing_name: "[name='HousingName']",
+                housing_no: "[name='HousingNo']",
                 // expense_amount: "[name='Amount']"
             },
             select: {
@@ -240,6 +246,14 @@
 
                 fields: {
 
+                    HousingNo: {
+                        validators: {
+                            notEmpty: {
+                                message: 'Konut no boş geçilemez.'
+                            },
+                        }
+                    },
+
                     HousingName: {
                         validators: {
                             notEmpty: {
@@ -295,6 +309,7 @@
                             var dm = {
                                 Id: $(qcs.input.housing_id).val(),
                                 HousingName: $(qcs.input.housing_name).val(),
+                                HousingNo: $(qcs.input.housing_no).val(),
                                 ApartmentId: $(qcs.select.apartments).val(),
                                 HousingUser: $(qcs.select.users).val(),
                             };
@@ -471,6 +486,7 @@
 
                             $(qcs.input.housing_id).val(d.view.id);
                             $(qcs.input.housing_name).val(d.view.housingName);
+                            $(qcs.input.housing_no).val(d.view.housingNo);
                             // $(qcs.input.expense_amount).val(d._Amount);
 
 

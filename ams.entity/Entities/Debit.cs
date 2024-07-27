@@ -19,7 +19,7 @@
         public Housing? Housing { get; set; } // 1 Borcun 1 konutu olur.
 
 
-
+        public int Queue { get; set; }
 
 
         public Guid? CreateUser { get; set; }

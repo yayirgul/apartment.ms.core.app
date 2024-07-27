@@ -1,0 +1,473 @@
+﻿@{
+    ViewData["Title"] = "Borçlar";
+}
+
+@section Subheader {
+    <div class="subheader py-2 py-lg-4 subheader-solid" id="kt_subheader">
+        <div class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
+            <!--begin::Info-->
+            <div class="d-flex align-items-center flex-wrap mr-2">
+                <h5 class="text-dark font-weight-bold mt-2 mb-2 mr-5">Borçlar</h5>
+                <div class="subheader-separator subheader-separator-ver mt-2 mb-2 mr-4 bg-gray-200"></div>
+                <span class="text-muted font-weight-bold mr-4">#XRS-45670</span>
+            </div>
+            <!--end::Info-->
+            <!--begin::Toolbar-->
+            <div class="d-flex align-items-center">
+            </div>
+            <!--end::Toolbar-->
+        </div>
+    </div>
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="card card-custom">
+                <div class="card-header">
+                    <div class="card-title">
+                        <span class="card-icon">
+                            <i class="far fa-building text-primary"></i>
+                        </span>
+                        <h3 class="card-label">Borçlar</h3>
+                    </div>
+                    <div class="card-toolbar">
+                        <a href="javascript:;" id="modal-debit-new" class="btn btn-primary font-weight-bolder">
+                            Yeni
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+
+                    <div class="mb-7">
+                        <div class="row align-items-center">
+                            <div class="col-lg-12 col-xl-12">
+                                <div class="row align-items-center">
+
+                                    <div class="col-md-2 my-2 my-md-0">
+                                        <div class="d-flex align-items-center">
+                                            <select class="form-control" id="combo-filter-apartments"></select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-1 my-2 my-md-0">
+                                        <div class="d-flex align-items-center">
+                                            <select class="form-control" id="combo-filter-paid">
+                                                <option value="" selected="selected">Tümü</option>
+                                                <option value="1">Ödendi</option>
+                                                <option value="2">Ödenmedi</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-1 my-2 my-md-0">
+                                        <div class="d-flex align-items-center">
+                                            <select class="form-control" id="combo-filter-months">
+                                                <option value="1">Ocak</option>
+                                                <option value="2">Şubat</option>
+                                                <option value="3">Mart</option>
+                                                <option value="4">Nisan</option>
+                                                <option value="5">Mayıs</option>
+                                                <option value="6">Haziran</option>
+                                                <option value="7">Temmuz</option>
+                                                <option value="8">Ağustos</option>
+                                                <option value="9">Eylül</option>
+                                                <option value="10">Ekim</option>
+                                                <option value="11">Kasım</option>
+                                                <option value="12">Aralık</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-1 my-2 my-md-0">
+                                        <div class="d-flex align-items-center">
+                                            <select class="form-control" id="combo-filter-years">
+                                                <option value="2024">2024</option>
+                                                <option value="2023">2023</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-7 my-2 my-md-0">
+                                        <div class="row align-items-center justify-content-end">
+
+                                            <div class="col-md-12 my-2 my-md-0 d-flex align-items-center justify-content-end">
+
+                                                <div class="input-icon">
+                                                    <input type="text" class="form-control" placeholder="Search..." id="kt_datatable_search_query" />
+                                                    <span>
+                                                        <i class="flaticon2-search-1 text-muted"></i>
+                                                    </span>
+                                                </div> 
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="datatable datatable-bordered datatable-head-custom" id="t-debits"></div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+
+    <script src="~/lib/theme/plugins/custom/datatables/datatables.bundle.js"></script>
+
+    <script type="text/javascript">
+
+        var _date = new Date();
+
+        // Query Component Selector
+        const qcs = {
+            default: [
+                {
+                    month: _date.getMonth() + 1,
+                    year: _date.getFullYear(),
+                }
+            ],
+            table: "#t-debits",
+            input: {
+                expense_id: "[name='ExpenseId']",
+                expense_name: "[name='ExpenseName']",
+                expense_amount: "[name='Amount']"
+            },
+            label: {
+                apartment_month_year: '#label-apartment-month-year',
+                apartment_total_amount: '#label-apartment-total-amount',
+                apartment_calc_amount: '#label-apartment-calc-amount'
+            },
+            combo: {
+                expense_months: '#combo-expense-months',
+                expense_years: '#combo-expense-years',
+                expense_apartments: '#combo-expense-apartments',
+                debit_months: '#combo-debit-months',
+                debit_years: '#combo-debit-years',
+                debit_apartments: '#combo-debit-apartments',
+                filter: {
+                    apartments: '#combo-filter-apartments',
+                    months: '#combo-filter-months',
+                    years: '#combo-filter-years',
+                    paid: '#combo-filter-paid'
+                }
+            },
+            modal: {
+                expense: '#modal-debits',
+                debit: '#modal-debit',
+                expense_new: '#modal-expense-new',
+                expense_edit: '.modal-expense-edit',
+                debit_new: '#modal-debit-new'
+            },
+            button: {
+                auto_debit: "#button-auto-debit",
+            }
+        }
+     
+        function combo_apartments() {
+
+            $.ajax({
+                type: 'GET',
+                url: "/ams/app/combo-apartments",
+                async: false,
+                dataType: 'json',
+                success: function (data) {
+
+                    $.each(data, function (i, v) {
+
+                        if (i == 0) {
+                            $(qcs.combo.filter.apartments).append('<option value=' + v.id + ' selected="selected">' + v.apartmentName + '</option>');
+                            $(qcs.combo.expense_apartments).append('<option value=' + v.id + ' selected="selected">' + v.apartmentName + '</option>');
+                        } else {
+                            $(qcs.combo.expense_apartments).append('<option value=' + v.id + '>' + v.apartmentName + '</option>');
+                            $(qcs.combo.filter.apartments).append('<option value=' + v.id + '>' + v.apartmentName + '</option>');
+                        }
+
+                        // $(qcs.combo.expense_apartments).append($("<option selected='selected'></option>").val(v.id).html(v.apartmentName));
+
+                    });
+
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log('Could not get posts, server response: ' + textStatus + ': ' + errorThrown);
+                }
+            });
+
+        }
+
+
+        
+        function debits() {
+
+            $(document).on("change", qcs.combo.filter.apartments, function () {
+
+                var filter = {
+                    apartment_id: $(this).val(),
+                    month: $(qcs.combo.filter.months).val(),
+                    year: $(qcs.combo.filter.years).val(),
+                }
+
+                $(qcs.combo.filter.apartments).children('option').removeAttr('selected');
+                $(qcs.combo.filter.apartments).find('option[value=' + filter.apartment_id + ']').attr('selected', 'selected');
+
+                l_debits(filter.apartment_id, filter.month, filter.year);
+
+            });
+
+            $(document).on("change", qcs.combo.filter.months, function () {
+
+                var filter = {
+                    apartment_id: $(qcs.combo.filter.apartments).val(),
+                    month: $(this).val(),
+                    year: $(qcs.combo.filter.years).val(),
+                }
+
+                $(qcs.combo.filter.months).children('option').removeAttr('selected');
+                $(qcs.combo.filter.months).find('option[value=' + filter.month + ']').attr('selected', 'selected');
+
+                l_debits(filter.apartment_id, filter.month, filter.year);
+
+            });
+
+            $(document).on("change", qcs.combo.filter.years, function () {
+
+                var filter = {
+                    apartment_id: $(qcs.combo.filter.apartments).val(),
+                    month: $(qcs.combo.filter.months).val(),
+                    year: $(this).val(),
+                }
+
+                $(qcs.combo.filter.years).children('option').removeAttr('selected');
+                $(qcs.combo.filter.years).find('option[value=' + filter.year + ']').attr('selected', 'selected');
+
+                l_debits(filter.apartment_id, filter.month, filter.year);
+
+            });
+
+            // TODO : Gider girebileceğimiz "Modal" açma
+            $(document).delegate(qcs.modal.expense_new, 'click', function () {
+
+                fv.resetForm("fv-form-expense");
+                fv_expense_save.innerHTML = "Kaydet";
+
+                $(qcs.modal.expense).modal();
+
+            });
+
+            // TODO : Gider düzenleyeceğimiz "Modal" açma
+            $(document).delegate(qcs.modal.expense_edit, 'click', function () {
+
+                fv_expense_save.innerHTML = "Kaydet";
+                var filter = { id: $(this).data('expense-id') }
+
+                g_expense(filter.id);
+
+                $(qcs.modal.expense).modal();
+
+            });
+
+        }
+
+
+     
+    
+
+        function l_debits(apartment_id, month, year) {
+
+            var list = [];
+
+            $(qcs.table).KTDatatable('destroy');
+
+            var ds = $.ajax({
+                type: 'GET',
+                url: '/ams/app/debits/' + apartment_id + '/' + month + '/' + year,
+                async: false,
+                dataType: 'json',
+                done: function (data) {
+                    return data;
+                },
+                fail: function (jqXHR, textStatus, errorThrown) {
+                    console.log('Could not get posts, server response: ' + textStatus + ': ' + errorThrown);
+                }
+            }).responseJSON;
+
+            // console.table(ds);
+            console.log(ds.listView);
+             
+            if (ds.isSucceed) {
+                switch (ds.statuses) {
+                    case 'x-list':
+                        list = ds.listView;
+                        break;
+                }
+            }
+
+            var datatable = $(qcs.table).KTDatatable({
+                data: {
+                    source: list,
+                    pageSize: 10,
+                },
+                layout: {
+                    scroll: true,
+                    footer: false,
+                },
+                sortable: true,
+                pagination: true,
+                search: {
+                    input: $('#kt_datatable_search_query'),
+                    key: 'generalSearch',
+                },
+                columns: [
+                    {
+                        field: 'apartmentId',
+                        title: '#',
+                        sortable: false,
+                        width: 20,
+                        type: 'number',
+                        selector: true,
+                        textAlign: 'center',
+                    },
+                    {
+                        field: 'housingName',
+                        title: 'Konut / Konut Sahibi',
+                        width: 200,
+                    },
+                    // {
+                    //     field: 'housingUser',
+                    //     title: 'Konut Sahibi',
+                    // },
+                    {
+                        field: '_CreateTime',
+                        title: 'Kayıt Tarihi',
+                        type: 'date',
+                        // format: 'MM/DD/YYYY',
+                    },
+                    {
+                        field: 'createUser',
+                        title: 'Oluşturan',
+                    },
+                    {
+                        field: 'Month',
+                        title: 'Ay/Yıl',
+                        template: function (row) {
+                            return row._Month + '/' + row._Year;
+                        },
+                    },
+                    {
+                        field: 'Amount',
+                        title: 'Tutar',
+                        template: function (row) {
+                            return row._Amount;
+                        },
+                    },
+                    {
+                        field: 'isActive',
+                        title: 'Durum',
+                        visible: false,
+                        template: function (row) {
+                            var status = {
+                                1: {
+                                    'title': 'Aktif',
+                                    'class': ' label-light-success',
+                                },
+                                2: {
+                                    'title': 'Pasif',
+                                    'class': ' label-light-danger',
+                                },
+                            };
+                            return '<span class="label font-weight-bold label-lg ' + status[row.isActive].class + ' label-inline">' + status[row.isActive].title + '</span>';
+                        },
+                    },
+                    {
+                        field: 'paid',
+                        title: 'Ödeme',
+                        template: function (row) {
+                            var status = {
+                                1: {
+                                    'title': 'Ödendi',
+                                    'class': ' label-light-success',
+                                },
+                                2: {
+                                    'title': 'Ödenmedi',
+                                    'class': ' label-light-danger',
+                                },
+                            };
+                            return '<span class="label font-weight-bold label-lg ' + status[row.paid].class + ' label-inline">' + status[row.paid].title + '</span>';
+                        },
+                    },
+                    {
+                        field: 'Actions',
+                        title: 'İşlem',
+                        sortable: false,
+                        width: 125,
+                        overflow: 'visible',
+                        autoHide: false,
+                        template: function (row) {
+
+
+                            return '\
+                                                                                                                                <a href="javascript:;" class="btn btn-sm btn-clean btn-icon  modal-expense-edit" data-expense-id=' + row.id + ' data-toggle="tooltip" data-theme="dark" title="Edit" >\
+                                                                                                                            <i class="la la-pencil"></i>\
+                                                                                                                                        </a>\
+                                                                                                                                      \
+                                                                                                                                             <a href="javascript:;" class="btn btn-sm btn-clean btn-icon" data-delete-id='+ row.id + ' data-toggle="tooltip" data-theme="dark" title="Delete">\
+                                                                                                                                            <i class="la fa-trash"></i>\
+                                                                                                                                        </a>\
+                                                                                                                                    ';
+
+
+
+                        },
+                    }],
+            });
+
+            $(qcs.combo.filter.paid).on('change', function (e) {
+                // console.log(e.target.value);
+                var paid = $(this).val().toLowerCase();
+                datatable.search(paid, 'paid');
+            });
+
+        }
+
+        $(function () {
+
+            debits();
+            combo_apartments();
+
+            $(qcs.combo.filter.months).find('option[value=' + qcs.default[0].month + ']').attr('selected', 'selected');
+            // $(qcs.combo.expense_months).find('option[value=' + qcs.default[0].month + ']').attr('selected', 'selected');
+
+            $(qcs.combo.filter.years).find('option[value=' + qcs.default[0].year + ']').attr('selected', 'selected');
+            // $(qcs.combo.expense_years).find('option[value=' + qcs.default[0].year + ']').attr('selected', 'selected');
+
+            var filter = {
+                apartment_id: $(qcs.combo.filter.apartments).val(),
+                month: $(qcs.combo.filter.months).val(),
+                year: $(qcs.combo.filter.years).val(),
+            }
+
+
+
+
+            l_debits(filter.apartment_id, filter.month, filter.year);
+
+            $(qcs.table).tooltip({
+                selector: '[data-toggle=tooltip]',
+                container: 'body'
+            });
+
+
+        });
+
+    </script>
+
+}                                                

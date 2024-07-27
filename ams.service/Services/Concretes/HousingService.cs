@@ -25,6 +25,7 @@
                 AccountId = dto.AccountId,
                 ApartmentId = dto.ApartmentId,
                 HousingName = dto.HousingName,
+                HousingNo = dto.HousingNo,
                 CreateUser = dto.CreateUser,
                 IsDeleted = false,
                 IsActive = true,
@@ -56,6 +57,7 @@
             var housing = await Uow.GetRepository<Housing>().GetAsync(x => !x.IsDeleted && x.Id == dto.Id);
 
             housing!.HousingName = dto.HousingName;
+            housing.HousingNo = dto.HousingNo;
             housing.ModifiedTime = dto.ModifiedTime;
             housing.ModifiedUser = dto.ModifiedUser;
             housing.HousingUser = dto.HousingUser;
@@ -110,6 +112,7 @@
                     Id = detail!.Id,
                     ApartmentId = detail.ApartmentId,
                     HousingName = detail!.HousingName,
+                    HousingNo = detail!.HousingNo,
                     HousingUser = detail!.HousingUser,
                 };
                 view.IsSucceed = true;
@@ -132,8 +135,10 @@
                 Id = x.Id,
                 AccountId = x.AccountId,
                 ApartmentId = x.ApartmentId,
-                HousingName = x.HousingName,
+                HousingName = x.HousingName + " " + x.HousingNo,
+                HousingNo = x.HousingNo,
                 //_Amount = x.Amount.HasValue ? x.Amount.Value.ToString("N2", Culture) : "0",
+                CreateTime = x.CreateTime,
                 _CreateTime = x.CreateTime != null ? x.CreateTime.ToString("dd/MM/yyyy") : "-",
                 _ModifiedTime = x.ModifiedTime != null ? x.ModifiedTime.Value.ToString("dd/MM/yyyy") : "-",
                 IsActive = x.IsActive ? 1 : 2,
@@ -141,7 +146,7 @@
                 ModifiedUser = x.ModifiedTheUser != null ? x.ModifiedTheUser.Firstname + " " + x.ModifiedTheUser.Lastname : "-",
                 HousingUser = x.HousingTheUser != null ? x.HousingTheUser.Firstname + " " + x.HousingTheUser.Lastname : "-",
                 _Amount = x.HousingTheSafe != null ? x.HousingTheSafe.Amount!.Value.ToString("N2", Culture) : "0"
-            }).OrderBy(x => x.HousingName).ToList();
+            }).OrderBy(x => x.HousingNo).ToList();
 
             return housing;
         }

@@ -4,6 +4,13 @@ namespace ams.web.Helpers
 {
     public static class Helper
     {
+        public static class Role
+        {
+            public const string ADMIN = "admin";
+            public const string AGENT = "agent";
+            public const string USER = "user";
+        }
+
         public static void SetSession<T>(this ISession session, string key, T value)
         {
             session.SetString(key, JsonConvert.SerializeObject(value));

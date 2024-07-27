@@ -40,6 +40,7 @@ namespace ams.web.Areas.Admin.Controllers
                     //AccountId = (Guid)User!.AccountId!,
                     ApartmentId = dto.ApartmentId,
                     HousingName = dto.HousingName,
+                    HousingNo = dto.HousingNo,
                     ModifiedTime = DateTime.UtcNow,
                     ModifiedUser = User!.Id,
                     HousingUser = dto.HousingUser,

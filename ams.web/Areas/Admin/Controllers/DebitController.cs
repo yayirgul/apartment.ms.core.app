@@ -1,22 +1,24 @@
-﻿using ams.core.Units;
-using ams.entity.DTOs;
-using ams.service.Services.Abstractions;
-using ams.service.Services.Concretes;
-using ams.web.Helpers;
-using Microsoft.AspNetCore.Mvc;
-
-namespace ams.web.Areas.Admin.Controllers
+﻿namespace ams.web.Areas.Admin.Controllers
 {
+    using ams.core.Units;
+    using ams.entity.DTOs;
+    using ams.service.Services.Abstractions;
+    using ams.web.Helpers;
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Mvc;
+
+    [Area("admin")]
     public class DebitController : Controller
     {
         private readonly IDebitService DebitService;
+
         public DebitController(IDebitService DebitService)
         {
             this.DebitService = DebitService;
         }
 
         [HttpPost, Route("ams/app/auto/debit/add")]
-        public async Task<JsonResult> HousingEdit(DebitDTO.Add dto)
+        public async Task<JsonResult> DebitAdd(DebitDTO.Add dto)
         {
             var User = HttpContext.Session.GetSession<UserDTO.User>(Unit.Constants.SESSION_USER);
 
@@ -32,7 +34,16 @@ namespace ams.web.Areas.Admin.Controllers
             return Json(result);
         }
 
-        public IActionResult Index()
+        [HttpGet, Route("ams/app/debits/{apartment_id}/{month}/{year}")]
+        public async Task<JsonResult> GetDebits(Guid apartment_id, int month, int year)
+        {
+            var debits = await DebitService.GetDebits(apartment_id, month, year);
+            return Json(debits);
+        }
+
+        [Route("ams/debits")]
+        [Authorize(Roles = $"{Helper.Role.ADMIN}")]
+        public IActionResult Debits()
         {
             return View();
         }

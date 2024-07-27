@@ -115,16 +115,8 @@
 
                                             </div>
 
-
-                                            <div class="col-md-2 my-2 my-md-0">
-                                            </div>
                                         </div>
                                     </div>
-
-
-
-
-
 
                                 </div>
                             </div>
@@ -718,16 +710,12 @@
             // TODO : Apartmana bağlı konutları borçlandırma "Modal" açma
             $(document).delegate(qcs.modal.debit_new, 'click', function () {
 
-
                 var apartment = {
                     id: $(qcs.combo.filter.apartments).val(),
                     title: $(qcs.combo.filter.apartments + " option:selected").text(),
                     month: $(qcs.combo.filter.months).val(),
                     year: $(qcs.combo.filter.years).val(),
                 };
-
-                console.log(apartment);
-
 
                 g_debit_calc(apartment.id, apartment.title, apartment.month, apartment.year);
                 $(qcs.modal.debit).modal();
@@ -737,7 +725,6 @@
 
             // TODO : Apartmana bağlı konutları borçlandır
             $(document).delegate(qcs.button.auto_debit, 'click', function () {
-
 
                 var dm = {
                     ApartmentId: $(qcs.combo.filter.apartments).val(),
@@ -776,14 +763,36 @@
                                 }).then(function (r) {
 
                                     if (r.dismiss === "timer") {
-                                        $(qcs.modal.expense).modal('hide');
+                                        $(qcs.modal.debit).modal('hide');
                                         l_expenses(dm.ApartmentId, dm.Month, dm.Year);
                                     }
 
                                 });
 
                                 break;
+                            case 'x-duplicate':
 
+                                Swal.fire({
+                                    title: "Uyarı",
+                                    html: "<b>" + dm.Month + "/" + dm.Year + "</b> tarihine ait borçlandırılma yapılmıştır. Tekrardan borçlandırma yapamazsınız...",
+                                    icon: "warning",
+                                    allowOutsideClick: false,
+                                    allowEscapeKey: false,
+                                    buttonsStyling: false,
+                                    confirmButtonText: "Tamam",
+                                    customClass: {
+                                        confirmButton: "btn btn-danger",
+                                        cancelButton: "btn btn-default"
+                                    }
+                                }).then(function (result) {
+
+                                    if (result.value) {
+                                        $(qcs.modal.debit).modal('hide');
+                                    }
+
+                                });
+
+                                break;
                         }
                     }
 
@@ -1011,7 +1020,8 @@
                 }
             }).responseJSON;
 
-            console.table(ds);
+            // console.table(ds);
+            console.log(ds);
 
 
             var datatable = $(qcs.table).KTDatatable({

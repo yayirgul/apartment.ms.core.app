@@ -61,7 +61,7 @@
             else
             {
                 view.IsSucceed = true;
-                view.Statuses = "x-dublicate";
+                view.Statuses = "x-duplicate";
             }
 
             return view;
