@@ -98,6 +98,7 @@
             var debits = l.ConvertAll(x => new DebitDTO.Table
             {
                 Id = x.Id,
+                _Housing = x.Housing!.HousingName + " " + x.Housing.HousingNo,
                 HousingName = x.Housing!.HousingName + " " + x.Queue + " - [ <b class='text-dark'>" + x.DebitTheUser!.Firstname + " " + x.DebitTheUser.Lastname + "</b> ]",
                 HousingUser = x.DebitTheUser != null ? x.DebitTheUser!.Firstname + " " + x.DebitTheUser.Lastname : "-",
                 Amount = x.Amount,
@@ -111,7 +112,9 @@
                 Paid = x.Paid ? 1 : 2,
                 CreateUser = x.CreateTheUser != null ? x.CreateTheUser.Firstname + " " + x.CreateTheUser.Lastname : "-",
                 ModifiedUser = x.ModifiedTheUser != null ? x.ModifiedTheUser.Firstname + " " + x.ModifiedTheUser.Lastname : "-",
+                DebitUser = x.DebitUser,
                 Queue = x.Queue,
+                HousingId = x.HousingId,
             }).OrderBy(x => x.Queue).ToList();
 
 

@@ -84,29 +84,18 @@
 
         public async Task<Result.ViewResult<HousingDTO.Detail>> GetHousing(Guid housing_id)
         {
+            var view = new Result.ViewResult<HousingDTO.Detail>();
+
             var detail = await Uow.GetRepository<Housing>().GetAsync(x => !x.IsDeleted && x.Id == housing_id);
 
             //decimal amount; 
             //decimal.TryParse(view!.Amount.ToString(), NumberStyles.Any, CultureInfo.InvariantCulture, out amount);
 
-
-            var view = new Result.ViewResult<HousingDTO.Detail>();
-
-
             if (detail != null)
             {
-                //var housing = new HousingDTO.Detail()
-                //{
-                //    Id = detail!.Id,
-                //    ApartmentId = detail.ApartmentId,
-                //    HousingName = detail!.HousingName, 
-                //};
-
-
                 //_Amount = view.Amount.HasValue ? view.Amount!.Value.ToString("#,##0.00") : ""
                 //_Amount = view.Amount.HasValue ? amount.ToString("N2", Culture) : "",
                 //_Amount = view.Amount.HasValue ? view.Amount.Value.ToString("N2", Culture) : "",
-
 
                 view.View = new HousingDTO.Detail() {
                     Id = detail!.Id,

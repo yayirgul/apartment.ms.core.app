@@ -120,6 +120,101 @@
     </div>
 </div>
 
+<div class="modal fade" id="modal-payment" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-expense-title">Ödeme</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <form class="form" id="form-payment">
+
+                    <input type="hidden" name="ExpenseId" />
+
+                    <div class="row">
+
+                        <div class="col-xl-12">
+
+                            <label class="option mb-6">
+
+                                <span class="option-label">
+                                    <span class="option-body pt-0">
+
+                                        <div class="row">
+
+                                            <div class="col-xl-12 mb-4">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <h6 class="font-size-sm text-dark mb-0">APARTMAN - AY / YIL</h6>
+                                                    <span class="btn btn-sm btn-text btn-light-primary font-weight-bold" id="label-apartment-month-year">-</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-xl-12">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <h6 class="font-size-sm text-dark mb-0">KONUT / SAHİBİ </h6>
+                                                    <span class="btn btn-sm btn-text btn-light-success font-weight-bold" id="label-housing-the-housing-user">
+                                                        -
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-xl-12">
+                                                <div class="separator separator-solid my-7"></div>
+                                            </div>
+
+                                            <div class="col-xl-12 mb-4">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <h6 class="font-size-sm text-dark mb-0">KONUT KASA TUTARI</h6>
+                                                    <span class="btn btn-sm btn-text btn-light-danger font-weight-bold" id="label-housing-safe-amount">0</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-xl-12">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <h6 class="font-size-sm text-dark mb-0">ÖDENECEK TUTAR</h6>
+                                                    <span class="btn btn-sm btn-text btn-light-danger font-weight-bold" id="label-debit-amount">0</span>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                    </span>
+                                </span>
+                            </label>
+                        </div>
+
+                        <div class="col-xl-12">
+                            <label class="option mb-0">
+                                <span class="option-label">
+                                    <span class="option-body pt-0">
+                                        <div class="row">
+                                            <div class="col-xl-12">
+                                                <h6 class="font-size-sm text-dark mb-4">ALINAN TUTAR</h6>
+                                                <input type="text" name="Amount" class="form-control money" id="debit-amount" maxlength="22" placeholder="0,00">
+                                            </div>
+                                        </div>
+                                    </span>
+                                </span>
+                            </label>
+
+                        </div>
+
+                    </div>
+
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="button-payment-save" class="btn btn-primary font-weight-bold">Öde</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @section Scripts {
 
     <script src="~/lib/theme/plugins/custom/datatables/datatables.bundle.js"></script>
@@ -144,13 +239,14 @@
             },
             label: {
                 apartment_month_year: '#label-apartment-month-year',
-                apartment_total_amount: '#label-apartment-total-amount',
-                apartment_calc_amount: '#label-apartment-calc-amount'
+                housing_the_housing_user: '#label-housing-the-housing-user',
+                housing_safe_amount: '#label-housing-safe-amount',
+                debit_amount: '#label-debit-amount'
             },
             combo: {
-                expense_months: '#combo-expense-months',
-                expense_years: '#combo-expense-years',
-                expense_apartments: '#combo-expense-apartments',
+                // expense_months: '#combo-expense-months',
+                // expense_years: '#combo-expense-years',
+                // expense_apartments: '#combo-expense-apartments',
                 debit_months: '#combo-debit-months',
                 debit_years: '#combo-debit-years',
                 debit_apartments: '#combo-debit-apartments',
@@ -162,16 +258,27 @@
                 }
             },
             modal: {
-                expense: '#modal-debits',
-                debit: '#modal-debit',
-                expense_new: '#modal-expense-new',
-                expense_edit: '.modal-expense-edit',
-                debit_new: '#modal-debit-new'
+                payment: '#modal-payment',
+                payment_open: '.modal-payment-open'
             },
             button: {
                 auto_debit: "#button-auto-debit",
             }
         }
+
+        var Masks = function () {
+            var Mask = function () {
+                $('#debit-amount').mask("#.##0,00", {
+                    reverse: true
+                });
+            }
+            return {
+                Init: function () {
+                    Mask();
+                }
+            };
+
+        }();
      
         function combo_apartments() {
 
@@ -186,10 +293,10 @@
 
                         if (i == 0) {
                             $(qcs.combo.filter.apartments).append('<option value=' + v.id + ' selected="selected">' + v.apartmentName + '</option>');
-                            $(qcs.combo.expense_apartments).append('<option value=' + v.id + ' selected="selected">' + v.apartmentName + '</option>');
+                            // $(qcs.combo.expense_apartments).append('<option value=' + v.id + ' selected="selected">' + v.apartmentName + '</option>');
                         } else {
+                            // $(qcs.combo.filter.apartments).append('<option value=' + v.id + '>' + v.apartmentName + '</option>');
                             $(qcs.combo.expense_apartments).append('<option value=' + v.id + '>' + v.apartmentName + '</option>');
-                            $(qcs.combo.filter.apartments).append('<option value=' + v.id + '>' + v.apartmentName + '</option>');
                         }
 
                         // $(qcs.combo.expense_apartments).append($("<option selected='selected'></option>").val(v.id).html(v.apartmentName));
@@ -204,9 +311,98 @@
 
         }
 
+        function g_housing_safe(housing_id) {
+
+            // var dm = { Id: expense_id };
+
+            $.get("/ams/app/housing-safe/" + housing_id, function (d) {
+
+                console.log("KASA TUTARI :::::::");
+                console.log(d);
+
+                if (d.isSucceed) {
+                    switch (d.statuses) {
+                        case 'x-detail':
+
+                            console.log(d.view);
+                            $(qcs.label.housing_safe_amount).text(d.view._Amount);
+
+                            break;
+
+                        case 'x-fail':
+
+                            Swal.fire({
+                                title: "Hata",
+                                text: "İstenmeyen bir hata oluştu.",
+                                icon: "error",
+                                timer: 4000,
+                                onOpen: function () {
+                                    Swal.showLoading()
+                                },
+                                allowOutsideClick: false,
+                                allowEscapeKey: false,
+                                buttonsStyling: false,
+                                confirmButtonText: "<i class='la la-headphones'></i> I am game!",
+                                showCancelButton: false,
+                                cancelButtonText: "<i class='la la-thumbs-down'></i> No, thanks",
+                                customClass: {
+                                    confirmButton: "btn btn-danger",
+                                    cancelButton: "btn btn-default"
+                                }
+                            }).then(function (r) {
+                                if (r.dismiss === "timer") {
+                                    $(qcs.modal.payment).modal('hide');
+                                }
+                            });
+
+                            break;
+                    }
+                }
+
+                 
+
+
+            }).done(function (d) {
+
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+
+                Swal.fire({
+                    title: "Hata",
+                    text: "Hata Kodu : " + textStatus,
+                    icon: "error",
+                    timer: 4000,
+                    onOpen: function () {
+                        Swal.showLoading()
+                    },
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    buttonsStyling: false,
+                    confirmButtonText: "<i class='la la-headphones'></i> I am game!",
+                    showCancelButton: false,
+                    cancelButtonText: "<i class='la la-thumbs-down'></i> No, thanks",
+                    customClass: {
+                        confirmButton: "btn btn-danger",
+                        cancelButton: "btn btn-default"
+                    }
+                }).then(function (r) {
+
+                    if (r.dismiss === "timer") { }
+
+                });
+
+            }).always(function (d) {
+
+            });
+
+        }
+
+
+
 
         
         function debits() {
+
+            Masks.Init();
 
             $(document).on("change", qcs.combo.filter.apartments, function () {
 
@@ -253,27 +449,38 @@
 
             });
 
-            // TODO : Gider girebileceğimiz "Modal" açma
-            $(document).delegate(qcs.modal.expense_new, 'click', function () {
+            $(document).on("click", qcs.modal.payment_open, function () {
 
-                fv.resetForm("fv-form-expense");
-                fv_expense_save.innerHTML = "Kaydet";
+                $(qcs.modal.payment).modal();
 
-                $(qcs.modal.expense).modal();
+                var filter = {
+                    apartment_id: $(qcs.combo.filter.apartments).val(),
+                    apartment_title: $(qcs.combo.filter.apartments + " option:selected").text(),
+                    month: $(qcs.combo.filter.months).val(),
+                    year: $(qcs.combo.filter.years).val(),
+                    housing: $(this).data("housing"),
+                    housing_user: $(this).data("housing-user"),
+                    housing_id: $(this).data("housing-id"),
+                    debit_amount: $(this).data("debit-amount")
+                }
+
+                $(qcs.label.apartment_month_year).text(filter.apartment_title + " - " + filter.month + "." + filter.year);
+                $(qcs.label.housing_the_housing_user).text(filter.housing + " - " + filter.housing_user);
+
+                $(qcs.label.debit_amount).text(filter.debit_amount);
+
+                g_housing_safe(filter.housing_id);
+
+                console.log(filter);
+
+
 
             });
 
-            // TODO : Gider düzenleyeceğimiz "Modal" açma
-            $(document).delegate(qcs.modal.expense_edit, 'click', function () {
 
-                fv_expense_save.innerHTML = "Kaydet";
-                var filter = { id: $(this).data('expense-id') }
 
-                g_expense(filter.id);
 
-                $(qcs.modal.expense).modal();
 
-            });
 
         }
 
@@ -397,11 +604,26 @@
                                     'class': ' label-light-success',
                                 },
                                 2: {
-                                    'title': 'Ödenmedi',
-                                    'class': ' label-light-danger',
+                                    'title': 'Öde',
+                                    'class': ' label-light-danger cursor-pointer modal-payment-open',
                                 },
                             };
-                            return '<span class="label font-weight-bold label-lg ' + status[row.paid].class + ' label-inline">' + status[row.paid].title + '</span>';
+
+                            var r = null;
+
+                            switch (row.paid) {
+                                case 1: // ÖDENDİ
+                                    r = '<span class="label font-weight-bold label-lg label-inline label-light-success">' + 'Ödendi' + '</span>';
+                                    break;
+                                case 2:
+                                    r = '<span class="label font-weight-bold label-lg label-inline label-light-danger cursor-pointer modal-payment-open" data-housing="' + row._Housing + '" data-housing-user="' + row.housingUser + '" data-housing-id="' + row.housingId + '" data-debit-amount="' + row._Amount + '">' + 'Öde' + '</span>';
+                                    break;
+                            }
+
+                            return r;
+                            // return '<span class="label font-weight-bold label-lg ' + status[row.paid].class + ' label-inline" data-housing="' + row._Housing + '" data-housing-user="' + row.housingUser + '">' + status[row.paid].title + '</span>';
+
+
                         },
                     },
                     {

@@ -13,10 +13,11 @@
             services.AddScoped<IApartmentService, ApartmentService>();
             services.AddScoped<IExpenseService, ExpenseService>();
             services.AddScoped<IHousingService, HousingService>();
+            services.AddScoped<IHousingSafeService, HousingSafeService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<IDebitService, DebitService>();
-
+            
             return services;
         }
     }

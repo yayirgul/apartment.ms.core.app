@@ -15,6 +15,7 @@ namespace ams.entity.DTOs
         public class Table
         {
             public Guid Id { get; set; }
+            public string? _Housing { get; set; }
             public string? HousingName { get; set; }
             public string? HousingUser { get; set; }
 
@@ -52,7 +53,7 @@ namespace ams.entity.DTOs
        
              
     
-            public string? DebitUser { get; set; }
+            public Guid? DebitUser { get; set; }
     
 
 
