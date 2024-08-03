@@ -7,6 +7,7 @@
             public string? HousingSafeAmount { get; set; }
             public string? MovementAmount { get; set; }
             public string? DebitAmount { get; set; }
+            public string? FormerAmount { get; set; }
             public int _Month { get; set; }
             public int _Year { get; set; }
             public string? CreateUser { get; set; }

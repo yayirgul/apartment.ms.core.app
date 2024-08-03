@@ -497,43 +497,55 @@
             // -----
             button_payment.addEventListener('click', function () {
 
-                button_payment.innerHTML = status === 'Valid' ? 'Güncelleniyor...' : 'Lütfen tekrar deneyin';
-
                 fv.validate().then(function (status) {
 
-                    var dm = {
-                        DebitId: $(qcs.input.debit_id).val(),
-                        HousingId: $(qcs.input.housing_id).val(),
-                        ApartmentId: $(qcs.combo.filter.apartments).val(),
-                        Month: $(qcs.combo.filter.months).val(),
-                        Year: $(qcs.combo.filter.years).val(),
-                        Amount: $(qcs.input.debit_amount).val()
+                    button_payment.innerHTML = status === 'Valid' ? 'Güncelleniyor...' : 'Lütfen tekrar deneyin';
+
+                    switch (status) {
+                        case "Valid":
+
+                            var dm = {
+                                DebitId: $(qcs.input.debit_id).val(),
+                                HousingId: $(qcs.input.housing_id).val(),
+                                ApartmentId: $(qcs.combo.filter.apartments).val(),
+                                Month: $(qcs.combo.filter.months).val(),
+                                Year: $(qcs.combo.filter.years).val(),
+                                Amount: $(qcs.input.debit_amount).val()
+                            }
+                            console.log(dm);
+
+
+                            $.post("/ams/app/debit/pay", dm, function (d) {
+
+                                console.log(d);
+
+                                if (d.isSucceed) {
+                                    switch (d.statuses) {
+                                        case 'x-pay':
+
+
+
+                                            break;
+                                    }
+                                }
+
+
+                            }).done(function () {
+
+                            }).fail(function (jqXHR, textStatus, errorThrown) {
+
+                            }).always(function () {
+
+                            });
+
+                            break;
                     }
 
-                    console.log(dm);
-
-                    $.post("/ams/app/debit/pay", dm, function (d) {
-
-                        console.log(d);
-
-                        if (d.isSucceed) {
-                            switch (d.statuses) {
-                                case 'x-pay':
 
 
-
-                                    break;
-                            }
-                        }
+                    
 
 
-                    }).done(function () {
-
-                    }).fail(function (jqXHR, textStatus, errorThrown) {
-
-                    }).always(function () {
-
-                    });
 
 
                     
@@ -789,13 +801,6 @@
                         },
                     },
                     {
-                        field: '',
-                        title: 'Hareket',
-                        template: function (row) {
-                            return '<span class="label font-weight-bold label-lg label-inline label-light-warning cursor-pointer modal-housing-movement-open" data-housing-id="' + row.housingId + '"  >' + 'Liste' + '</span>';
-                        },
-                    },
-                    {
                         field: 'Actions',
                         title: 'İşlem',
                         sortable: false,
@@ -804,18 +809,12 @@
                         autoHide: false,
                         template: function (row) {
 
+                            var r = `
+                            <a href="javascript:;" class="btn btn-sm btn-clean btn-icon modal-housing-movement-open" data-housing-id='${row.housingId}' data-toggle="tooltip"><i class="la la-bars"></i>
+                            </a>
+                            `;
 
-                            return '\
-                                                                                                                                        <a href="javascript:;" class="btn btn-sm btn-clean btn-icon  modal-expense-edit" data-expense-id=' + row.id + ' data-toggle="tooltip" data-theme="dark" title="Edit" >\
-                                                                                                                                    <i class="la la-pencil"></i>\
-                                                                                                                                                </a>\
-                                                                                                                                              \
-                                                                                                                                                     <a href="javascript:;" class="btn btn-sm btn-clean btn-icon" data-delete-id='+ row.id + ' data-toggle="tooltip" data-theme="dark" title="Delete">\
-                                                                                                                                                    <i class="la fa-trash"></i>\
-                                                                                                                                                </a>\
-                                                                                                                                            ';
-
-
+                            return r;
 
                         },
                     }],
@@ -877,7 +876,12 @@
                 columns: [
                     {
                         field: 'housingSafeAmount',
-                        title: 'Kasa Tutarı',
+                        title: 'Güncel Kasa',
+                    },
+                    {
+                        field: 'formerAmount',
+                        title: 'Eski Kasa',
+                        textAlign: 'left',
                     },
                     {
                         field: 'movementAmount',
@@ -886,7 +890,7 @@
                     },
                     {
                         field: 'debitAmount',
-                        title: 'Kalan Tutar',
+                        title: 'Ödenecek',
                         textAlign: 'left',
                     },
                     {

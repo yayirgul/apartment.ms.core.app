@@ -29,6 +29,8 @@
         [Column(TypeName = "money")]
         public decimal? DebitAmount { get; set; }
 
+        [Column(TypeName = "money")]
+        public decimal? FormerAmount { get; set; }
 
 
 

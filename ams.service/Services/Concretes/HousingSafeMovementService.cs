@@ -35,6 +35,7 @@
                 HousingSafeAmount = x.HousingSafe!.Amount.HasValue ? x.HousingSafe.Amount.Value.ToString("N2", Culture) : "0",
                 MovementAmount = x.MovementAmount.HasValue ? x.MovementAmount.Value.ToString("N2", Culture) : "0",
                 DebitAmount = x.DebitAmount.HasValue ? x.DebitAmount.Value.ToString("N2", Culture) : "0",
+                FormerAmount = x.FormerAmount.HasValue ? x.FormerAmount.Value.ToString("N2", Culture) : "0",
                 _Month = month,
                 _Year = year,
                 MonthYear = month + "/" + year,

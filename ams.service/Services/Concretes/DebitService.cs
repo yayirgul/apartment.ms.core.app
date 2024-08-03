@@ -136,6 +136,7 @@
                                         ApartmentId = (Guid)item.ApartmentId!,
                                         HousingId = item.Id,
                                         HousingSafeId = safe.Id,
+                                        FormerAmount = safe.Amount,
                                         MovementAmount = -safe!.Amount, // TODO : KASA'da para varsa düşülecek tutarı "KASA HAREKETLERİNE" ekliyorum.
                                         DebitAmount = amount, // TODO : Kalan "BORCU" "KASA HAREKETLERİNDE" göstermek için ekliyorum.
                                         _Month = month,
