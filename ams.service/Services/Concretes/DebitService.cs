@@ -18,6 +18,17 @@
             Culture = new CultureInfo("tr-TR");
         }
 
+        public async Task<Result.ViewResult> DebitPay(DebitDTO.Pay pay)
+        {
+            var view = new Result.ViewResult();
+
+
+
+
+
+            return view;
+        }
+
         public async Task<Result.ViewResult> DebitAddAsync(Guid apartment_id, Guid create_user, int month, int year)
         {
             var view = new Result.ViewResult();
@@ -40,6 +51,20 @@
 
                         foreach (var item in ls_housing.OrderBy(x => x.CreateTime))
                         {
+                            var safe = await Uow.GetRepository<HousingSafe>().GetAsync(x => !x.IsDeleted && x.IsActive == true && x.HousingId == item.Id);
+
+                            if (safe != null)
+                            {
+                                if (safe!.Amount > 0)
+                                {
+                                    amount = amount - safe!.Amount;
+                                    safe.Amount = 0;
+
+                                    await Uow.GetRepository<HousingSafe>().UpdateAsync(safe);
+                                    var save = await Uow.SaveAsync();
+                                }
+                            }
+
                             var debit = new Debit()
                             {
                                 AccountId = item.AccountId,

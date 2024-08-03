@@ -17,6 +17,23 @@
             this.DebitService = DebitService;
         }
 
+        [HttpPost, Route("ams/app/debit/pay")]
+        public async Task<JsonResult> DebitPay(DebitDTO.Pay dto)
+        {
+            var User = HttpContext.Session.GetSession<UserDTO.User>(Unit.Constants.SESSION_USER);
+
+            var result = new Result.ViewResult();
+
+            Guid debit_id;
+
+            if (Guid.TryParse(dto.DebitId.ToString(), out debit_id) && dto.ApartmentId != Guid.Empty)
+            {
+                result = await DebitService.DebitAddAsync(dto.ApartmentId, User!.Id, dto.Month, dto.Year);
+            }
+
+            return Json(result);
+        }
+
         [HttpPost, Route("ams/app/auto/debit/add")]
         public async Task<JsonResult> DebitAdd(DebitDTO.Add dto)
         {

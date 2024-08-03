@@ -108,7 +108,6 @@
             decimal amount;
             decimal.TryParse(dto.Amount, NumberStyles.Number, Culture, out amount);
 
-
             expense!.ExpenseName = dto.ExpenseName;
             expense.Amount = amount;
             expense.Month = dto.Month;
@@ -118,7 +117,6 @@
 
             await Uow.GetRepository<Expense>().UpdateAsync(expense);
             var result = await Uow.SaveAsync();
-
 
             var view = new Result.ViewResult();
 

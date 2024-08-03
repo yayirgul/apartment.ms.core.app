@@ -1,10 +1,19 @@
-﻿using ams.entity.Entities;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace ams.entity.DTOs
+﻿namespace ams.entity.DTOs
 {
+    using ams.entity.Entities;
+
     public class DebitDTO
     {
+        public class Pay
+        {
+            public Guid DebitId { get; set; }
+            public Guid ApartmentId { get; set; }
+            public Guid HousingId { get; set; }
+            public int Month { get; set; }
+            public int Year { get; set; }
+            public string? Amount { get; set; }
+        }
+
         public class Add
         {
             public Guid ApartmentId { get; set; }
