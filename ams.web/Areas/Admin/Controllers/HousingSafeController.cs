@@ -20,8 +20,10 @@
         }
 
         [Route("ams/housing-safe")]
-        public IActionResult HousingSafe()
+        public async Task<IActionResult> HousingSafe()
         {
+            var housing_safe = await HousingSafeService.GetHousingSafes();
+
             return View();
         }
     }

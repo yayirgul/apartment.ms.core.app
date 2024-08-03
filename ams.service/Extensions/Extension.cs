@@ -14,6 +14,7 @@
             services.AddScoped<IExpenseService, ExpenseService>();
             services.AddScoped<IHousingService, HousingService>();
             services.AddScoped<IHousingSafeService, HousingSafeService>();
+            services.AddScoped<IHousingSafeMovement, HousingSafeMovementService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<IDebitService, DebitService>();

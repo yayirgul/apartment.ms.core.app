@@ -17,12 +17,6 @@ namespace ams.web.Areas.Admin.Controllers
             this.HousingService = HousingService;
         }
 
-        [Route("ams/housing-safe")]
-        public IActionResult HousingSafe()
-        {
-            return View();
-        }
-
         [HttpPost, Route("ams/app/housing/add")]
         public async Task<JsonResult> HousingEdit(HousingDTO.Add dto)
         {

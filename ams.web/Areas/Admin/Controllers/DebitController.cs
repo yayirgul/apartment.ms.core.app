@@ -26,9 +26,11 @@
 
             Guid debit_id;
 
-            if (Guid.TryParse(dto.DebitId.ToString(), out debit_id) && dto.ApartmentId != Guid.Empty)
+            if (Guid.TryParse(dto.DebitId.ToString(), out debit_id) && dto.DebitId != Guid.Empty)
             {
-                result = await DebitService.DebitAddAsync(dto.ApartmentId, User!.Id, dto.Month, dto.Year);
+                dto.ModifiedTime = DateTime.UtcNow;
+                dto.ModifiedUser = User!.Id;
+                result = await DebitService.DebitPay(dto);
             }
 
             return Json(result);

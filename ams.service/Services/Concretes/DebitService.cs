@@ -5,6 +5,7 @@
     using ams.entity.DTOs;
     using ams.entity.Entities;
     using ams.service.Services.Abstractions;
+    using System;
     using System.Globalization;
 
     public class DebitService : IDebitService
@@ -22,8 +23,78 @@
         {
             var view = new Result.ViewResult();
 
+            decimal amount_X, amount_R;
+            decimal.TryParse(pay.Amount, NumberStyles.Number, Culture, out amount_X);
+
+            var qdebit = await Uow.GetRepository<Debit>().GetAsync(x => !x.IsDeleted && x.IsActive == true && x.ApartmentId == pay.ApartmentId && x.HousingId == pay.HousingId);
+
+            if (qdebit != null)
+            {
+                var safe = await Uow.GetRepository<HousingSafe>().GetAsync(x => !x.IsDeleted && x.IsActive == true && x.HousingId == pay.HousingId);
+
+                if (amount_X > qdebit!.Amount) // TODO : Kasa tutarına artı (+) tutar eklenmelidir.
+                {
+                    amount_R = amount_X - (decimal)qdebit!.Amount;
+
+                    if (safe != null)
+                    {
+                        safe!.Amount = amount_R;
+                        await Uow.GetRepository<HousingSafe>().UpdateAsync(safe);
+                        var save = await Uow.SaveAsync();
 
 
+                        // Kalan Tutar :  +15,00 ₺
+
+                        // TODO : Bu kısımda "KONUT KASASI HAREKETLERİ" veya "BORÇ HAREKETLERİ" yapılabilir.
+
+                    }
+                }
+
+                if (amount_X < qdebit!.Amount) // TODO : Kasa tutarına eksi (-) tutar eklenmelidir.
+                {
+                    amount_R = amount_X - (decimal)qdebit!.Amount;
+
+                    if (safe != null)
+                    {
+                        safe!.Amount = amount_R;
+                        await Uow.GetRepository<HousingSafe>().UpdateAsync(safe);
+                        var save = await Uow.SaveAsync();
+
+                        // Kalan Tutar :  -15,00 ₺
+
+                        // TODO : Bu kısımda "KONUT KASASI HAREKETLERİ" veya "BORÇ HAREKETLERİ" yapılabilir.
+
+                    }
+
+                }
+
+
+            }
+
+         
+
+
+
+            
+
+            qdebit!.ModifiedUser = pay.ModifiedUser;
+            qdebit.ModifiedTime = pay.ModifiedTime;
+            qdebit.Paid = true;
+
+            await Uow.GetRepository<Debit>().UpdateAsync(qdebit);
+            var result = await Uow.SaveAsync();
+
+            switch (result)
+            {
+                case 1:
+                    view.IsSucceed = true;
+                    view.Statuses = "x-pay";
+                    break;
+                case 0:
+                    view.IsSucceed = true;
+                    view.Statuses = "x-fail";
+                    break;
+            }
 
 
             return view;
@@ -58,9 +129,24 @@
                                 if (safe!.Amount > 0)
                                 {
                                     amount = amount - safe!.Amount;
-                                    safe.Amount = 0;
+                               
+                                    var movement = new HousingSafeMovement()
+                                    {
+                                        AccountId = item.AccountId,
+                                        ApartmentId = (Guid)item.ApartmentId!,
+                                        HousingId = item.Id,
+                                        HousingSafeId = safe.Id,
+                                        MovementAmount = -safe!.Amount, // TODO : KASA'da para varsa düşülecek tutarı "KASA HAREKETLERİNE" ekliyorum.
+                                        DebitAmount = amount, // TODO : Kalan "BORCU" "KASA HAREKETLERİNDE" göstermek için ekliyorum.
+                                        _Month = month,
+                                        _Year = year,
+                                        CreateUser = create_user,
+                                        IsActive = true,
+                                    };
 
+                                    safe.Amount = 0;
                                     await Uow.GetRepository<HousingSafe>().UpdateAsync(safe);
+                                    await Uow.GetRepository<HousingSafeMovement>().AddAsync(movement);
                                     var save = await Uow.SaveAsync();
                                 }
                             }
@@ -109,11 +195,9 @@
         public async Task<Result.ListResult<DebitDTO.Table>> GetDebits(Guid apartment_id, int month, int year)
         {
             var result = new Result.ListResult<DebitDTO.Table>();
-            //var l = await Uow.GetRepository<Expense>().GetAllAsync(x => !x.IsDeleted && x.ApartmentId == apartment_id && x.Month == month && x.Year == year, y => y.CreateTheUser!, z => z.ModifiedTheUser!);
-
-
+            
             var l = await Uow.GetRepository<Debit>().GetAllAsync(
-                a => !a.IsDeleted && a.IsActive == true && a.ApartmentId == apartment_id && a._Month == month && a._Year == year, 
+                a => !a.IsDeleted && a.IsActive == true && a.ApartmentId == apartment_id && a._Month == month && a._Year == year,
                 b => b.Housing!,
                 c => c.DebitTheUser!,
                 d => d.CreateTheUser!,

@@ -1,34 +1,40 @@
 ﻿namespace ams.entity.Entities
 {
     using ams.core.Entities;
-    using System;
     using System.ComponentModel.DataAnnotations.Schema;
 
-    public class HousingSafe : EntityBase // TODO: Konut Kasası
+    public class HousingSafeMovement : EntityBase
     {
-        [ForeignKey(nameof(Account))]
-        public Guid AccountId { get; set; }
+        public Guid? AccountId { get; set; }
         public Account? Account { get; set; }
 
-
-        public Guid ApartmentId { get; set; }
+        public Guid? ApartmentId { get; set; }
         public Apartment? Apartment { get; set; }
-
 
         public Guid? HousingId { get; set; }
         public Housing? Housing { get; set; }
 
 
-        //public Guid? UserId { get; set; }
-        //public AppUser? User { get; set; }
+
+        public Guid? HousingSafeId { get; set; }
+        public HousingSafe? HousingSafe { get; set; }
 
 
 
-        [ForeignKey("HousingSafeUser")] // Konut kasası sahibi
-        public AppUser? HousingSafeTheUser { get; set; }
+  
+
+        [Column(TypeName = "money")]
+        public decimal? MovementAmount { get; set; }
+
+        [Column(TypeName = "money")]
+        public decimal? DebitAmount { get; set; }
 
 
 
+
+        public int _Month { get; set; }
+        public int _Year { get; set; }
+         
 
         public Guid? CreateUser { get; set; }
         [ForeignKey("CreateUser")]
@@ -41,14 +47,5 @@
         public Guid? DeleteUser { get; set; }
         [ForeignKey("DeleteUser")]
         public AppUser? DeleteTheUser { get; set; }
-
-
-
-
-        [Column(TypeName = "money")]
-        public decimal? Amount { get; set; }
-
-
-        public ICollection<HousingSafeMovement>? HousingSafeMovements { get; set; } // Bir "KASA'ya" ait birden çok "KASA HAREKETLERİ" olabilir.
     }
 }

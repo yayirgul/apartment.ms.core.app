@@ -32,7 +32,7 @@
                         <h3 class="card-label">Borçlar</h3>
                     </div>
                     <div class="card-toolbar">
-                        <a href="javascript:;" id="modal-debit-new" class="btn btn-primary font-weight-bolder">
+                        <a href="javascript:;" id="modal-debit-open" class="btn btn-primary font-weight-bolder">
                             Yeni
                         </a>
                     </div>
@@ -120,6 +120,71 @@
     </div>
 </div>
 
+<div class="modal fade" id="modal-debit" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-expense-title">Yeni Gider</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <form class="form" id="fv-form-expense">
+
+                    <div class="form-group mb-0 row">
+
+                        @* <input type="hidden" name="ExpenseId" /> *@
+
+                        <div class="col-xl-12 mb-6">
+                            <label>* Apartman</label>
+                            <select class="form-control" name="ExpApartments" id="combo-expense-apartments"></select>
+                        </div>
+
+                        <div class="col-xl-6 mb-6">
+                            <label>* Ay</label>
+                            <select class="form-control" id="combo-expense-months">
+                                <option value="1">Ocak</option>
+                                <option value="2">Şubat</option>
+                                <option value="3">Mart</option>
+                                <option value="4">Nisan</option>
+                                <option value="5">Mayıs</option>
+                                <option value="6">Haziran</option>
+                                <option value="7">Temmuz</option>
+                                <option value="8">Ağustos</option>
+                                <option value="9">Eylül</option>
+                                <option value="10">Ekim</option>
+                                <option value="11">Kasım</option>
+                                <option value="12">Aralık</option>
+                            </select>
+                        </div>
+
+                        <div class="col-xl-6">
+                            <label>* Yıl</label>
+                            <select class="form-control" id="combo-expense-years">
+                                <option value="2024">2024</option>
+                                <option value="2023">2023</option>
+                            </select>
+                        </div>
+
+                        <div class="col-xl-12">
+                            <label>* Tutar</label>
+                            <input type="text" name="Debit" class="form-control money" id="kt_money_input" maxlength="22" placeholder="0,00">
+                        </div>
+
+                    </div>
+
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="button-debit" class="btn btn-primary font-weight-bold">Kaydet</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="modal fade" id="modal-payment" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-md" role="document">
         <div class="modal-content">
@@ -133,18 +198,15 @@
 
                 <form class="form" id="form-payment">
 
-                    <input type="hidden" name="DebitId" />
-                    <input type="hidden" name="HousingId" />
+                    <input type="hidden" name="DebitId" value="0" />
+                    <input type="hidden" name="HousingId" value="0" />
 
-                    <div class="row">
+                    <div class="form-group mb-0 row">
 
                         <div class="col-xl-12">
-
-                            <label class="option mb-6">
-
-                                <span class="option-label">
-                                    <span class="option-body pt-0">
-
+                            <div class="option mb-6">
+                                <div class="option-label">
+                                    <div class="option-body pt-0">
                                         <div class="row">
 
                                             <div class="col-xl-12 mb-4">
@@ -153,7 +215,6 @@
                                                     <span class="btn btn-sm btn-text btn-light-primary font-weight-bold" id="label-apartment-month-year">-</span>
                                                 </div>
                                             </div>
-
                                             <div class="col-xl-12">
                                                 <div class="d-flex justify-content-between align-items-center">
                                                     <h6 class="font-size-sm text-dark mb-0">KONUT / SAHİBİ </h6>
@@ -162,18 +223,15 @@
                                                     </span>
                                                 </div>
                                             </div>
-
                                             <div class="col-xl-12">
                                                 <div class="separator separator-solid my-7"></div>
                                             </div>
-
                                             <div class="col-xl-12 mb-4">
                                                 <div class="d-flex justify-content-between align-items-center">
                                                     <h6 class="font-size-sm text-dark mb-0">KONUT KASA TUTARI</h6>
                                                     <span class="btn btn-sm btn-text btn-light-danger font-weight-bold" id="label-housing-safe-amount">0</span>
                                                 </div>
                                             </div>
-
                                             <div class="col-xl-12">
                                                 <div class="d-flex justify-content-between align-items-center">
                                                     <h6 class="font-size-sm text-dark mb-0">ÖDENECEK TUTAR</h6>
@@ -182,28 +240,26 @@
                                             </div>
 
                                         </div>
-
-                                    </span>
-                                </span>
-                            </label>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-
+                          
                         <div class="col-xl-12">
-                            <label class="option mb-0">
-                                <span class="option-label">
-                                    <span class="option-body pt-0">
+                            <div class="option mb-0">
+                                <div class="option-label">
+                                    <div class="option-body pt-0">
                                         <div class="row">
                                             <div class="col-xl-12">
                                                 <h6 class="font-size-sm text-dark mb-4">ALINAN TUTAR</h6>
-                                                <input type="text" name="Amount" class="form-control money" id="debt-amount" maxlength="22" placeholder="0,00">
+                                                <input type="text" name="Amount" class="form-control" id="d-amount" maxlength="22" placeholder="0,00">
                                             </div>
                                         </div>
-                                    </span>
-                                </span>
-                            </label>
-
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-
+                         
                     </div>
 
                 </form>
@@ -216,9 +272,29 @@
     </div>
 </div>
 
-@section Scripts {
+<div class="modal fade" id="modal-housing-movement" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-expense-title">Hareketler</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+            <div class="modal-body">
 
-    <script src="~/lib/theme/plugins/custom/datatables/datatables.bundle.js"></script>
+                <div class="datatable datatable-bordered datatable-head-custom" id="t-housing-movement"></div>
+
+            </div>
+            <div class="modal-footer">
+                @* <button type="button" id="button-debit" class="btn btn-primary font-weight-bold">Kaydet</button> *@
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
 
     <script type="text/javascript">
 
@@ -233,16 +309,20 @@
                 }
             ],
             table: "#t-debits",
+            table: {
+                debits: "#t-debits",
+                housing_movement: '#t-housing-movement'
+            },
             input: {
                 debit_id: "[name='DebitId']",
                 housing_id: "[name='HousingId']",
-                // amount: "[name='Amount']"
+                debit_amount: "[name='Amount']",
             },
             label: {
                 apartment_month_year: '#label-apartment-month-year',
                 housing_the_housing_user: '#label-housing-the-housing-user',
                 housing_safe_amount: '#label-housing-safe-amount',
-                debit_amount: '#label-debit-amount'
+                debit_amount: '#label-debit-amount',
             },
             combo: {
                 debit_months: '#combo-debit-months',
@@ -252,18 +332,22 @@
                     apartments: '#combo-filter-apartments',
                     months: '#combo-filter-months',
                     years: '#combo-filter-years',
-                    paid: '#combo-filter-paid'
+                    paid: '#combo-filter-paid',
                 }
             },
             modal: {
                 payment: '#modal-payment',
-                payment_open: '.modal-payment-open'
+                payment_open: '.modal-payment-open',
+                debit: '#modal-debit',
+                debit_open: '#modal-debit-open',
+                housing_movement: '#modal-housing-movement',
+                housing_movement_open: '.modal-housing-movement-open',
             }
         }
 
         var Masks = function () {
             var Mask = function () {
-                $('#debt-amount').mask("#.##0,00", {
+                $('#d-amount').mask("#.##0,00", {
                     reverse: true
                 });
             }
@@ -274,6 +358,196 @@
             };
 
         }();
+
+        function debits() {
+
+            $(document).on("click", qcs.modal.housing_movement_open, function () {
+
+                $(qcs.modal.housing_movement).modal();
+
+                var filter = {
+                    housing_id: $(this).data("housing-id"),
+                    month: $(qcs.combo.filter.months).val(),
+                    year: $(qcs.combo.filter.years).val(),
+                }
+                console.log(filter);
+                l_housing_movement(filter.housing_id, filter.month, filter.year);
+
+
+            });
+
+            // APARTMENT FILTER
+            $(document).on("change", qcs.combo.filter.apartments, function () {
+
+                var filter = {
+                    apartment_id: $(this).val(),
+                    month: $(qcs.combo.filter.months).val(),
+                    year: $(qcs.combo.filter.years).val(),
+                }
+
+                $(qcs.combo.filter.apartments).children('option').removeAttr('selected');
+                $(qcs.combo.filter.apartments).find('option[value=' + filter.apartment_id + ']').attr('selected', 'selected');
+
+                l_debits(filter.apartment_id, filter.month, filter.year);
+
+            });
+
+            // MONTH FILTER
+            $(document).on("change", qcs.combo.filter.months, function () {
+
+                var filter = {
+                    apartment_id: $(qcs.combo.filter.apartments).val(),
+                    month: $(this).val(),
+                    year: $(qcs.combo.filter.years).val(),
+                }
+
+                $(qcs.combo.filter.months).children('option').removeAttr('selected');
+                $(qcs.combo.filter.months).find('option[value=' + filter.month + ']').attr('selected', 'selected');
+
+                l_debits(filter.apartment_id, filter.month, filter.year);
+
+            });
+
+            // YEAR FILTER
+            $(document).on("change", qcs.combo.filter.years, function () {
+
+                var filter = {
+                    apartment_id: $(qcs.combo.filter.apartments).val(),
+                    month: $(qcs.combo.filter.months).val(),
+                    year: $(this).val(),
+                }
+
+                $(qcs.combo.filter.years).children('option').removeAttr('selected');
+                $(qcs.combo.filter.years).find('option[value=' + filter.year + ']').attr('selected', 'selected');
+
+                l_debits(filter.apartment_id, filter.month, filter.year);
+
+            });
+
+            // PAYMENT MODAL OPEN
+            $(document).on("click", qcs.modal.payment_open, function () {
+
+                $(qcs.modal.payment).modal();
+
+                var filter = {
+                    apartment_id: $(qcs.combo.filter.apartments).val(),
+                    apartment_title: $(qcs.combo.filter.apartments + " option:selected").text(),
+                    month: $(qcs.combo.filter.months).val(),
+                    year: $(qcs.combo.filter.years).val(),
+                    housing: $(this).data("housing"),
+                    housing_user: $(this).data("housing-user"),
+                    housing_id: $(this).data("housing-id"),
+                    debit_id: $(this).data("debit-id"),
+                    debit_amount: $(this).data("debit-amount"),
+                }
+
+                $(qcs.input.debit_id).val(filter.debit_id);
+                $(qcs.input.housing_id).val(filter.housing_id);
+
+                $(qcs.label.apartment_month_year).text(filter.apartment_title + " - " + filter.month + "." + filter.year);
+                $(qcs.label.housing_the_housing_user).text(filter.housing + " - " + filter.housing_user);
+
+                $(qcs.label.debit_amount).text(filter.debit_amount);
+
+                g_housing_safe(filter.housing_id);
+
+                console.log(filter);
+
+            });
+
+
+            $(document).on("click", qcs.modal.debit_open, function () {
+
+                $(qcs.modal.debit).modal(); 
+
+            });
+
+
+
+
+
+            const form_payment = document.getElementById('form-payment');
+            const button_payment = document.getElementById('button-payment');
+
+            const fv = FormValidation.formValidation(form_payment, {
+
+                fields: {
+
+                    Amount: {
+                        validators: {
+                            notEmpty: {
+                                message: 'Tutar alanı boş geçilemez.'
+                            },
+                            stringLength: {
+                                min: 1,
+                                message: 'Tutar minimum 1 olmalıdır'
+                            }
+                        }
+                    },
+
+                },
+                plugins: {
+                    trigger: new FormValidation.plugins.Trigger(),
+                    bootstrap: new FormValidation.plugins.Bootstrap(),
+                },
+            }).on('core.form.validating', function () {
+                button_payment.innerHTML = 'Doğrulanıyor ...';
+            });
+
+            // -----
+            button_payment.addEventListener('click', function () {
+
+                button_payment.innerHTML = status === 'Valid' ? 'Güncelleniyor...' : 'Lütfen tekrar deneyin';
+
+                fv.validate().then(function (status) {
+
+                    var dm = {
+                        DebitId: $(qcs.input.debit_id).val(),
+                        HousingId: $(qcs.input.housing_id).val(),
+                        ApartmentId: $(qcs.combo.filter.apartments).val(),
+                        Month: $(qcs.combo.filter.months).val(),
+                        Year: $(qcs.combo.filter.years).val(),
+                        Amount: $(qcs.input.debit_amount).val()
+                    }
+
+                    console.log(dm);
+
+                    $.post("/ams/app/debit/pay", dm, function (d) {
+
+                        console.log(d);
+
+                        if (d.isSucceed) {
+                            switch (d.statuses) {
+                                case 'x-pay':
+
+
+
+                                    break;
+                            }
+                        }
+
+
+                    }).done(function () {
+
+                    }).fail(function (jqXHR, textStatus, errorThrown) {
+
+                    }).always(function () {
+
+                    });
+
+
+                    
+
+                });
+
+            });
+
+
+
+        }
+
+
+
 
         function combo_apartments() {
 
@@ -288,9 +562,7 @@
 
                         if (i == 0) {
                             $(qcs.combo.filter.apartments).append('<option value=' + v.id + ' selected="selected">' + v.apartmentName + '</option>');
-                            // $(qcs.combo.expense_apartments).append('<option value=' + v.id + ' selected="selected">' + v.apartmentName + '</option>');
                         } else {
-                            // $(qcs.combo.filter.apartments).append('<option value=' + v.id + '>' + v.apartmentName + '</option>');
                             $(qcs.combo.expense_apartments).append('<option value=' + v.id + '>' + v.apartmentName + '</option>');
                         }
 
@@ -308,21 +580,13 @@
 
         function g_housing_safe(housing_id) {
 
-            // var dm = { Id: expense_id };
-
             $.get("/ams/app/housing-safe/" + housing_id, function (d) {
-
-                console.log("KASA TUTARI :::::::");
-                console.log(d);
 
                 if (d.isSucceed) {
                     switch (d.statuses) {
                         case 'x-detail':
-
                             $(qcs.label.housing_safe_amount).text(d.view._Amount);
-
                             break;
-
                         case 'x-fail':
 
                             Swal.fire({
@@ -390,175 +654,11 @@
 
         }
 
-
-
-
-
-        function debits() {
-
-            $(document).on("change", qcs.combo.filter.apartments, function () {
-
-                var filter = {
-                    apartment_id: $(this).val(),
-                    month: $(qcs.combo.filter.months).val(),
-                    year: $(qcs.combo.filter.years).val(),
-                }
-
-                $(qcs.combo.filter.apartments).children('option').removeAttr('selected');
-                $(qcs.combo.filter.apartments).find('option[value=' + filter.apartment_id + ']').attr('selected', 'selected');
-
-                l_debits(filter.apartment_id, filter.month, filter.year);
-
-            });
-
-            $(document).on("change", qcs.combo.filter.months, function () {
-
-                var filter = {
-                    apartment_id: $(qcs.combo.filter.apartments).val(),
-                    month: $(this).val(),
-                    year: $(qcs.combo.filter.years).val(),
-                }
-
-                $(qcs.combo.filter.months).children('option').removeAttr('selected');
-                $(qcs.combo.filter.months).find('option[value=' + filter.month + ']').attr('selected', 'selected');
-
-                l_debits(filter.apartment_id, filter.month, filter.year);
-
-            });
-
-            $(document).on("change", qcs.combo.filter.years, function () {
-
-                var filter = {
-                    apartment_id: $(qcs.combo.filter.apartments).val(),
-                    month: $(qcs.combo.filter.months).val(),
-                    year: $(this).val(),
-                }
-
-                $(qcs.combo.filter.years).children('option').removeAttr('selected');
-                $(qcs.combo.filter.years).find('option[value=' + filter.year + ']').attr('selected', 'selected');
-
-                l_debits(filter.apartment_id, filter.month, filter.year);
-
-            });
-
-            $(document).on("click", qcs.modal.payment_open, function () {
-
-                $(qcs.modal.payment).modal();
-
-                var filter = {
-                    apartment_id: $(qcs.combo.filter.apartments).val(),
-                    apartment_title: $(qcs.combo.filter.apartments + " option:selected").text(),
-                    month: $(qcs.combo.filter.months).val(),
-                    year: $(qcs.combo.filter.years).val(),
-                    housing: $(this).data("housing"),
-                    housing_user: $(this).data("housing-user"),
-                    housing_id: $(this).data("housing-id"),
-                    debit_id: $(this).data("debit-id"),
-                    debit_amount: $(this).data("debit-amount")
-                }
-
-                $(qcs.input.debit_id).val(filter.debit_id);
-                $(qcs.input.housing_id).val(filter.housing_id);
-
-                $(qcs.label.apartment_month_year).text(filter.apartment_title + " - " + filter.month + "." + filter.year);
-                $(qcs.label.housing_the_housing_user).text(filter.housing + " - " + filter.housing_user);
-
-                $(qcs.label.debit_amount).text(filter.debit_amount);
-
-                g_housing_safe(filter.housing_id);
-
-                console.log(filter);
-
-            });
-
-
-            // $(document).on("click", qcs.button.payment, function () {
-
-            //     $(qcs.modal.payment).modal();
-
-            //     var q = {
-            //         debit_id: $(qcs.input.debit_id).val(),
-            //         housing_id: $(qcs.input.housing_id).val(),
-            //         apartment_id: $(qcs.combo.filter.apartments).val(),
-            //         month: $(qcs.combo.filter.months).val(),
-            //         year: $(qcs.combo.filter.years).val(),
-            //         debit_amount: $(qcs.input.amount).val()
-            //     }
-
-            //     console.log(q);
-
-            // });
-
-
-            const form_payment = document.getElementById('form-payment');
-            const button_payment = document.getElementById('button-payment');
-
-            const fv = FormValidation.formValidation(form_payment, {
-
-                fields: {
-
-                    'Amount': {
-                        validators: {
-                            notEmpty: {
-                                message: 'Tutar alanı boş geçilemez.'
-                            },
-                            stringLength: {
-                                min: 1,
-                                message: 'Tutar minimum 1 olmalıdır'
-                            }
-                        }
-                    },
-
-                },
-
-                plugins: {
-                    trigger: new FormValidation.plugins.Trigger(),
-                    bootstrap: new FormValidation.plugins.Bootstrap(),
-                },
-            }).on('core.form.validating', function () {
-                button_payment.innerHTML = 'Doğrulanıyor ...';
-            });
-
-
-
-            // -----
-            button_payment.addEventListener('click', function () {
-
-                fv.validate().then(function (status) {
-
-                    button_payment.innerHTML = status === 'Valid' ? 'Güncelleniyor...' : 'Lütfen tekrar deneyin';
-
-                });
-
-            });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        }
-
-
- 
-
-
-
         function l_debits(apartment_id, month, year) {
 
             var list = [];
 
-            $(qcs.table).KTDatatable('destroy');
+            $(qcs.table.debits).KTDatatable('destroy');
 
             var ds = $.ajax({
                 type: 'GET',
@@ -584,7 +684,7 @@
                 }
             }
 
-            var datatable = $(qcs.table).KTDatatable({
+            var datatable = $(qcs.table.debits).KTDatatable({
                 data: {
                     source: list,
                     pageSize: 10,
@@ -689,6 +789,13 @@
                         },
                     },
                     {
+                        field: '',
+                        title: 'Hareket',
+                        template: function (row) {
+                            return '<span class="label font-weight-bold label-lg label-inline label-light-warning cursor-pointer modal-housing-movement-open" data-housing-id="' + row.housingId + '"  >' + 'Liste' + '</span>';
+                        },
+                    },
+                    {
                         field: 'Actions',
                         title: 'İşlem',
                         sortable: false,
@@ -722,6 +829,96 @@
 
         }
 
+        function l_housing_movement(housing_id, month, year) {
+
+            var list = [];
+
+            $(qcs.table.housing_movement).KTDatatable('destroy');
+
+            var ds = $.ajax({
+                type: 'GET',
+                url: '/ams/app/housing-safe-movement/' + housing_id + '/' + month + '/' + year,
+                async: false,
+                dataType: 'json',
+                done: function (data) {
+                    return data;
+                },
+                fail: function (jqXHR, textStatus, errorThrown) {
+                    console.log('Could not get posts, server response: ' + textStatus + ': ' + errorThrown);
+                }
+            }).responseJSON;
+
+            // console.table(ds);
+            console.log(ds.listView);
+
+            if (ds.isSucceed) {
+                switch (ds.statuses) {
+                    case 'x-list':
+                        list = ds.listView;
+                        break;
+                }
+            }
+
+            var datatable = $(qcs.table.housing_movement).KTDatatable({
+                data: {
+                    source: list,
+                    pageSize: 10,
+                },
+                layout: {
+                    scroll: true,
+                    footer: false,
+                },
+                sortable: true,
+                pagination: true,
+                // search: {
+                //     input: $('#kt_datatable_search_query'),
+                //     key: 'generalSearch',
+                // },
+                columns: [
+                    {
+                        field: 'housingSafeAmount',
+                        title: 'Kasa Tutarı',
+                    },
+                    {
+                        field: 'movementAmount',
+                        title: 'Kasa Harekatı',
+                        textAlign: 'left',
+                    },
+                    {
+                        field: 'debitAmount',
+                        title: 'Kalan Tutar',
+                        textAlign: 'left',
+                    },
+                    {
+                        field: 'monthYear',
+                        title: 'Ay/Yıl',
+                        textAlign: 'left',
+                    },
+                    {
+                        field: '_CreateTime',
+                        title: 'Kayıt Tarihi',
+                        textAlign: 'left',
+                    },
+                    {
+                        field: 'createUser',
+                        title: 'Oluşturan',
+                        textAlign: 'left',
+                    },
+
+                    ],
+            });
+
+            // $(qcs.combo.filter.paid).on('change', function (e) {
+            //     // console.log(e.target.value);
+            //     var paid = $(this).val().toLowerCase();
+            //     datatable.search(paid, 'paid');
+            // });
+
+        }
+
+
+
+
         $(function () {
 
             combo_apartments();
@@ -738,7 +935,7 @@
             debits();
             l_debits(filter.apartment_id, filter.month, filter.year);
 
-            $(qcs.table).tooltip({
+            $(qcs.table.debits).tooltip({
                 selector: '[data-toggle=tooltip]',
                 container: 'body'
             });

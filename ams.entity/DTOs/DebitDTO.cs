@@ -12,6 +12,8 @@
             public int Month { get; set; }
             public int Year { get; set; }
             public string? Amount { get; set; }
+            public Guid ModifiedUser { get; set; }
+            public DateTime ModifiedTime { get; set; }
         }
 
         public class Add
@@ -49,11 +51,7 @@
             public Guid ApartmentId { get; set; }
             public Apartment? Apartment { get; set; }
             public Guid? HousingId { get; set; }
-        
-
-
-
-
+         
 
             public string? CreateUser { get; set; }
      
