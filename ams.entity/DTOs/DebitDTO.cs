@@ -12,6 +12,7 @@
             public int Month { get; set; }
             public int Year { get; set; }
             public string? Amount { get; set; }
+            public Guid CreateUser { get; set; }
             public Guid ModifiedUser { get; set; }
             public DateTime ModifiedTime { get; set; }
         }

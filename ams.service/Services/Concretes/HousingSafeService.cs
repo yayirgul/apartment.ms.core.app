@@ -24,26 +24,36 @@
 
             var detail = await Uow.GetRepository<HousingSafe>().GetAsync(x => !x.IsDeleted && x.HousingId == housing_id);
 
-            if (detail != null)
+            if (detail == null)
             {
-                view.View = new HousingSafeDTO.Detail()
-                {
-                    Id = detail!.Id,
-                    Amount = detail!.Amount,
-                    _Amount = detail.Amount.HasValue ? detail.Amount.Value.ToString("N2", Culture) : "0",
-                };
+                view.View = new HousingSafeDTO.Detail() { Amount = 0, _Amount = "0,00" };
                 view.IsSucceed = true;
-                view.Statuses = "x-detail";
+                view.Statuses = "x-ndata";
             }
             else
             {
-                view.IsSucceed = false;
-                view.Statuses = "x-fail";
+                if (detail != null)
+                {
+                    view.View = new HousingSafeDTO.Detail()
+                    {
+                        Id = detail!.Id,
+                        Amount = detail!.Amount,
+                        _Amount = detail.Amount.HasValue ? detail.Amount.Value.ToString("N2", Culture) : "0",
+                    };
+                    view.IsSucceed = true;
+                    view.Statuses = "x-detail";
+                }
+                else
+                {
+                    view.View = new HousingSafeDTO.Detail() { _Amount = "0,00" };
+                    view.IsSucceed = true;
+                    view.Statuses = "x-fail";
+                }
             }
 
             return view;
         }
- 
+
         public async Task<Result.ListResult<HousingSafeDTO.Table>> GetHousingSafes()
         {
             var list = new Result.ListResult<HousingSafeDTO.Table>();

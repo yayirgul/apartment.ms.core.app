@@ -28,6 +28,7 @@
 
             if (Guid.TryParse(dto.DebitId.ToString(), out debit_id) && dto.DebitId != Guid.Empty)
             {
+                dto.CreateUser = User!.Id;
                 dto.ModifiedTime = DateTime.UtcNow;
                 dto.ModifiedUser = User!.Id;
                 result = await DebitService.DebitPay(dto);

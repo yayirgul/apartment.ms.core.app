@@ -276,18 +276,66 @@
     <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modal-expense-title">Hareketler</h5>
+                <h5 class="modal-title" id="modal-expense-title">BORÇ HAREKETLERİ</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <i aria-hidden="true" class="ki ki-close"></i>
                 </button>
             </div>
             <div class="modal-body">
 
-                <div class="datatable datatable-bordered datatable-head-custom" id="t-housing-movement"></div>
+                <div class="row">
+                    <div class="col-xl-4">
+                        <div class="option mb-4">
+                            <div class="option-label">
+                                <span class="option-head">
+                                    <span class="option-title">
+                                        GÜNCEL KASA TUTARI
+                                    </span>
+                                </span>
+                                <div class="option-body mt-3">
+                                    <h3 id="widget-housing-safe-amount" class="font-size-lg text-dark-65 mb-0">0,00</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-4">
+                        <div class="option mb-4">
+                            <div class="option-label">
+                                <span class="option-head">
+                                    <span class="option-title">ÖDENECEK TUTARI</span>
+                                </span>
+                                <div class="option-body mt-3">
+                                    <h3 id="widget-housing-debit-amount" class="font-size-lg text-dark-65 mb-0">0,00</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-4">
+                        <div class="option mb-4">
+                            <div class="option-label">
+                                <span class="option-head">
+                                    <span class="option-title">AY/YIL</span>
+                                </span>
+                                <div class="option-body mt-3">
+                                    <h3 id="widget-housing-month-year" class="font-size-lg text-dark-65 mb-0">0/0000</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-            </div>
-            <div class="modal-footer">
-                @* <button type="button" id="button-debit" class="btn btn-primary font-weight-bold">Kaydet</button> *@
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="option mb-0">
+                            <div class="option-label">
+                                <div class="option-body pt-0">
+                                    <div class="datatable datatable-bordered datatable-head-custom" id="t-housing-movement"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
@@ -324,6 +372,11 @@
                 housing_safe_amount: '#label-housing-safe-amount',
                 debit_amount: '#label-debit-amount',
             },
+            widget: {
+                housing_safe_amount: '#widget-housing-safe-amount',
+                housing_debit_amount: '#widget-housing-debit-amount',
+                housing_month_year: '#widget-housing-month-year',
+            },
             combo: {
                 debit_months: '#combo-debit-months',
                 debit_years: '#combo-debit-years',
@@ -356,7 +409,6 @@
                     Mask();
                 }
             };
-
         }();
 
         function debits() {
@@ -369,8 +421,15 @@
                     housing_id: $(this).data("housing-id"),
                     month: $(qcs.combo.filter.months).val(),
                     year: $(qcs.combo.filter.years).val(),
+                    debit_amount: $(this).data("debit-amount"),
                 }
                 console.log(filter);
+
+                $(qcs.widget.housing_debit_amount).text(filter.debit_amount);
+                $(qcs.widget.housing_month_year).text(filter.month + "/" + filter.year);
+
+                g_housing_safe(filter.housing_id);
+
                 l_housing_movement(filter.housing_id, filter.month, filter.year);
 
 
@@ -523,6 +582,35 @@
                                     switch (d.statuses) {
                                         case 'x-pay':
 
+                                            Swal.fire({
+                                                title: "Ödeme",
+                                                text: "Ödeme için teşekkürler.",
+                                                icon: "success",
+                                                timer: 4000,
+                                                onOpen: function () { Swal.showLoading() },
+                                                allowOutsideClick: false,
+                                                allowEscapeKey: false,
+                                                buttonsStyling: false,
+                                                confirmButtonText: "<i class='la la-headphones'></i> I am game!",
+                                                showCancelButton: false,
+                                                cancelButtonText: "<i class='la la-thumbs-down'></i> No, thanks",
+                                                customClass: {
+                                                    confirmButton: "btn btn-danger",
+                                                    cancelButton: "btn btn-default"
+                                                }
+                                            }).then(function (r) {
+
+                                                if (r.dismiss === "timer") {
+                                                    $(qcs.modal.expense).modal('hide');
+                                                    l_debits(dm.ApartmentId, dm.Month, dm.Year);
+                                                }
+
+                                            });
+
+
+
+
+
 
 
                                             break;
@@ -594,10 +682,17 @@
 
             $.get("/ams/app/housing-safe/" + housing_id, function (d) {
 
+                console.log(d);
+
                 if (d.isSucceed) {
                     switch (d.statuses) {
                         case 'x-detail':
                             $(qcs.label.housing_safe_amount).text(d.view._Amount);
+                            $(qcs.widget.housing_safe_amount).text(d.view._Amount);
+                            break;
+                        case 'x-ndata':
+                            $(qcs.label.housing_safe_amount).text(d.view._Amount);
+                            $(qcs.widget.housing_safe_amount).text(d.view._Amount);
                             break;
                         case 'x-fail':
 
@@ -810,7 +905,7 @@
                         template: function (row) {
 
                             var r = `
-                            <a href="javascript:;" class="btn btn-sm btn-clean btn-icon modal-housing-movement-open" data-housing-id='${row.housingId}' data-toggle="tooltip"><i class="la la-bars"></i>
+                            <a href="javascript:;" class="btn btn-sm btn-clean btn-icon modal-housing-movement-open" data-housing-id='${row.housingId}' data-debit-month="${row._Month}" data-debit-year="${row._Year}" data-debit-amount="${row._Amount}" data-toggle="tooltip"><i class="la la-bars"></i>
                             </a>
                             `;
 
@@ -874,30 +969,30 @@
                 //     key: 'generalSearch',
                 // },
                 columns: [
-                    {
-                        field: 'housingSafeAmount',
-                        title: 'Güncel Kasa',
-                    },
+                    // {
+                    //     field: 'housingSafeAmount',
+                    //     title: 'Güncel Kasa',
+                    // },
                     {
                         field: 'formerAmount',
-                        title: 'Eski Kasa',
+                        title: 'Eski Kasa T.',
                         textAlign: 'left',
                     },
                     {
                         field: 'movementAmount',
-                        title: 'Kasa Harekatı',
+                        title: 'Harekat T.',
                         textAlign: 'left',
                     },
                     {
                         field: 'debitAmount',
-                        title: 'Ödenecek',
+                        title: 'Ödenecek T.',
                         textAlign: 'left',
                     },
-                    {
-                        field: 'monthYear',
-                        title: 'Ay/Yıl',
-                        textAlign: 'left',
-                    },
+                    // {
+                    //     field: 'monthYear',
+                    //     title: 'Ay/Yıl',
+                    //     textAlign: 'left',
+                    // },
                     {
                         field: '_CreateTime',
                         title: 'Kayıt Tarihi',
@@ -919,9 +1014,6 @@
             // });
 
         }
-
-
-
 
         $(function () {
 
