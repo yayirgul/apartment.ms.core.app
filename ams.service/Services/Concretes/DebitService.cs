@@ -193,6 +193,25 @@
                                     await Uow.GetRepository<HousingSafeMovement>().AddAsync(movement);
                                     var save = await Uow.SaveAsync();
                                 }
+                                else
+                                {
+                                    var debit = new Debit()
+                                    {
+                                        AccountId = item.AccountId,
+                                        ApartmentId = (Guid)item.ApartmentId!,
+                                        HousingId = item.Id,
+                                        Amount = amount,
+                                        DebitUser = item.HousingUser,
+                                        CreateUser = create_user,
+                                        _Month = month,
+                                        _Year = year,
+                                        ExpenseCode = "H:" + item.HousingNo + "-" + month + "/" + year,
+                                        Paid = false,
+                                        IsActive = true,
+                                        Queue = item.HousingNo
+                                    };
+                                    await Uow.GetRepository<Debit>().AddAsync(debit);
+                                }
                             }
                             else
                             {
