@@ -226,8 +226,8 @@
                             <label class="option mb-0">
 
                                 <span class="option-label">
-                              @*       <span class="option-head">
-                                        <span class="option-title">Apartman</span>
+                                    @*       <span class="option-head">
+                                    <span class="option-title">Apartman</span>
                                     </span> *@
                                     <span class="option-body pt-0">
 
@@ -240,13 +240,13 @@
                                                 </div>
                                             </div>
 
-                                      @*       <div class="col-xl-12">
-                                                <div class="d-flex justify-content-between align-items-center">
-                                                    <h6 class="font-size-sm text-dark mb-0">AY / YIL</h6>
-                                                    <span class="btn btn-sm btn-text btn-light-success font-weight-bold">07.2024</span>
-                                                </div>
+                                            @*       <div class="col-xl-12">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                            <h6 class="font-size-sm text-dark mb-0">AY / YIL</h6>
+                                            <span class="btn btn-sm btn-text btn-light-success font-weight-bold">07.2024</span>
+                                            </div>
                                             </div> *@
-                                              
+
                                             <div class="col-xl-12">
                                                 <div class="separator separator-solid my-7"></div>
                                             </div>
@@ -256,7 +256,7 @@
                                                     <h6 class="font-size-sm text-dark mb-0">TOPLAM TUTAR</h6>
                                                     <span class="btn btn-sm btn-text btn-light-danger font-weight-bold" id="label-apartment-total-amount">0 ₺</span>
                                                 </div>
-                                            </div> 
+                                            </div>
 
                                             <div class="col-xl-12">
                                                 <div class="d-flex justify-content-between align-items-center">
@@ -264,17 +264,17 @@
                                                     <span class="btn btn-sm btn-text btn-light-danger font-weight-bold" id="label-apartment-calc-amount">0 ₺</span>
                                                 </div>
                                             </div>
-                                             
+
                                         </div>
 
                                     </span>
                                 </span>
                             </label>
-                        </div> 
+                        </div>
 
-               
 
- 
+
+
 
                     </div>
 
@@ -468,7 +468,7 @@
                             $.post("/ams/app/expense-edit", dm, function (d) {
 
                                 console.log(d);
-                                 
+
                                 if (d.isSucceed) {
                                     switch (d.statuses) {
                                         case 'x-add':
@@ -744,6 +744,29 @@
                                 });
 
                                 break;
+                            case 'n-found-housing':
+
+                                Swal.fire({
+                                    title: "Uyarı",
+                                    html: "<b>Apartmana</b> bağlı <b>konutlar</b> bulunamadı...",
+                                    icon: "warning",
+                                    allowOutsideClick: false,
+                                    allowEscapeKey: false,
+                                    buttonsStyling: false,
+                                    confirmButtonText: "Tamam",
+                                    customClass: {
+                                        confirmButton: "btn btn-danger",
+                                        cancelButton: "btn btn-default"
+                                    }
+                                }).then(function (result) {
+
+                                    if (result.value) {
+                                        window.location.href = "/ams/housings";
+                                    }
+
+                                });
+
+                                break;
                         }
                     }
 
@@ -798,7 +821,7 @@
 
                 console.log("CALC :::::::");
                 console.log(d);
-                 
+
                 if (d.isSucceed) {
                     switch (d.statuses) {
                         case 'x-calc':
@@ -806,7 +829,7 @@
                             $(qcs.label.apartment_month_year).text(title + " - " + month + "." + year);
                             $(qcs.label.apartment_total_amount).text(d.view.totalAmount);
                             $(qcs.label.apartment_calc_amount).text(d.view.calcAmount);
-                         
+
                             break;
 
                         case 'x-fail':
@@ -955,7 +978,7 @@
 
 
         function l_expenses(apartment_id, month, year) {
-            
+
             $(qcs.table).KTDatatable('destroy');
 
             var ds = $.ajax({
@@ -1091,14 +1114,14 @@
 
 
                             return '\
-                                                                                                        <a href="javascript:;" class="btn btn-sm btn-clean btn-icon  modal-expense-edit" data-expense-id=' + row.id + ' data-toggle="tooltip" data-theme="dark" title="Edit" >\
-                                                                                                    <i class="la la-pencil"></i>\
-                                                                                                                </a>\
-                                                                                                              \
-                                                                                                                     <a href="javascript:;" class="btn btn-sm btn-clean btn-icon" data-delete-id='+ row.id + ' data-toggle="tooltip" data-theme="dark" title="Delete">\
-                                                                                                                    <i class="la fa-trash"></i>\
-                                                                                                                </a>\
-                                                                                                            ';
+                                                                                                                <a href="javascript:;" class="btn btn-sm btn-clean btn-icon  modal-expense-edit" data-expense-id=' + row.id + ' data-toggle="tooltip" data-theme="dark" title="Edit" >\
+                                                                                                            <i class="la la-pencil"></i>\
+                                                                                                                        </a>\
+                                                                                                                      \
+                                                                                                                             <a href="javascript:;" class="btn btn-sm btn-clean btn-icon" data-delete-id='+ row.id + ' data-toggle="tooltip" data-theme="dark" title="Delete">\
+                                                                                                                            <i class="la fa-trash"></i>\
+                                                                                                                        </a>\
+                                                                                                                    ';
 
 
 
@@ -1157,7 +1180,7 @@
             $(qcs.combo.expense_months).find('option[value=' + qcs.default[0].month + ']').attr('selected', 'selected');
 
             $(qcs.combo.filter.years).find('option[value=' + qcs.default[0].year + ']').attr('selected', 'selected');
-            $(qcs.combo.expense_years).find('option[value=' + qcs.default[0].year + ']').attr('selected', 'selected'); 
+            $(qcs.combo.expense_years).find('option[value=' + qcs.default[0].year + ']').attr('selected', 'selected');
 
             var filter = {
                 apartment_id: $(qcs.combo.filter.apartments).val(),

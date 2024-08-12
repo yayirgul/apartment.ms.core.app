@@ -15,7 +15,7 @@
         public Apartment? Apartment { get; set; }
 
 
-        //public Guid? HousingSafeId { get; set; }
+        public Guid? HousingSafe { get; set; }
         [ForeignKey("HousingSafe")]  
         public HousingSafe? HousingTheSafe { get; set; }
 

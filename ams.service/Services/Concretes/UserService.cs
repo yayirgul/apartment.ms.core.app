@@ -1,6 +1,7 @@
 ﻿namespace ams.service.Services.Concretes
 {
     using ams.core.Units;
+    using ams.data.UnitOfWorks;
     using ams.entity.DTOs;
     using ams.entity.Entities;
     using ams.service.Services.Abstractions;
@@ -11,11 +12,13 @@
 
     public class UserService : IUserService
     {
+        private readonly IUnitOfWork Uow;
         private readonly UserManager<AppUser> UserManager;
         private readonly RoleManager<AppRole> RoleManager;
 
-        public UserService(UserManager<AppUser> UserManager, RoleManager<AppRole> RoleManager)
+        public UserService(IUnitOfWork uow, UserManager<AppUser> UserManager, RoleManager<AppRole> RoleManager)
         {
+            Uow = uow;
             this.UserManager = UserManager;
             this.RoleManager = RoleManager;
         }
@@ -26,7 +29,7 @@
 
             var email = await UserManager.FindByEmailAsync(dto.Email!);
 
-            if (email == null) // BOŞ İSE
+            if (email == null)
             {
                 var user = new AppUser()
                 {
@@ -44,13 +47,11 @@
 
                 if (result.Succeeded)
                 {
-
                     var role = await RoleManager.FindByIdAsync(dto.RoleId.ToString());
                     await UserManager.AddToRoleAsync(user, role!.ToString());
 
                     view.IsSucceed = true;
                     view.Statuses = "x-add";
-
                 }
                 else
                 {
@@ -103,6 +104,48 @@
             }
 
             return view;
+        }
+
+        public async Task<Result.ListResult<UserDTO.ComboList>> GetComboHousingUser(Guid apartment_id)
+        {
+            var result = new Result.ListResult<UserDTO.ComboList>();
+            var lv = new List<UserDTO.ComboList>();
+
+            var l = await UserManager.Users.Where(x => x.IsActive == true).ToListAsync();
+            var housing = await Uow.GetRepository<Housing>().GetAllAsync(x => !x.IsDeleted && x.IsActive == true && x.ApartmentId == apartment_id);
+
+            foreach (var user in l)
+            {
+                var housing_user = housing.Where(x => x.HousingUser == user.Id).FirstOrDefault();
+
+                if (housing_user == null)
+                {
+                    lv.Add(new UserDTO.ComboList()
+                    {
+                        Id = user.Id,
+                        DisplayName = user.Firstname + " " + user.Lastname,
+                    });
+                }
+
+                // TODO : Combo'ya daha önce hiçbir konuta bağlanmamış kullanıcılar gelecek ve "EDIT" butonuna basınca o konuta bağlı kullanıcı gelecek şekilde ayarlanmalıdır.
+
+                //if (housing_user != null) {
+                //    if (housing_user!.HousingUser == user.Id)
+                //    {
+                //        lv.Add(new UserDTO.ComboList()
+                //        {
+                //            Id = user.Id,
+                //            DisplayName = user.Firstname + " " + user.Lastname,
+                //        });
+                //    }
+                //}
+            }
+
+            result.ListView = lv;
+            result.IsSucceed = true;
+            result.Statuses = lv.Count() > 0 ? "x-list" : lv.Count() == 0 ? "x-list" : "x-fail";
+
+            return result;
         }
 
         public async Task<List<UserDTO.ComboList>> GetComboUsers()

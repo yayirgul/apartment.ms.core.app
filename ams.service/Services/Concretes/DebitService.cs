@@ -83,8 +83,8 @@
                             IsActive = true,
                         };
 
-
                         safe!.Amount = amount_R;
+
                         await Uow.GetRepository<HousingSafe>().UpdateAsync(safe);
                         await Uow.GetRepository<HousingSafeMovement>().AddAsync(movement);
                         var save = await Uow.SaveAsync();
@@ -93,14 +93,45 @@
 
                 }
 
+                if (amount_X == qdebit!.Amount) // TODO : Kasa tutarına eksi (-) tutar eklenmelidir.
+                {
+                    amount_R = amount_X - (decimal)qdebit!.Amount;
+
+                    if (safe != null)
+                    {
+                        var movement = new HousingSafeMovement()
+                        {
+                            AccountId = qdebit.AccountId,
+                            ApartmentId = (Guid)qdebit.ApartmentId!,
+                            HousingId = pay.HousingId,
+                            HousingSafeId = safe.Id,
+                            FormerAmount = safe.Amount,     // TODO : KASA'daki önceki tutar
+                            MovementAmount = amount_R,      // TODO : KASA'da para varsa düşülecek tutarı "KASA HAREKETLERİNE" ekliyorum.
+                            DebitAmount = qdebit!.Amount,   // TODO : Kalan "BORCU" "KASA HAREKETLERİNDE" göstermek için ekliyorum.
+                            _Month = pay.Month,
+                            _Year = pay.Year,
+                            CreateUser = pay.CreateUser,
+                            IsActive = true,
+                        };
+
+                        safe!.Amount = amount_R;
+
+                        //await Uow.GetRepository<HousingSafe>().UpdateAsync(safe);
+                        //await Uow.GetRepository<HousingSafeMovement>().AddAsync(movement);
+                        //var save = await Uow.SaveAsync();
+
+                    }
+
+                }
+
 
             }
 
-         
 
 
 
-            
+
+
 
             qdebit!.ModifiedUser = pay.ModifiedUser;
             qdebit.ModifiedTime = pay.ModifiedTime;
@@ -154,7 +185,7 @@
                                 if (safe!.Amount > 0)
                                 {
                                     var x_amount = amount - safe!.Amount;
-                               
+
                                     var movement = new HousingSafeMovement()
                                     {
                                         AccountId = item.AccountId,
@@ -242,6 +273,11 @@
                         view.Statuses = "x-debit";
 
                     }
+                    else
+                    {
+                        view.IsSucceed = true;
+                        view.Statuses = "n-found-housing";
+                    }
 
                 }
                 else
@@ -262,7 +298,7 @@
         public async Task<Result.ListResult<DebitDTO.Table>> GetDebits(Guid apartment_id, int month, int year)
         {
             var result = new Result.ListResult<DebitDTO.Table>();
-            
+
             var l = await Uow.GetRepository<Debit>().GetAllAsync(
                 a => !a.IsDeleted && a.IsActive == true && a.ApartmentId == apartment_id && a._Month == month && a._Year == year,
                 b => b.Housing!,

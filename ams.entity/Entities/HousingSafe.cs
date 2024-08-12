@@ -23,7 +23,7 @@
         //public AppUser? User { get; set; }
 
 
-
+        public Guid? HousingSafeUser { get; set; }
         [ForeignKey("HousingSafeUser")] // Konut kasası sahibi
         public AppUser? HousingSafeTheUser { get; set; }
 

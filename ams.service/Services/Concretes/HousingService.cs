@@ -20,8 +20,15 @@
 
         public async Task<Result.ViewResult> AddAsync(HousingDTO.Add dto)
         {
+            var quid = new
+            {
+                HousingId = Guid.NewGuid(),
+                HousingSafe = Guid.NewGuid(),
+            };
+
             var housing = new Housing()
             {
+                Id = quid.HousingId,
                 AccountId = dto.AccountId,
                 ApartmentId = dto.ApartmentId,
                 HousingName = dto.HousingName,
@@ -30,23 +37,37 @@
                 IsDeleted = false,
                 IsActive = true,
                 HousingUser = dto.HousingUser,
+                HousingSafe = quid.HousingSafe,
+            };
+
+            var safe = new HousingSafe()
+            {
+                Id = quid.HousingSafe,
+                AccountId = dto.AccountId,
+                ApartmentId = (Guid)dto.ApartmentId!,
+                HousingId = quid.HousingId,
+                HousingSafeUser = dto.HousingUser,
+                CreateUser = dto.CreateUser,
+                IsDeleted = false,
+                IsActive = true,
+                Amount = 0
             };
 
             await Uow.GetRepository<Housing>().AddAsync(housing);
+            await Uow.GetRepository<HousingSafe>().AddAsync(safe);
             var result = await Uow.SaveAsync();
 
             var view = new Result.ViewResult();
 
-            switch (result)
+            if (result > 0)
             {
-                case 1:
-                    view.IsSucceed = true;
-                    view.Statuses = "x-add";
-                    break;
-                case 0:
-                    view.IsSucceed = true;
-                    view.Statuses = "x-fail";
-                    break;
+                view.IsSucceed = true;
+                view.Statuses = "x-add";
+            }
+            else
+            {
+                view.IsSucceed = true;
+                view.Statuses = "x-fail";
             }
 
             return view;
@@ -97,7 +118,8 @@
                 //_Amount = view.Amount.HasValue ? amount.ToString("N2", Culture) : "",
                 //_Amount = view.Amount.HasValue ? view.Amount.Value.ToString("N2", Culture) : "",
 
-                view.View = new HousingDTO.Detail() {
+                view.View = new HousingDTO.Detail()
+                {
                     Id = detail!.Id,
                     ApartmentId = detail.ApartmentId,
                     HousingName = detail!.HousingName,
@@ -106,7 +128,8 @@
                 };
                 view.IsSucceed = true;
                 view.Statuses = "x-detail";
-            } else
+            }
+            else
             {
                 view.IsSucceed = false;
                 view.Statuses = "x-fail";

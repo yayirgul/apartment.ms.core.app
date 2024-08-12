@@ -175,26 +175,69 @@
         }
 
 
-        function combo_users() {
+        function combo_users(apartment_id) {
+
+            $(qcs.combo.users).find('option').remove();
 
             $.ajax({
                 type: 'GET',
-                url: "/ams/app/combo-users",
+                url: "/ams/app/combo-housing-users/" + apartment_id,
                 async: false,
                 dataType: 'json',
-                success: function (data) {
+                success: function (d) {
 
-                    console.log(data);
+                    if (d.isSucceed) {
+                        switch (d.statuses) {
+                            case 'x-list':
 
-                    $.each(data, function (i, v) {
+                                $.each(d.listView, function (i, v) {
 
-                        if (i == 0) {
-                            $(qcs.combo.users).append('<option value=' + v.id + ' selected="selected">' + v.displayName + '</option>');
-                        } else {
-                            $(qcs.combo.users).append('<option value=' + v.id + '>' + v.displayName + '</option>');
+                                    if (i == 0) {
+                                        $(qcs.combo.users).append('<option value=' + v.id + ' selected="selected">' + v.displayName + '</option>');
+                                    } else {
+                                        $(qcs.combo.users).append('<option value=' + v.id + '>' + v.displayName + '</option>');
+                                    }
+
+                                });
+
+                                break;
+                            case 'x-fail':
+
+                                Swal.fire({
+                                    title: "Hata",
+                                    text: "İstenmeyen bir hata oluştu.",
+                                    icon: "error",
+                                    timer: 4000,
+                                    onOpen: function () {
+                                        Swal.showLoading()
+                                    },
+                                    allowOutsideClick: false,
+                                    allowEscapeKey: false,
+                                    buttonsStyling: false,
+                                    confirmButtonText: "<i class='la la-headphones'></i> I am game!",
+                                    showCancelButton: false,
+                                    cancelButtonText: "<i class='la la-thumbs-down'></i> No, thanks",
+                                    customClass: {
+                                        confirmButton: "btn btn-danger",
+                                        cancelButton: "btn btn-default"
+                                    }
+                                }).then(function (r) {
+
+                                    if (r.dismiss === "timer") {
+                                        $(qcs.modal.expense).modal('hide');
+                                        l_expenses(dm.ApartmentId, dm.Month, dm.Year);
+                                    }
+                                });
+
+                                break;
                         }
+                    }
 
-                    });
+
+
+
+
+
 
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
@@ -442,8 +485,28 @@
 
             });
 
+            $(document).on("change", qcs.combo.apartments, function () {
+
+                var filter = { apartment_id: $(this).val() }
+
+                $(qcs.combo.apartments).children('option').removeAttr('selected');
+                $(qcs.combo.apartments).find('option[value=' + filter.apartment_id + ']').attr('selected', 'selected');
+
+                // $(qcs.combo.users).append('<option value=' + v.id + '>' + v.displayName + '</option>');
+                $(qcs.combo.users).find('option').remove();
+
+                combo_users(filter.apartment_id);
+
+            });
+
             // TODO : Gider girebileceğimiz "Modal" açma
             $(document).delegate(qcs.modal.housing_new, 'click', function () {
+
+
+                var filter = {
+                    apartment_id: $(qcs.combo.filter.apartments).val(),
+                }
+                combo_users(filter.apartment_id);
 
                 fv.resetForm("fv-form-expense");
                 fv_housing_save.innerHTML = "Kaydet";
@@ -774,23 +837,18 @@
 
         $(function () {
 
-            combo_users();
+            // combo_users();
             combo_apartments();
 
             $(qcs.combo.filter.months).find('option[value=' + qcs.default[0].month + ']').attr('selected', 'selected');
-
-
 
             var filter = {
                 apartment_id: $(qcs.combo.filter.apartments).val(),
             }
 
-            // console.log(filter);
-
-
-
             housings();
             l_housings(filter.apartment_id, filter.month, filter.year);
+            combo_users(filter.apartment_id);
 
             $(qcs.table).tooltip({
                 selector: '[data-toggle=tooltip]',

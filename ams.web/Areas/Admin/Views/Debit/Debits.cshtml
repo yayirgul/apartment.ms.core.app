@@ -460,6 +460,9 @@
                     year: $(qcs.combo.filter.years).val(),
                 }
 
+                sessionStorage.setItem("_month", filter.month);
+                sessionStorage.setItem("_year", filter.year);
+
                 $(qcs.combo.filter.months).children('option').removeAttr('selected');
                 $(qcs.combo.filter.months).find('option[value=' + filter.month + ']').attr('selected', 'selected');
 
@@ -475,6 +478,9 @@
                     month: $(qcs.combo.filter.months).val(),
                     year: $(this).val(),
                 }
+
+                sessionStorage.setItem("_month", filter.month);
+                sessionStorage.setItem("_year", filter.year);
 
                 $(qcs.combo.filter.years).children('option').removeAttr('selected');
                 $(qcs.combo.filter.years).find('option[value=' + filter.year + ']').attr('selected', 'selected');
@@ -628,15 +634,6 @@
 
                             break;
                     }
-
-
-
-                    
-
-
-
-
-                    
 
                 });
 
@@ -1019,9 +1016,6 @@
 
             combo_apartments();
 
-            $(qcs.combo.filter.months).find('option[value=' + qcs.default[0].month + ']').attr('selected', 'selected');
-            $(qcs.combo.filter.years).find('option[value=' + qcs.default[0].year + ']').attr('selected', 'selected');
-
             var filter = {
                 apartment_id: $(qcs.combo.filter.apartments).val(),
                 month: $(qcs.combo.filter.months).val(),
@@ -1029,7 +1023,25 @@
             }
 
             debits();
-            l_debits(filter.apartment_id, filter.month, filter.year);
+
+
+            var sessions = {
+                month: sessionStorage.getItem("_month"),
+                year: sessionStorage.getItem("_year")
+            }
+            console.log(sessions);
+
+            if (sessions.month != null && sessions.year != null) {
+                $(qcs.combo.filter.months).find('option[value=' + sessions.month + ']').attr('selected', 'selected');
+                $(qcs.combo.filter.years).find('option[value=' + sessions.year + ']').attr('selected', 'selected');
+                l_debits(filter.apartment_id, sessions.month, sessions.year);
+            }
+            else {
+                console.log("DYNAMIC");
+                $(qcs.combo.filter.months).find('option[value=' + qcs.default[0].month + ']').attr('selected', 'selected');
+                $(qcs.combo.filter.years).find('option[value=' + qcs.default[0].year + ']').attr('selected', 'selected');
+                l_debits(filter.apartment_id, filter.month, filter.year);
+            }
 
             $(qcs.table.debits).tooltip({
                 selector: '[data-toggle=tooltip]',
