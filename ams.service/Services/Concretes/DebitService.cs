@@ -117,21 +117,14 @@
                         safe!.Amount = amount_R;
 
                         //await Uow.GetRepository<HousingSafe>().UpdateAsync(safe);
-                        //await Uow.GetRepository<HousingSafeMovement>().AddAsync(movement);
-                        //var save = await Uow.SaveAsync();
+                        await Uow.GetRepository<HousingSafeMovement>().AddAsync(movement);
+                        var save = await Uow.SaveAsync();
 
                     }
 
                 }
 
-
             }
-
-
-
-
-
-
 
             qdebit!.ModifiedUser = pay.ModifiedUser;
             qdebit.ModifiedTime = pay.ModifiedTime;
@@ -328,7 +321,6 @@
                 Queue = x.Queue,
                 HousingId = x.HousingId,
             }).OrderBy(x => x.Queue).ToList();
-
 
             if (debits.Count() > 0)
             {

@@ -32,9 +32,7 @@
                         <h3 class="card-label">Apartmanlar</h3>
                     </div>
                     <div class="card-toolbar">
-                        <a href="javascript:;" class="btn btn-primary font-weight-bolder">
-                            Yeni Apartman
-                        </a>
+                        <a href="javascript:;" id="modal-apartment-open" class="btn btn-primary font-weight-bolder">Yeni</a>
                     </div>
                 </div>
                 <div class="card-body">
@@ -65,18 +63,6 @@
                                         </div>
                                     </div>
 
-
-                                    @*  <div class="col-md-4 my-2 my-md-0">
-                                    <div class="d-flex align-items-center">
-                                    <label class="mr-3 mb-0 d-none d-md-block">Type:</label>
-                                    <select class="form-control" id="kt_datatable_search_type">
-                                    <option value="">All</option>
-                                    <option value="1">Online</option>
-                                    <option value="2">Retail</option>
-                                    <option value="3">Direct</option>
-                                    </select>
-                                    </div>
-                                    </div> *@
                                 </div>
                             </div>
 
@@ -92,6 +78,40 @@
     </div>
 </div>
 
+<div class="modal fade" id="modal-apartment" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-apartment-title">Yeni Apartman</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <form class="form" id="form-apartment">
+
+                    <div class="form-group mb-0 row">
+
+                        <input type="hidden" name="ApartmentId" />
+
+                        <div class="col-xl-12">
+                            <label>* Apartman Adı</label>
+                            <input type="text" name="ApartmentName" class="form-control" placeholder="">
+                        </div>
+
+                    </div>
+
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="button-apartment" class="btn btn-primary font-weight-bold">Kaydet</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @section Scripts {
 
     <script src="~/lib/theme/plugins/custom/datatables/datatables.bundle.js"></script>
@@ -100,34 +120,255 @@
          
         var app = app || {}
         app.Urls = app.Urls || {} 
-        app.Urls.ApartmentList = "@(Url.Action("Apt", "Apartment"))"; 
-
+        // app.Urls.ApartmentList = "@(Url.Action("Apt", "Apartment"))";
 
         // Query Component Selector
         const qcs = {
             table: "#t_apartments",
+            input: {
+                apartment_id: "[name='ApartmentId']",
+                apartment_name: "[name='ApartmentName']",
+            },
+            modal: {
+                apartment: '#modal-apartment',
+                apartment_open: '#modal-apartment-open',
+                apartment_edit: '.modal-apartment-edit',
+            }
         }
 
-        var KTDatatableDataLocalDemo = function () {
+        function apartments() {
 
-            var demo = function () {
+            $(document).on("click", qcs.modal.apartment_open, function () {
+                $(qcs.modal.apartment).modal();
+                fv.resetForm("form-apartment");
+                button_apartment.innerHTML = "Kaydet";
+                $(qcs.input.apartment_id).removeAttr("value");
+            });
 
-            };
+            $(document).on("click", qcs.modal.apartment_edit, function () {
+                $(qcs.modal.apartment).modal();
 
-            return {
-                init: function () {
-                    demo();
+                var q = {
+                    apartment_id: $(this).data('apartment-id'),
+                }
+
+                g_apartment(q.apartment_id);
+            });
+
+            const form_apartment = document.getElementById('form-apartment');
+            const button_apartment = document.getElementById('button-apartment');
+
+            const fv = FormValidation.formValidation(form_apartment, {
+
+                fields: {
+
+                    ApartmentName: {
+                        validators: {
+                            notEmpty: {
+                                message: 'Apartman adı boş geçilemez.'
+                            },
+                            stringLength: {
+                                min: 3,
+                                message: 'Apartman adı minimum 1 olmalıdır.'
+                            }
+                        }
+                    },
+
                 },
-            };
-        }();
+                plugins: {
+                    trigger: new FormValidation.plugins.Trigger(),
+                    bootstrap: new FormValidation.plugins.Bootstrap(),
+                },
+            }).on('core.form.validating', function () {
+                button_apartment.innerHTML = 'Doğrulanıyor ...';
+            });
+
+            // -----
+            button_apartment.addEventListener('click', function () {
+
+                fv.validate().then(function (status) {
+
+                    button_apartment.innerHTML = status === 'Valid' ? 'Güncelleniyor...' : 'Lütfen tekrar deneyin';
+
+                    switch (status) {
+                        case "Valid":
+
+                            var dm = {
+                                ApartmentId: $(qcs.input.apartment_id).val(),
+                                ApartmentName: $(qcs.input.apartment_name).val()
+                            }
+                            console.log(dm);
+
+                            $.post("/ams/app/apartment/add", dm, function (d) {
+
+                                if (d.isSucceed) {
+                                    switch (d.statuses) {
+                                        case 'x-add':
+
+                                            Swal.fire({
+                                                title: "APARTMAN",
+                                                text: "Yeni apartman oluşturuldu.",
+                                                icon: "success",
+                                                timer: 4000,
+                                                onOpen: function () { Swal.showLoading() },
+                                                allowOutsideClick: false,
+                                                allowEscapeKey: false,
+                                                buttonsStyling: false,
+                                                confirmButtonText: "<i class='la la-headphones'></i> I am game!",
+                                                showCancelButton: false,
+                                                cancelButtonText: "<i class='la la-thumbs-down'></i> No, thanks",
+                                                customClass: {
+                                                    confirmButton: "btn btn-danger",
+                                                    cancelButton: "btn btn-default"
+                                                }
+                                            }).then(function (r) {
+
+                                                if (r.dismiss === "timer") {
+                                                    $(qcs.modal.apartment).modal('hide');
+                                                    l_aparmets();
+                                                }
+
+                                            });
+
+                                            break;
+                                        case 'x-edit':
+
+                                            Swal.fire({
+                                                title: "APARTMAN",
+                                                text: "Apartman bilgileri güncellendi.",
+                                                icon: "success",
+                                                timer: 4000,
+                                                onOpen: function () { Swal.showLoading() },
+                                                allowOutsideClick: false,
+                                                allowEscapeKey: false,
+                                                buttonsStyling: false,
+                                                confirmButtonText: "<i class='la la-headphones'></i> I am game!",
+                                                showCancelButton: false,
+                                                cancelButtonText: "<i class='la la-thumbs-down'></i> No, thanks",
+                                                customClass: {
+                                                    confirmButton: "btn btn-danger",
+                                                    cancelButton: "btn btn-default"
+                                                }
+                                            }).then(function (r) {
+
+                                                if (r.dismiss === "timer") {
+                                                    $(qcs.modal.apartment).modal('hide');
+                                                    l_aparmets();
+                                                }
+
+                                            });
+
+                                            break;
+                                    }
+                                }
+
+                            }).done(function () {
+
+                            }).fail(function (jqXHR, textStatus, errorThrown) {
+
+                            }).always(function () {
+
+                            });
+
+                            break;
+                    }
+
+                });
+
+            });
+
+        }
+
+        function g_apartment(apartment_id) {
+
+            // var dm = { Id: expense_id };
+
+            $.get("/ams/app/apartment/" + apartment_id, function (d) {
+
+                console.log("APARTMENT DETAIL :::::::");
+                console.log(d);
 
 
-        function aparmets() {
+                if (d.isSucceed) {
+                    switch (d.statuses) {
+                        case 'x-detail':
 
-            var d = [
-                { "Id": "1", "ApartmentName": "A Apartmanı", "CreateBy": "Yunus AYIRGÜL", "CreateTime": "8/27/2017", "Status": 5, "IsActive": 1, "Actions": null },
-                { "Id": "2", "ApartmentName": "B Apartmanı", "CreateBy": "Yunus AYIRGÜL", "CreateTime": "8/27/2017", "Status": 5, "IsActive": 2, "Actions": null }
-            ];
+                            $(qcs.input.apartment_id).val(d.view.id);
+                            $(qcs.input.apartment_name).val(d.view.apartmentName);
+
+
+                            // $(qcs.combo.apartments + " option[value=" + d.view.apartmentId + "]").removeAttr('selected').attr('selected', 'selected');
+                            // $(qcs.combo.users + " option[value=" + d.view.housingUser + "]").removeAttr('selected').attr('selected', 'selected');
+                              
+                            break;
+
+                        case 'x-fail':
+
+                            Swal.fire({
+                                title: "Hata",
+                                text: "İstenmeyen bir hata oluştu.",
+                                icon: "error",
+                                timer: 4000,
+                                onOpen: function () {
+                                    Swal.showLoading()
+                                },
+                                allowOutsideClick: false,
+                                allowEscapeKey: false,
+                                buttonsStyling: false,
+                                confirmButtonText: "<i class='la la-headphones'></i> I am game!",
+                                showCancelButton: false,
+                                cancelButtonText: "<i class='la la-thumbs-down'></i> No, thanks",
+                                customClass: {
+                                    confirmButton: "btn btn-danger",
+                                    cancelButton: "btn btn-default"
+                                }
+                            }).then(function (r) {
+
+                                if (r.dismiss === "timer") {
+                                    $(qcs.modal.apartment).modal('hide');
+                                }
+                            });
+
+                            break;
+                    }
+                }
+
+
+            }).done(function (d) {
+
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+
+                Swal.fire({
+                    title: "Hata",
+                    text: "Hata Kodu : " + textStatus,
+                    icon: "error",
+                    timer: 4000,
+                    onOpen: function () {
+                        Swal.showLoading()
+                    },
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    buttonsStyling: false,
+                    confirmButtonText: "<i class='la la-headphones'></i> I am game!",
+                    showCancelButton: false,
+                    cancelButtonText: "<i class='la la-thumbs-down'></i> No, thanks",
+                    customClass: {
+                        confirmButton: "btn btn-danger",
+                        cancelButton: "btn btn-default"
+                    }
+                }).then(function (r) {
+
+                    if (r.dismiss === "timer") { }
+
+                });
+
+            }).always(function (d) {
+
+            });
+
+        }
+
+        function l_aparmets() {
              
             var ds = $.ajax({
                 type: 'GET',
@@ -144,17 +385,8 @@
 
             console.log(ds);
 
-
             var datatable = $(qcs.table).KTDatatable({
-                // datasource definition
-                data: {
-                    // type: 'local',
-                    // source: dataJSONArray,
-                    source: ds,
-                    pageSize: 10,
-                },
-
-                // layout definition
+                data: { source: ds, pageSize: 10 },
                 layout: {
                     scroll: false, // enable/disable datatable scroll both horizontal and vertical when needed.
                     // height: 450, // datatable's body's fixed height
@@ -167,7 +399,6 @@
                     input: $('#kt_datatable_search_query'),
                     key: 'generalSearch',
                 },
-                // columns definition
                 columns: [
                     {
                         field: 'apartmentId',
@@ -210,29 +441,6 @@
                             return '<span class="label font-weight-bold label-lg ' + status[row.isActive].class + ' label-inline">' + status[row.isActive].title + '</span>';
                         },
                     },
-                    // {
-                    //     field: 'Type',
-                    //     title: 'Type',
-                    //     autoHide: false,
-                    //     template: function (row) {
-                    //         var status = {
-                    //             1: {
-                    //                 'title': 'Online',
-                    //                 'state': 'danger',
-                    //             },
-                    //             2: {
-                    //                 'title': 'Retail',
-                    //                 'state': 'primary',
-                    //             },
-                    //             3: {
-                    //                 'title': 'Direct',
-                    //                 'state': 'success',
-                    //             },
-                    //         };
-                    //         return '<span class="label label-' + status[row.Type].state + ' label-dot mr-2"></span><span class="font-weight-bold text-' + status[row.Type].state + '">' +
-                    //             status[row.Type].title + '</span>';
-                    //     },
-                    // },
                     {
                         field: 'Actions',
                         title: 'İşlem',
@@ -243,15 +451,23 @@
                         template: function (row) {
 
 
-                            return '\
-                                                        <a href="javascript:;" class="btn btn-sm btn-clean btn-icon  modal-apartment-open" data-apartment-id=' + row.apartmentId + ' data-toggle="tooltip" data-theme="dark" title="Edit" >\
-                                                    <i class="la la-pencil"></i>\
-                                                                </a>\
-                                                              \
-                                                             <a href="javascript:;" class="btn btn-sm btn-clean btn-icon" data-delete-id='+ row.apartmentId + ' data-toggle="tooltip" data-theme="dark" title="Delete">\
-                                                                    <i class="la fa-trash"></i>\
-                                                                </a>\
-                                                            ';
+                            // return '\
+                            //                             <a href="javascript:;" class="btn btn-sm btn-clean btn-icon  modal-apartment-open" data-apartment-id=' + row.apartmentId + ' data-toggle="tooltip" data-theme="dark" title="Edit" >\
+                            //                         <i class="la la-pencil"></i>\
+                            //                                     </a>\
+                            //                                   \
+                            //                                  <a href="javascript:;" class="btn btn-sm btn-clean btn-icon" data-delete-id='+ row.apartmentId + ' data-toggle="tooltip" data-theme="dark" title="Delete">\
+                            //                                         <i class="la fa-trash"></i>\
+                            //                                     </a>\
+                            //                                 ';
+
+
+                            var r = `
+                            <a href="javascript:;" class="btn btn-sm btn-clean btn-icon modal-apartment-edit" data-apartment-id='${row.apartmentId}' data-toggle="tooltip"><i class="la la-pencil"></i>
+                                    </a>
+                                    `;
+
+                            return r;
 
 
 
@@ -294,7 +510,8 @@
 
         $(function () {
 
-            aparmets();
+            apartments();
+            l_aparmets();
 
             $(qcs.table).tooltip({
                 selector: '[data-toggle=tooltip]',

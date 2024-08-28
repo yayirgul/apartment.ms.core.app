@@ -444,6 +444,10 @@
                     year: $(qcs.combo.filter.years).val(),
                 }
 
+                sessionStorage.setItem("_apartment", filter.apartment_id);
+                sessionStorage.setItem("_month", filter.month);
+                sessionStorage.setItem("_year", filter.year);
+
                 $(qcs.combo.filter.apartments).children('option').removeAttr('selected');
                 $(qcs.combo.filter.apartments).find('option[value=' + filter.apartment_id + ']').attr('selected', 'selected');
 
@@ -460,6 +464,7 @@
                     year: $(qcs.combo.filter.years).val(),
                 }
 
+                sessionStorage.setItem("_apartment", filter.apartment_id);
                 sessionStorage.setItem("_month", filter.month);
                 sessionStorage.setItem("_year", filter.year);
 
@@ -479,6 +484,7 @@
                     year: $(this).val(),
                 }
 
+                sessionStorage.setItem("_apartment", filter.apartment_id);
                 sessionStorage.setItem("_month", filter.month);
                 sessionStorage.setItem("_year", filter.year);
 
@@ -518,18 +524,15 @@
 
                 console.log(filter);
 
+                fv.resetForm("form-payment");
+                button_payment.innerHTML = "Kaydet";
+
             });
 
 
             $(document).on("click", qcs.modal.debit_open, function () {
-
                 $(qcs.modal.debit).modal(); 
-
             });
-
-
-
-
 
             const form_payment = document.getElementById('form-payment');
             const button_payment = document.getElementById('button-payment');
@@ -607,17 +610,11 @@
                                             }).then(function (r) {
 
                                                 if (r.dismiss === "timer") {
-                                                    $(qcs.modal.expense).modal('hide');
+                                                    $(qcs.modal.payment).modal('hide');
                                                     l_debits(dm.ApartmentId, dm.Month, dm.Year);
                                                 }
 
                                             });
-
-
-
-
-
-
 
                                             break;
                                     }
@@ -639,8 +636,6 @@
 
             });
 
-
-
         }
 
 
@@ -660,7 +655,7 @@
                         if (i == 0) {
                             $(qcs.combo.filter.apartments).append('<option value=' + v.id + ' selected="selected">' + v.apartmentName + '</option>');
                         } else {
-                            $(qcs.combo.expense_apartments).append('<option value=' + v.id + '>' + v.apartmentName + '</option>');
+                            $(qcs.combo.filter.apartments).append('<option value=' + v.id + '>' + v.apartmentName + '</option>');
                         }
 
                         // $(qcs.combo.expense_apartments).append($("<option selected='selected'></option>").val(v.id).html(v.apartmentName));
@@ -1024,20 +1019,19 @@
 
             debits();
 
-
             var sessions = {
+                apartment: sessionStorage.getItem("_apartment"),
                 month: sessionStorage.getItem("_month"),
                 year: sessionStorage.getItem("_year")
             }
-            console.log(sessions);
 
             if (sessions.month != null && sessions.year != null) {
+                $(qcs.combo.filter.apartments).find('option[value=' + sessions.apartment + ']').attr('selected', 'selected');
                 $(qcs.combo.filter.months).find('option[value=' + sessions.month + ']').attr('selected', 'selected');
                 $(qcs.combo.filter.years).find('option[value=' + sessions.year + ']').attr('selected', 'selected');
-                l_debits(filter.apartment_id, sessions.month, sessions.year);
+                l_debits(sessions.apartment, sessions.month, sessions.year);
             }
             else {
-                console.log("DYNAMIC");
                 $(qcs.combo.filter.months).find('option[value=' + qcs.default[0].month + ']').attr('selected', 'selected');
                 $(qcs.combo.filter.years).find('option[value=' + qcs.default[0].year + ']').attr('selected', 'selected');
                 l_debits(filter.apartment_id, filter.month, filter.year);
