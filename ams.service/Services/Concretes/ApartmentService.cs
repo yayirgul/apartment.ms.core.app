@@ -61,7 +61,7 @@
 
         public async Task<Result.ViewResult> EditAsync(ApartmentDTO.Edit dto)
         {
-            var apartment = await Uow.GetRepository<Apartment>().GetAsync(x => !x.IsDeleted && x.Id == dto.Id);
+            var apartment = await Uow.GetRepository<Apartment>().GetAsync(x => !x.IsDeleted && x.Id == dto.ApartmentId);
 
             apartment!.ApartmentName = dto.ApartmentName;
             apartment.ModifiedUser = dto.ModifiedUser;

@@ -4,7 +4,7 @@
     {
         public class Add
         {
-            public Guid? Id { get; set; }
+            public Guid? ApartmentId { get; set; }
             public Guid? AccountId { get; set; }
             public string? ApartmentName { get; set; }
             public Guid? CreateUser { get; set; }
@@ -12,7 +12,7 @@
 
         public class Edit
         {
-            public Guid? Id { get; set; }
+            public Guid? ApartmentId { get; set; }
             public Guid? AccountId { get; set; }
             public string? ApartmentName { get; set; }
             public Guid? ModifiedUser { get; set; }

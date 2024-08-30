@@ -1034,7 +1034,10 @@
             else {
                 $(qcs.combo.filter.months).find('option[value=' + qcs.default[0].month + ']').attr('selected', 'selected');
                 $(qcs.combo.filter.years).find('option[value=' + qcs.default[0].year + ']').attr('selected', 'selected');
-                l_debits(filter.apartment_id, filter.month, filter.year);
+                sessionStorage.setItem("_apartment", filter.apartment_id);
+                sessionStorage.setItem("_month", qcs.default[0].month);
+                sessionStorage.setItem("_year", qcs.default[0].year);
+                l_debits(filter.apartment_id, qcs.default[0].month, qcs.default[0].year);
             }
 
             $(qcs.table.debits).tooltip({

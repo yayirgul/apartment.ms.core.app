@@ -25,11 +25,11 @@
 
             Guid apartment_id;
 
-            if (Guid.TryParse(dto.Id.ToString(), out apartment_id) && dto.Id != Guid.Empty)
+            if (Guid.TryParse(dto.ApartmentId.ToString(), out apartment_id) && dto.ApartmentId != Guid.Empty)
             {
                 var d = new ApartmentDTO.Edit()
                 {
-                    Id = apartment_id,
+                    ApartmentId = apartment_id,
                     ApartmentName = dto.ApartmentName,
                     ModifiedTime = DateTime.UtcNow,
                     ModifiedUser = User!.Id,

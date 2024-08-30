@@ -40,10 +40,10 @@
                     <!--begin::Search Form-->
                     <div class="mb-7">
                         <div class="row align-items-center">
-                            <div class="col-lg-9 col-xl-8">
+                            <div class="col-xl-12">
                                 <div class="row align-items-center">
 
-                                    <div class="col-md-4 my-2 my-md-0">
+                                    <div class="col-md-2 my-2 my-md-0">
                                         <div class="input-icon">
                                             <input type="text" class="form-control" placeholder="Search..." id="kt_datatable_search_query" />
                                             <span>
@@ -52,9 +52,8 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-md-4 my-2 my-md-0">
+                                    <div class="col-md-1 my-2 my-md-0">
                                         <div class="d-flex align-items-center">
-                                            <label class="mr-3 mb-0 d-none d-md-block">Status:</label>
                                             <select class="form-control" id="kt_datatable_search_status">
                                                 <option value="">Tümü</option>
                                                 <option value="1">Aktif</option>
@@ -369,6 +368,8 @@
         }
 
         function l_aparmets() {
+
+            $(qcs.table).KTDatatable('destroy');
              
             var ds = $.ajax({
                 type: 'GET',
@@ -517,12 +518,6 @@
                 selector: '[data-toggle=tooltip]',
                 container: 'body'
             });
-
-
-
-
-
-
 
         });
 
