@@ -26,7 +26,7 @@
             decimal amount_X, amount_R;
             decimal.TryParse(pay.Amount, NumberStyles.Number, Culture, out amount_X);
 
-            var qdebit = await Uow.GetRepository<Debit>().GetAsync(x => !x.IsDeleted && x.IsActive == true && x.ApartmentId == pay.ApartmentId && x.HousingId == pay.HousingId);
+            var qdebit = await Uow.GetRepository<Debit>().GetAsync(x => !x.IsDeleted && x.IsActive == true && x.ApartmentId == pay.ApartmentId && x.HousingId == pay.HousingId && x._Month == pay.Month && x._Year == pay.Year);
 
             if (qdebit != null)
             {
