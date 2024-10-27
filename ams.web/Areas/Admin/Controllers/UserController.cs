@@ -60,6 +60,12 @@
             return Json(await UserService.GetComboUsers());
         }
 
+        [HttpGet, Route("ams/app/user/{user_id}")]
+        public async Task<JsonResult> GetUser(Guid user_id)
+        {
+            return Json(await UserService.GetUser(user_id));
+        }
+
         [HttpGet, Route("ams/app/users")]
         public async Task<JsonResult> GetUsers()
         {

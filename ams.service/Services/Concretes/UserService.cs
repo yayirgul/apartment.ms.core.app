@@ -106,10 +106,10 @@
             return view;
         }
 
-        public async Task<Result.ListResult<UserDTO.ComboList>> GetComboHousingUser(Guid apartment_id)
+        public async Task<Result.ListResult<UserDTO.ComboBox>> GetComboHousingUser(Guid apartment_id)
         {
-            var result = new Result.ListResult<UserDTO.ComboList>();
-            var lv = new List<UserDTO.ComboList>();
+            var result = new Result.ListResult<UserDTO.ComboBox>();
+            var lv = new List<UserDTO.ComboBox>();
 
             var l = await UserManager.Users.Where(x => x.IsActive == true).ToListAsync();
             var housing = await Uow.GetRepository<Housing>().GetAllAsync(x => !x.IsDeleted && x.IsActive == true && x.ApartmentId == apartment_id);
@@ -120,7 +120,7 @@
 
                 if (housing_user == null)
                 {
-                    lv.Add(new UserDTO.ComboList()
+                    lv.Add(new UserDTO.ComboBox()
                     {
                         Id = user.Id,
                         DisplayName = user.Firstname + " " + user.Lastname,
@@ -148,15 +148,15 @@
             return result;
         }
 
-        public async Task<List<UserDTO.ComboList>> GetComboUsers()
+        public async Task<List<UserDTO.ComboBox>> GetComboUsers()
         {
             var l = await UserManager.Users.Where(x => x.IsActive == true).ToListAsync();
 
-            var users = new List<UserDTO.ComboList>();
+            var users = new List<UserDTO.ComboBox>();
 
             foreach (var user in l)
             {
-                users.Add(new UserDTO.ComboList()
+                users.Add(new UserDTO.ComboBox()
                 {
                     Id = user.Id,
                     DisplayName = user.Firstname + " " + user.Lastname,
@@ -164,6 +164,46 @@
             }
 
             return users;
+        }
+
+        public async Task<Result.ViewResult<UserDTO.Detail>> GetUser(Guid user_id)
+        {
+            var view = new Result.ViewResult<UserDTO.Detail>();
+
+            var user = await UserManager.FindByIdAsync(user_id.ToString());
+
+            if (user != null)
+            {
+                var roles = await RoleManager.Roles.ToListAsync(); // Tüm "rollerin" listesi
+
+                var role = string.Join("", await UserManager.GetRolesAsync(user));
+
+
+                var role_id = roles.FirstOrDefault(x => x.Name == role)!.Id;
+
+
+                //var rr = RoleManager.GetRoleNameAsync
+
+                view.View = new UserDTO.Detail()
+                {
+                    Id = user.Id,
+                    IsActive = user.IsActive,
+                    Firstname = user.Firstname,
+                    Lastname = user.Lastname,
+                    Email = user.Email,
+                    ModifiedTime = user.ModifiedTime,
+                    RoleId = role_id,
+                };
+                view.IsSucceed = true;
+                view.Statuses = "x-detail";
+            }
+            else
+            {
+                view.IsSucceed = false;
+                view.Statuses = "x-fail";
+            }
+
+            return view;
         }
 
         public async Task<List<UserDTO.List>> GetUsers()

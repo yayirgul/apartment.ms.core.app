@@ -32,7 +32,6 @@
                         <h3 class="card-label">Kullanıcılar</h3>
                     </div>
                     <div class="card-toolbar">
-
                         <a href="javascript:;" id="modal-user-new" class="btn btn-primary font-weight-bolder">
                             Yeni
                         </a>
@@ -332,6 +331,13 @@
                                 ConfirmPassword: $(qcs.input.password_confirm).val(),
                             };
 
+                            if(dm.Id != '') {
+                                fv.resetField("Password");
+                                fv.resetField("ConfirmPassword");
+                                fv.removeField("Password");
+                                fv.removeField("ConfirmPassword");
+                            }
+
                             console.log(dm);
 
                             $.post("/ams/app/user/add", dm, function (d) {
@@ -431,10 +437,38 @@
             // TODO : Kullanıcı girebileceğimiz "Modal" açma
             $(document).delegate(qcs.modal.user_new, 'click', function () {
 
+                $(qcs.input.user_id).removeAttr("value");
+
                 fv.resetForm("form-user");
                 button_user.innerHTML = "Kaydet";
                   
                 $(qcs.modal.user).modal();
+
+            });
+
+            $(document).delegate(qcs.modal.user_edit, 'click', function () {
+
+                button_user.innerHTML = "Güncelle";
+
+                var filter = {
+                    user_id: $(this).data("user-id"),
+                }
+
+                g_user(filter.user_id);
+
+                $(qcs.modal.user).modal();
+
+            });
+
+            $(document).delegate("#modal-expense-title", 'click', function () {
+
+                console.log("test");
+           
+                fv.resetField("Password");
+                fv.resetField("ConfirmPassword");
+
+                fv.removeField("Password");
+                fv.removeField("ConfirmPassword");
 
             });
              
@@ -442,13 +476,13 @@
         }
 
 
-        function g_users(user_id) {
+        function g_user(user_id) {
 
             // var dm = { Id: expense_id };
 
-            $.get("/ams/app/housing/" + user_id, function (d) {
+            $.get("/ams/app/user/" + user_id, function (d) {
 
-                console.log("HOUSING DETAIL :::::::");
+                console.log("USER DETAIL :::::::");
                 console.log(d);
 
 
@@ -457,12 +491,14 @@
                         case 'x-detail':
 
 
-                            $(qcs.input.housing_id).val(d.view.id);
-                            $(qcs.input.housing_name).val(d.view.housingName);
-                            // $(qcs.input.expense_amount).val(d._Amount);
+                            $(qcs.input.user_id).val(d.view.id);
+                            $(qcs.input.firstname).val(d.view.firstname);
+                            $(qcs.input.lastname).val(d.view.lastname);
+                            $(qcs.input.email).val(d.view.email);
 
 
-                            // $(qcs.input.expense_amount).inputmask(d._Amount);
+                            $(qcs.combo.roles + " option[value=" + d.view.roleId + "]").removeAttr('selected').attr('selected', 'selected');
+                             
 
                             // $(qcs.label_username).attr("data-label-username", d.View.Username);
                             // $(qcs.modal_user_title).text(d.View.Firstname + ' ' + d.View.Lastname);
@@ -470,8 +506,8 @@
                             // $(qcs.label_email).attr("data-label-email", d.View.Email);
 
 
-                            $(qcs.combo.apartments + " option[value=" + d.view.apartmentId + "]").removeAttr('selected').attr('selected', 'selected');
-                            $(qcs.combo.users + " option[value=" + d.view.apartmentId + "]").removeAttr('selected').attr('selected', 'selected');
+                            // $(qcs.combo.apartments + " option[value=" + d.view.apartmentId + "]").removeAttr('selected').attr('selected', 'selected');
+                            // $(qcs.combo.users + " option[value=" + d.view.apartmentId + "]").removeAttr('selected').attr('selected', 'selected');
 
                             // $(qcs.user_email_valid).val(d.View.Email);
 
@@ -676,17 +712,11 @@
                         autoHide: false,
                         template: function (row) {
 
-
-                            return '\
-                                                                                                                                <a href="javascript:;" class="btn btn-sm btn-clean btn-icon  modal-housing-edit" data-housing-id=' + row.id + ' data-toggle="tooltip" data-theme="dark" title="Edit" >\
-                                                                                                                    <i class="la la-pencil"></i>\
-                                                                                                                                </a>\
-                                                                                                                              \
-                                                                                                                                     <a href="javascript:;" class="btn btn-sm btn-clean btn-icon" data-delete-id='+ row.id + ' data-toggle="tooltip" data-theme="dark" title="Delete">\
-                                                                                                                                    <i class="la fa-trash"></i>\
-                                                                                                                                </a>\
-                                                                                                                            ';
-
+                            var r = `
+                                    <a href="javascript:;" class="btn btn-sm btn-clean btn-icon modal-user-edit" data-user-id='${row.id}' data-toggle="tooltip" title="Edit"><i class="la la-pencil"></i></a>
+                                    <a href="javascript:;" class="btn btn-sm btn-clean btn-icon" data-delete-id='${row.id}' data-toggle="tooltip" title="Delete"><i class="la fa-trash"></i></a>
+                                            `;
+                            return r;
 
 
                         },
@@ -702,17 +732,6 @@
                 datatable.search(status, 'isActive');
 
             });
-
-            $('#combof-months').on('change', function (e) {
-
-
-
-            });
-
-
-
-
-
 
             // $('#kt_datatable_search_type').on('change', function () {
             //     datatable.search($(this).val().toLowerCase(), 'Type');
