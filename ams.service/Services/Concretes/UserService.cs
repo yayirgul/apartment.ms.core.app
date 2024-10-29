@@ -23,6 +23,26 @@
             this.RoleManager = RoleManager;
         }
 
+        public async Task<Result.ViewResult> GetUserVerify(string user_id, string token)
+        {
+            var view = new Result.ViewResult();
+
+            var user = await UserManager.FindByIdAsync(user_id);
+
+            if (user != null)
+            {
+                var result = await UserManager.ConfirmEmailAsync(user, token);
+
+                if (result.Succeeded)
+                {
+                    view.IsSucceed = true;
+                    view.Statuses = "x-verify";
+                }
+            }
+
+            return view;
+        }
+
         public async Task<Result.ViewResult> AddAsync(UserDTO.Add dto)
         {
             var view = new Result.ViewResult();
@@ -50,8 +70,13 @@
                     var role = await RoleManager.FindByIdAsync(dto.RoleId.ToString());
                     await UserManager.AddToRoleAsync(user, role!.ToString());
 
+                    var token = await UserManager.GenerateEmailConfirmationTokenAsync(user); 
+
                     view.IsSucceed = true;
                     view.Statuses = "x-add";
+                    view.Key = user.Id.ToString();
+                    view.Token = token;
+
                 }
                 else
                 {
@@ -73,29 +98,32 @@
             var view = new Result.ViewResult();
 
             var q_user = await UserManager.FindByIdAsync(dto.Id.ToString());
-            var q_role = string.Join("", UserManager.GetRolesAsync(q_user!));
+            var q_role = string.Join("", await UserManager.GetRolesAsync(q_user!));
 
-            var user = new AppUser()
-            {
-                UserName = dto.Email,
-                Firstname = dto.Firstname,
-                Lastname = dto.Lastname,
-                Email = dto.Email,
-                ModifiedUser = dto.ModifiedUser,
-                PhoneNumber = dto.Phone
-            };
+            //var user = new AppUser()
+            //{
+            //    Id = dto.Id,
+            //    PhoneNumber = dto.Phone
+            //};
 
-            var result = await UserManager.UpdateAsync(user);
+            q_user!.UserName = dto.Email;
+            q_user.Firstname = dto.Firstname;
+            q_user.Lastname = dto.Lastname;
+            q_user.Email = dto.Email;
+            q_user!.ModifiedUser = dto.ModifiedUser;
+            q_user.ModifiedTime = dto.ModifiedTime;
+
+            var result = await UserManager.UpdateAsync(q_user);
 
             if (result.Succeeded)
             {
                 var role = await RoleManager.FindByIdAsync(dto.RoleId.ToString());
 
-                await UserManager.RemoveFromRoleAsync(user!, q_role);
-                await UserManager.AddToRoleAsync(user!, role!.Name!);
+                await UserManager.RemoveFromRoleAsync(q_user!, q_role);
+                await UserManager.AddToRoleAsync(q_user!, role!.Name!);
 
                 view.IsSucceed = true;
-                view.Statuses = "x-add";
+                view.Statuses = "x-edit";
             }
             else
             {

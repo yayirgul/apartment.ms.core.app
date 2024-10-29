@@ -5,6 +5,7 @@ namespace ams.service.Services.Abstractions
 {
     public interface IUserService
     {
+        Task<Result.ViewResult> GetUserVerify(string user_id, string token);
         Task<Result.ViewResult> EditAsync(UserDTO.Edit dto);
         Task<Result.ViewResult> AddAsync(UserDTO.Add dto);
         Task<Result.ListResult<UserDTO.ComboBox>> GetComboHousingUser(Guid apartment_id);

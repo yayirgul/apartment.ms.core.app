@@ -10,39 +10,74 @@
     public class UserController : Controller
     {
         private readonly IUserService UserService;
+        private readonly IMailSender MailSender;
+        private readonly IHttpContextAccessor HttpContextAccessor;
 
-        public UserController(IUserService UserService)
+        public UserController(IUserService UserService, IMailSender MailSender, IHttpContextAccessor HttpContextAccessor)
         {
             this.UserService = UserService;
+            this.MailSender = MailSender;
+            this.HttpContextAccessor = HttpContextAccessor;
         }
 
-        [HttpPost, Route("ams/app/user/add")]
-        public async Task<JsonResult> UserEdit(UserDTO.Add dto)
+        [HttpPost, Route("ams/app/user/edit")]
+        public async Task<JsonResult> UserEdit(UserDTO.Edit dto)
         {
             var User = HttpContext.Session.GetSession<UserDTO.User>(Unit.Constants.SESSION_USER);
 
             var result = new Result.ViewResult();
-              
+
             Guid user_id;
 
             if (Guid.TryParse(dto.Id.ToString(), out user_id) && dto.Id != Guid.Empty)
             {
-                var d = new UserDTO.Edit()
-                {
-                    Id = user_id,
-                    Firstname = dto.Firstname,
-                    Lastname = dto.Lastname,
-                    Email = dto.Email,
-                    ModifiedTime = DateTime.UtcNow,
-                    ModifiedUser = User!.Id
-                };
-                //result = await UserService.EditAsync(d);
+                dto.Id = user_id;
+                dto.ModifiedTime = DateTime.UtcNow;
+                dto.ModifiedUser = User!.Id;
+                result = await UserService.EditAsync(dto);
+
+                //var request = HttpContextAccessor!.HttpContext!.Request;
+                //var url = $"{request.Scheme}://{request.Host}/ams/app/verify-user/" + result.Key + "/" + result.Token;
+
+                //var mail = new
+                //{
+                //    subject = "AMS - Hesabını Onayla",
+                //    body = $"Lütfen sen olduğunu doğrula. <a href='{url}'>E-Posta Adresini Doğrula</a>"
+                //};
+
+                //await MailSender.MailSendAsync(dto.Email!, mail.subject, mail.body);
             }
             else
             {
-                dto.CreateUser = User!.Id;
-                dto.AccountId = (Guid)User!.AccountId!;
-                result = await UserService.AddAsync(dto);
+
+            }
+
+            return Json(result);
+        }
+
+        [HttpPost, Route("ams/app/user/add")]
+        public async Task<JsonResult> UserAdd(UserDTO.Add dto)
+        {
+            var User = HttpContext.Session.GetSession<UserDTO.User>(Unit.Constants.SESSION_USER);
+
+            var result = new Result.ViewResult();
+
+            dto.CreateUser = User!.Id;
+            dto.AccountId = (Guid)User!.AccountId!;
+            result = await UserService.AddAsync(dto);
+
+            if (result.IsSucceed)
+            {
+                var request = HttpContextAccessor!.HttpContext!.Request;
+                var url = $"{request.Scheme}://{request.Host}/ams/app/verify-user/" + result.Key + "/" + result.Token;
+
+                var mail = new
+                {
+                    subject = "AMS - Hesabını Onayla",
+                    body = $"Lütfen sen olduğunu doğrula. <a href='{url}'>E-Posta Adresini Doğrula</a>"
+                };
+
+                await MailSender.MailSendAsync(dto.Email!, mail.subject, mail.body);
             }
 
             return Json(result);

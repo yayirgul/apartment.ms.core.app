@@ -87,7 +87,7 @@
                     <i aria-hidden="true" class="ki ki-close"></i>
                 </button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body pb-0">
 
                 <form class="form" id="form-user">
 
@@ -112,15 +112,15 @@
 
                         <div class="col-xl-12 mb-6">
                             <label>* Rol</label>
-                            <select class="form-control" name="Roles" id="combo-roles"></select>
+                            <select class="form-control" name="RoleX" id="combo-role-x"></select>
                         </div>
 
-                        <div class="col-xl-6 mb-6">
+                        <div class="col-xl-6 mb-7">
                             <label>* Parola</label>
                             <input type="text" name="Password" class="form-control" placeholder="">
                         </div>
 
-                        <div class="col-xl-6">
+                        <div class="col-xl-6 mb-7">
                             <label>* Parola Onay</label>
                             <input type="text" name="ConfirmPassword" class="form-control" placeholder="">
                         </div>
@@ -133,6 +133,53 @@
             <div class="modal-footer">
                 @*<button type="button" class="btn btn-light-primary font-weight-bold" data-dismiss="modal">Close</button>*@
                 <button type="button" id="button-user" class="btn btn-primary font-weight-bold">Kaydet</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-update-user" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-expense-title">Düzenle</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+            <div class="modal-body pb-0">
+
+                <form class="form" id="form-update-user">
+
+                    <div class="form-group mb-0 row">
+
+                        <div class="col-xl-6 mb-6">
+                            <label>* Adınız</label>
+                            <input type="text" name="FirstnameX" class="form-control" placeholder="">
+                        </div>
+
+                        <div class="col-xl-6">
+                            <label>* Soyadınız</label>
+                            <input type="text" name="LastnameX" class="form-control" placeholder="">
+                        </div>
+
+                        <div class="col-xl-12 mb-6">
+                            <label>* E-Posta</label>
+                            <input type="text" name="EmailX" class="form-control" placeholder="">
+                        </div>
+
+                        <div class="col-xl-12 mb-7">
+                            <label>* Rol</label>
+                            <select class="form-control" name="RoleXX" id="combo-role-xx"></select>
+                        </div>
+
+                    </div>
+
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="button-update-user" class="btn btn-primary font-weight-bold">Kaydet</button>
             </div>
         </div>
     </div>
@@ -162,13 +209,18 @@
                 lastname: "[name='Lastname']",
                 email: "[name='Email']",
                 password: "[name='Password']",
-                password_confirm: "[name='ConfirmPassword']"
+                password_confirm: "[name='ConfirmPassword']",
+                update_firstname: "[name='FirstnameX']",
+                update_lastname: "[name='LastnameX']",
+                update_email: "[name='EmailX']",
             },
             select: {
-                roles: "select[name='Roles']"
+                role_x: "select[name='RoleX']",
+                role_xx: "select[name='RoleXX']",
             },
             combo: {
-                roles: '#combo-roles',
+                role_x: '#combo-role-x',
+                role_xx: '#combo-role-xx',
                 filter: {
                     apartments: '#combo-filter-apartments',
                 }
@@ -177,10 +229,11 @@
                 user: '#modal-user',
                 user_new: '#modal-user-new',
                 user_edit: '.modal-user-edit',
+                update_user: '#modal-update-user',
             }
         }
 
-        function combo_roles() {
+        function combo_roles(type) {
 
             $.ajax({
                 type: 'GET',
@@ -195,15 +248,35 @@
                         switch (d.statuses) {
                             case 'x-combo':
 
-                                $.each(d.listView, function (i, v) {
+                                if (type == 'create') {
 
-                                    if (i == 0) {
-                                        $(qcs.combo.roles).append('<option value=' + v.id + ' selected="selected">' + v.displayName + '</option>');
-                                    } else {
-                                        $(qcs.combo.roles).append('<option value=' + v.id + '>' + v.displayName + '</option>');
-                                    }
+                                    $(qcs.combo.role_x).empty();
 
-                                });
+                                    $.each(d.listView, function (i, v) {
+
+                                        if (i == 0) {
+                                            $(qcs.combo.role_x).append('<option value=' + v.id + ' selected="selected">' + v.displayName + '</option>');
+                                        } else {
+                                            $(qcs.combo.role_x).append('<option value=' + v.id + '>' + v.displayName + '</option>');
+                                        }
+
+                                    });
+
+                                } else {
+
+                                    $(qcs.combo.role_xx).empty();
+
+                                    $.each(d.listView, function (i, v) {
+
+                                        if (i == 0) {
+                                            $(qcs.combo.role_xx).append('<option value=' + v.id + ' selected="selected">' + v.displayName + '</option>');
+                                        } else {
+                                            $(qcs.combo.role_xx).append('<option value=' + v.id + '>' + v.displayName + '</option>');
+                                        }
+
+                                    });
+
+                                }
 
                                 break;
 
@@ -221,7 +294,7 @@
 
         }
 
-        function users() {
+        function create_user() {
 
             const form_user = document.getElementById('form-user');
             const button_user = document.getElementById('button-user');
@@ -323,7 +396,7 @@
                          
                             var dm = {
                                 Id: $(qcs.input.user_id).val(),
-                                RoleId: $(qcs.select.roles).val(),
+                                RoleId: $(qcs.select.role_x).val(),
                                 Firstname: $(qcs.input.firstname).val(),
                                 Lastname: $(qcs.input.lastname).val(),
                                 Email: $(qcs.input.email).val(),
@@ -331,12 +404,12 @@
                                 ConfirmPassword: $(qcs.input.password_confirm).val(),
                             };
 
-                            if(dm.Id != '') {
-                                fv.resetField("Password");
-                                fv.resetField("ConfirmPassword");
-                                fv.removeField("Password");
-                                fv.removeField("ConfirmPassword");
-                            }
+                            // if(dm.Id != '') {
+                            //     fv.resetField("Password");
+                            //     fv.resetField("ConfirmPassword");
+                            //     fv.removeField("Password");
+                            //     fv.removeField("ConfirmPassword");
+                            // }
 
                             console.log(dm);
 
@@ -429,13 +502,12 @@
                 });
             });
 
-
-
-
             // -------------------------------------------------------------------------------------------
 
             // TODO : Kullanıcı girebileceğimiz "Modal" açma
             $(document).delegate(qcs.modal.user_new, 'click', function () {
+
+                combo_roles('create');
 
                 $(qcs.input.user_id).removeAttr("value");
 
@@ -446,8 +518,180 @@
 
             });
 
+        }
+
+        function update_user() {
+
+            const form_user = document.getElementById('form-update-user');
+            const button_user = document.getElementById('button-update-user');
+
+            const fv = FormValidation.formValidation(form_user, {
+
+                fields: {
+
+                    FirstnameX: {
+                        validators: {
+                            notEmpty: {
+                                message: 'Adınız boş geçilemez.'
+                            },
+                            stringLength: {
+                                min: 2,
+                                max: 50,
+                                message: 'Adınız minimum 2, maksimum 100 karakter olmalıdır.'
+                            }
+                        }
+                    },
+
+                    LastnameX: {
+                        validators: {
+                            notEmpty: {
+                                message: 'Soyadınızı boş geçilemez.'
+                            },
+                            stringLength: {
+                                min: 2,
+                                max: 50,
+                                message: 'Soyadınızı minimum 2, maksimum 100 karakter olmalıdır.'
+                            }
+                        }
+                    },
+
+                    EmailX: {
+                        validators: {
+                            notEmpty: {
+                                message: 'E-posta boş geçilemez.'
+                            },
+                            emailAddress: {
+                                message: 'E-posta geçerli değil.'
+                            },
+                            stringLength: {
+                                min: 5,
+                                max: 50,
+                                message: 'E-posta alanı minimum 5, maksimum 100 karakter olmalıdır.'
+                            }
+                        }
+                    }
+
+                },
+                plugins: {
+                    trigger: new FormValidation.plugins.Trigger(),
+                    bootstrap: new FormValidation.plugins.Bootstrap(),
+                },
+            }).on('core.form.validating', function () {
+                button_user.innerHTML = 'Doğrulanıyor ...';
+            });
+
+            button_user.addEventListener('click', function () {
+
+                fv.validate().then(function (status) {
+
+                    button_user.innerHTML = status === 'Valid' ? 'Güncelleniyor...' : 'Lütfen tekrar deneyin';
+
+                    console.log(status);
+
+                    switch (status) {
+                        case "Valid":
+
+                            var dm = {
+                                Id: $(qcs.input.user_id).val(),
+                                RoleId: $(qcs.select.role_xx).val(),
+                                Firstname: $(qcs.input.update_firstname).val(),
+                                Lastname: $(qcs.input.update_lastname).val(),
+                                Email: $(qcs.input.update_email).val(),
+                            };
+
+                            $.post("/ams/app/user/edit", dm, function (d) {
+
+                                console.log(d);
+
+                                if (d.isSucceed) {
+                                    switch (d.statuses) {
+                                        case 'x-edit':
+
+                                            Swal.fire({
+                                                title: "Güncelleniyor",
+                                                text: "Kullanıcı bilgileri güncelleniyor.",
+                                                icon: "success",
+                                                timer: 4000,
+                                                onOpen: function () {
+                                                    Swal.showLoading()
+                                                },
+                                                allowOutsideClick: false,
+                                                allowEscapeKey: false,
+                                                buttonsStyling: false,
+                                                confirmButtonText: "<i class='la la-headphones'></i> I am game!",
+                                                showCancelButton: false,
+                                                cancelButtonText: "<i class='la la-thumbs-down'></i> No, thanks",
+                                                customClass: {
+                                                    confirmButton: "btn btn-danger",
+                                                    cancelButton: "btn btn-default"
+                                                }
+                                            }).then(function (r) {
+
+                                                if (r.dismiss === "timer") {
+
+                                                    $(qcs.modal.update_user).modal('hide');
+                                                    l_users();
+                                                }
+
+                                            });
+
+                                            break;
+                                        case 'x-fail':
+
+                                            break;
+                                    }
+                                }
+
+
+                            }).done(function () {
+
+                            }).fail(function (jqXHR, textStatus, errorThrown) {
+
+                            }).always(function () {
+
+                            });
+
+                            break;
+                        case 'Invalid':
+
+                            Swal.fire({
+                                title: "Hata",
+                                text: "Zorunlu alanlar boş geçilemez.",
+                                icon: "error",
+                                timer: 4000,
+                                onOpen: function () {
+                                    Swal.showLoading()
+                                },
+                                allowOutsideClick: false,
+                                allowEscapeKey: false,
+                                buttonsStyling: false,
+                                confirmButtonText: "<i class='la la-headphones'></i> I am game!",
+                                showCancelButton: false,
+                                cancelButtonText: "<i class='la la-thumbs-down'></i> No, thanks",
+                                customClass: {
+                                    confirmButton: "btn btn-danger",
+                                    cancelButton: "btn btn-default"
+                                }
+                            }).then(function (r) {
+
+                                if (r.dismiss === "timer") {
+                                    button_user.innerHTML = "Güncelle";
+                                }
+
+                            });
+
+                            break;
+                        default:
+                    }
+
+                });
+            });
+
+            // -------------------------------------------------------------
+
             $(document).delegate(qcs.modal.user_edit, 'click', function () {
 
+                combo_roles('update');
                 button_user.innerHTML = "Güncelle";
 
                 var filter = {
@@ -456,25 +700,11 @@
 
                 g_user(filter.user_id);
 
-                $(qcs.modal.user).modal();
+                $(qcs.modal.update_user).modal();
 
             });
-
-            $(document).delegate("#modal-expense-title", 'click', function () {
-
-                console.log("test");
-           
-                fv.resetField("Password");
-                fv.resetField("ConfirmPassword");
-
-                fv.removeField("Password");
-                fv.removeField("ConfirmPassword");
-
-            });
-             
 
         }
-
 
         function g_user(user_id) {
 
@@ -490,14 +720,13 @@
                     switch (d.statuses) {
                         case 'x-detail':
 
-
                             $(qcs.input.user_id).val(d.view.id);
-                            $(qcs.input.firstname).val(d.view.firstname);
-                            $(qcs.input.lastname).val(d.view.lastname);
-                            $(qcs.input.email).val(d.view.email);
+                            $(qcs.input.update_firstname).val(d.view.firstname);
+                            $(qcs.input.update_lastname).val(d.view.lastname);
+                            $(qcs.input.update_email).val(d.view.email);
 
 
-                            $(qcs.combo.roles + " option[value=" + d.view.roleId + "]").removeAttr('selected').attr('selected', 'selected');
+                            $(qcs.combo.role_xx + " option[value=" + d.view.roleId + "]").removeAttr('selected').attr('selected', 'selected');
                              
 
                             // $(qcs.label_username).attr("data-label-username", d.View.Username);
@@ -757,21 +986,16 @@
 
         $(function () {
 
-            combo_roles();
             l_users();
-            users();
+            create_user();
+            update_user();
 
             $(qcs.table).tooltip({
                 selector: '[data-toggle=tooltip]',
                 container: 'body'
             });
 
-
-
-
         });
-
-
 
     </script>
 

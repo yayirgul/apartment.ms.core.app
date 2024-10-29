@@ -7,11 +7,13 @@
             public bool IsSucceed { get; set; }
             public string Statuses { get; set; } = null!;
             public string Message { get; set; } = null!;
-        } 
-        
+            public string Key { get; set; } = null!;
+            public string Token { get; set; } = null!;
+        }
+
         public class ViewResult<T>
         {
-            public T? View { get; set; }  
+            public T? View { get; set; }
             public bool IsSucceed { get; set; }
             public string Statuses { get; set; } = null!;
             public string Message { get; set; } = null!;
