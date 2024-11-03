@@ -694,6 +694,8 @@
                 combo_roles('update');
                 button_user.innerHTML = "Güncelle";
 
+                fv.resetForm("form-update-user");
+
                 var filter = {
                     user_id: $(this).data("user-id"),
                 }
@@ -855,8 +857,6 @@
                     input: $('#kt_datatable_search_query'),
                     key: 'generalSearch',
                 },
-
-                // columns definition
                 columns: [
                     {
                         field: 'id',
@@ -871,7 +871,11 @@
                         field: 'displayName',
                         title: 'Kullancı',
                         template: function (row) {
-                            return row.displayName;
+                            var status = {
+                                1: { 'class': ' label label-outline-success label-inline' },
+                                0: { 'class': ' label label-outline-danger label-inline' },
+                            };
+                            return '<span class="label font-weight-bold label-lg ' + status[row.emailConfirmed].class + ' label-inline">' + row.displayName + '</span>';
                         },
                     },
                     {
@@ -891,7 +895,6 @@
                         field: 'createUser',
                         title: 'Oluşturan',
                     },
-
                     {
                         field: 'isActive',
                         title: 'Durum',

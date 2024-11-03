@@ -11,6 +11,6 @@ namespace ams.service.Services.Abstractions
         Task<Result.ListResult<UserDTO.ComboBox>> GetComboHousingUser(Guid apartment_id);
         Task<List<UserDTO.ComboBox>> GetComboUsers();
         Task<Result.ViewResult<UserDTO.Detail>> GetUser(Guid user_id);
-        Task<List<UserDTO.List>> GetUsers();
+        Task<List<UserDTO.Table>> GetUsers();
     }
 }

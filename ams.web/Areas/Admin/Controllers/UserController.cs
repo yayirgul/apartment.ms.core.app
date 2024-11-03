@@ -5,6 +5,8 @@
     using ams.service.Services.Abstractions;
     using ams.web.Helpers;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.WebUtilities;
+    using System.Text;
 
     [Area("admin")]
     public class UserController : Controller
@@ -69,7 +71,10 @@
             if (result.IsSucceed)
             {
                 var request = HttpContextAccessor!.HttpContext!.Request;
-                var url = $"{request.Scheme}://{request.Host}/ams/app/verify-user/" + result.Key + "/" + result.Token;
+                //var url = $"{request.Scheme}://{request.Host}/ams/app/user/verify/" + result.Key + "?token=" + HttpUtility.UrlEncode(result.Token);
+
+                var token = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(result.Token));
+                var url = $"{request.Scheme}://{request.Host}/ams/app/user/verify/" + result.Key + "?token=" + token;
 
                 var mail = new
                 {

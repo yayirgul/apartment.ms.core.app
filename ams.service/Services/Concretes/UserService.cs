@@ -70,7 +70,7 @@
                     var role = await RoleManager.FindByIdAsync(dto.RoleId.ToString());
                     await UserManager.AddToRoleAsync(user, role!.ToString());
 
-                    var token = await UserManager.GenerateEmailConfirmationTokenAsync(user); 
+                    var token = await UserManager.GenerateEmailConfirmationTokenAsync(user);
 
                     view.IsSucceed = true;
                     view.Statuses = "x-add";
@@ -234,7 +234,7 @@
             return view;
         }
 
-        public async Task<List<UserDTO.List>> GetUsers()
+        public async Task<List<UserDTO.Table>> GetUsers()
         {
             var l = await UserManager.Users.ToListAsync();
 
@@ -251,13 +251,13 @@
             //});
 
 
-            var users = new List<UserDTO.List>();
+            var users = new List<UserDTO.Table>();
 
             foreach (var user in l)
             {
                 var fuser = await UserManager.FindByIdAsync(user.Id.ToString());
 
-                users.Add(new UserDTO.List()
+                users.Add(new UserDTO.Table()
                 {
                     Id = user.Id,
                     AccountId = user.AccountId,
@@ -267,6 +267,7 @@
                     IsActive = user.IsActive ? 1 : 2,
                     _CreateTime = user.CreateTime != null ? user.CreateTime.ToString("dd/MM/yyyy") : "-",
                     _ModifiedTime = user.ModifiedTime != null ? user.ModifiedTime.Value.ToString("dd/MM/yyyy") : "-",
+                    EmailConfirmed = user.EmailConfirmed ? 1 : 0
                 });
             }
 

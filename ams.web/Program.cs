@@ -45,6 +45,7 @@ builder.Services.AddIdentity<AppUser, AppRole>(opt =>
 
     opt.SignIn.RequireConfirmedEmail = true; // Sisteme girecek kişinin "Email" adresinin onaylı olup olmadığını kontrol ediyor. Onaylı değilse sisteme giriş yapamaz.
     //opt.SignIn.RequireConfirmedPhoneNumber = false; // Aynı durum telefon içinde geçerlidir.
+
 })
 .AddRoleManager<RoleManager<AppRole>>()
 .AddEntityFrameworkStores<AppDbContext>()

@@ -49,13 +49,14 @@
             public Guid RoleId { get; set; }
         }
 
-        public class List
+        public class Table
         {
             public Guid Id { get; set; }
             public Guid? AccountId { get; set; }
             public string? Firstname { get; set; }
             public string? Lastname { get; set; }
             public string Email { get; set; } = null!;
+            public int EmailConfirmed { get; set; } = 0;
             public string? Role { get; set; }
             public string? DisplayName { get; set; }
             public int IsActive { get; set; }
