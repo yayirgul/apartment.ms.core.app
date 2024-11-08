@@ -88,10 +88,16 @@
             return Json(result);
         }
 
+        [HttpGet, Route("ams/app/combo-housing-user/{housing_id}")]
+        public async Task<JsonResult> GetComboHousingUser(Guid housing_id)
+        {
+            return Json(await UserService.GetComboHousingUser(housing_id));
+        }
+
         [HttpGet, Route("ams/app/combo-housing-users/{apartment_id}")]
         public async Task<JsonResult> GetComboHousingUsers(Guid apartment_id)
         {
-            return Json(await UserService.GetComboHousingUser(apartment_id));
+            return Json(await UserService.GetComboHousingUsers(apartment_id));
         }
 
         [HttpGet, Route("ams/app/combo-users")]

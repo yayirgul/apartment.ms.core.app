@@ -175,108 +175,9 @@
         }
 
 
-        function combo_users(apartment_id) {
-
-            $(qcs.combo.users).find('option').remove();
-
-            $.ajax({
-                type: 'GET',
-                url: "/ams/app/combo-housing-users/" + apartment_id,
-                async: false,
-                dataType: 'json',
-                success: function (d) {
-
-                    if (d.isSucceed) {
-                        switch (d.statuses) {
-                            case 'x-list':
-
-                                console.log(d.listView);
-
-                                $.each(d.listView, function (i, v) {
-
-                                    if (i == 0) {
-                                        $(qcs.combo.users).append('<option value=' + v.id + ' selected="selected">' + v.displayName + '</option>');
-                                    } else {
-                                        $(qcs.combo.users).append('<option value=' + v.id + '>' + v.displayName + '</option>');
-                                    }
-
-                                });
-
-                                break;
-                            case 'x-fail':
-
-                                Swal.fire({
-                                    title: "Hata",
-                                    text: "İstenmeyen bir hata oluştu.",
-                                    icon: "error",
-                                    timer: 4000,
-                                    onOpen: function () {
-                                        Swal.showLoading()
-                                    },
-                                    allowOutsideClick: false,
-                                    allowEscapeKey: false,
-                                    buttonsStyling: false,
-                                    confirmButtonText: "<i class='la la-headphones'></i> I am game!",
-                                    showCancelButton: false,
-                                    cancelButtonText: "<i class='la la-thumbs-down'></i> No, thanks",
-                                    customClass: {
-                                        confirmButton: "btn btn-danger",
-                                        cancelButton: "btn btn-default"
-                                    }
-                                }).then(function (r) {
-
-                                    if (r.dismiss === "timer") {
-                                        $(qcs.modal.expense).modal('hide');
-                                        l_expenses(dm.ApartmentId, dm.Month, dm.Year);
-                                    }
-                                });
-
-                                break;
-                        }
-                    }
 
 
 
-
-
-
-
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    console.log('Could not get posts, server response: ' + textStatus + ': ' + errorThrown);
-                }
-            });
-
-        }
-
-        function combo_apartments() {
-
-            $.ajax({
-                type: 'GET',
-                url: "/ams/app/combo-apartments",
-                async: false,
-                dataType: 'json',
-                success: function (data) {
-
-                    $.each(data, function (i, v) {
-
-                        if (i == 0) {
-                            $(qcs.combo.filter.apartments).append('<option value=' + v.id + ' selected="selected">' + v.apartmentName + '</option>');
-                            $(qcs.combo.apartments).append('<option value=' + v.id + ' selected="selected">' + v.apartmentName + '</option>');
-                        } else {
-                            $(qcs.combo.filter.apartments).append('<option value=' + v.id + '>' + v.apartmentName + '</option>');
-                            $(qcs.combo.apartments).append('<option value=' + v.id + '>' + v.apartmentName + '</option>');
-                        }
-
-                    });
-
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    console.log('Could not get posts, server response: ' + textStatus + ': ' + errorThrown);
-                }
-            });
-
-        }
 
 
         // $(qcs.modal_user_email).modal('hide');
@@ -503,9 +404,8 @@
 
             });
 
-            // TODO : Gider girebileceğimiz "Modal" açma
+            // TODO : Konut girebileceğimiz "Modal" açma
             $(document).delegate(qcs.modal.housing_new, 'click', function () {
-
 
                 var filter = {
                     apartment_id: $(qcs.combo.filter.apartments).val(),
@@ -521,13 +421,19 @@
 
             });
 
-            // TODO : Gider düzenleyeceğimiz "Modal" açma
+            // TODO : Konut düzenleyeceğimiz "Modal" açma
             $(document).delegate(qcs.modal.housing_edit, 'click', function () {
 
                 // fv_expense_save.innerHTML = "Kaydet";
-                var filter = { id: $(this).data('housing-id') }
+                var filter = { 
+                    apartment_id: $(qcs.combo.filter.apartments).val(),
+                    housing_id: $(this).data('housing-id')
+                }
 
-                g_housing(filter.id);
+                combo_users(filter.apartment_id);
+                combo_housing_user(filter.housing_id);
+
+                g_housing(filter.housing_id);
 
                 $(qcs.modal.housing).modal();
 
@@ -535,6 +441,168 @@
 
         }
 
+        function combo_housing_user(housing_id) {
+
+            $.ajax({
+                type: 'GET',
+                url: "/ams/app/combo-housing-user/" + housing_id,
+                async: false,
+                dataType: 'json',
+                success: function (d) {
+
+                    if (d.isSucceed) {
+                        switch (d.statuses) {
+                            case 'x-list':
+
+                                console.log(d.listView);
+
+                                $.each(d.listView, function (i, v) {
+
+                                    if (i == 0) {
+                                        $(qcs.combo.users).append('<option value=' + v.id + ' selected="selected">' + v.displayName + '</option>');
+                                    } else {
+                                        $(qcs.combo.users).append('<option value=' + v.id + '>' + v.displayName + '</option>');
+                                    }
+
+                                });
+
+                                break;
+                            case 'x-fail':
+
+                                Swal.fire({
+                                    title: "Hata",
+                                    text: "İstenmeyen bir hata oluştu.",
+                                    icon: "error",
+                                    timer: 4000,
+                                    onOpen: function () {
+                                        Swal.showLoading()
+                                    },
+                                    allowOutsideClick: false,
+                                    allowEscapeKey: false,
+                                    buttonsStyling: false,
+                                    confirmButtonText: "<i class='la la-headphones'></i> I am game!",
+                                    showCancelButton: false,
+                                    cancelButtonText: "<i class='la la-thumbs-down'></i> No, thanks",
+                                    customClass: {
+                                        confirmButton: "btn btn-danger",
+                                        cancelButton: "btn btn-default"
+                                    }
+                                }).then(function (r) {
+
+                                    if (r.dismiss === "timer") {
+                                        $(qcs.modal.expense).modal('hide');
+                                        l_expenses(dm.ApartmentId, dm.Month, dm.Year);
+                                    }
+                                });
+
+                                break;
+                        }
+                    }
+
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log('Could not get posts, server response: ' + textStatus + ': ' + errorThrown);
+                }
+            });
+
+        }
+
+        function combo_users(apartment_id) {
+
+            $(qcs.combo.users).find('option').remove();
+
+            $.ajax({
+                type: 'GET',
+                url: "/ams/app/combo-housing-users/" + apartment_id,
+                async: false,
+                dataType: 'json',
+                success: function (d) {
+
+                    if (d.isSucceed) {
+                        switch (d.statuses) {
+                            case 'x-list':
+
+                                console.log(d.listView);
+
+                                $.each(d.listView, function (i, v) {
+
+                                    if (i == 0) {
+                                        $(qcs.combo.users).append('<option value=' + v.id + ' selected="selected">' + v.displayName + '</option>');
+                                    } else {
+                                        $(qcs.combo.users).append('<option value=' + v.id + '>' + v.displayName + '</option>');
+                                    }
+
+                                });
+
+                                break;
+                            case 'x-fail':
+
+                                Swal.fire({
+                                    title: "Hata",
+                                    text: "İstenmeyen bir hata oluştu.",
+                                    icon: "error",
+                                    timer: 4000,
+                                    onOpen: function () {
+                                        Swal.showLoading()
+                                    },
+                                    allowOutsideClick: false,
+                                    allowEscapeKey: false,
+                                    buttonsStyling: false,
+                                    confirmButtonText: "<i class='la la-headphones'></i> I am game!",
+                                    showCancelButton: false,
+                                    cancelButtonText: "<i class='la la-thumbs-down'></i> No, thanks",
+                                    customClass: {
+                                        confirmButton: "btn btn-danger",
+                                        cancelButton: "btn btn-default"
+                                    }
+                                }).then(function (r) {
+
+                                    if (r.dismiss === "timer") {
+                                        $(qcs.modal.expense).modal('hide');
+                                        l_expenses(dm.ApartmentId, dm.Month, dm.Year);
+                                    }
+                                });
+
+                                break;
+                        }
+                    }
+
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log('Could not get posts, server response: ' + textStatus + ': ' + errorThrown);
+                }
+            });
+
+        }
+
+        function combo_apartments() {
+
+            $.ajax({
+                type: 'GET',
+                url: "/ams/app/combo-apartments",
+                async: false,
+                dataType: 'json',
+                success: function (data) {
+
+                    $.each(data, function (i, v) {
+
+                        if (i == 0) {
+                            $(qcs.combo.filter.apartments).append('<option value=' + v.id + ' selected="selected">' + v.apartmentName + '</option>');
+                            $(qcs.combo.apartments).append('<option value=' + v.id + ' selected="selected">' + v.apartmentName + '</option>');
+                        } else {
+                            $(qcs.combo.filter.apartments).append('<option value=' + v.id + '>' + v.apartmentName + '</option>');
+                            $(qcs.combo.apartments).append('<option value=' + v.id + '>' + v.apartmentName + '</option>');
+                        }
+
+                    });
+
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log('Could not get posts, server response: ' + textStatus + ': ' + errorThrown);
+                }
+            });
+
+        }
 
         function g_housing(housing_id) {
 
@@ -639,7 +707,6 @@
             });
 
         }
-
 
         function l_housings(apartment_id) {
 

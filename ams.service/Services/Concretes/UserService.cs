@@ -134,13 +134,41 @@
             return view;
         }
 
-        public async Task<Result.ListResult<UserDTO.ComboBox>> GetComboHousingUser(Guid apartment_id)
+        public async Task<Result.ListResult<UserDTO.ComboBox>> GetComboHousingUser(Guid housing_id)
+        {
+            var result = new Result.ListResult<UserDTO.ComboBox>();
+            var lv = new List<UserDTO.ComboBox>();
+
+            var housing = await Uow.GetRepository<Housing>().GetAsync(x => !x.IsDeleted && x.IsActive == true && x.Id == housing_id);
+
+            if (housing != null)
+            {
+                var user = await UserManager.Users.Where(x => x.IsActive == true && x.Id == housing.HousingUser).FirstOrDefaultAsync();
+
+                if (user != null)
+                {
+                    lv.Add(new UserDTO.ComboBox()
+                    {
+                        Id = user.Id,
+                        DisplayName = user.Firstname + " " + user.Lastname,
+                    });
+                }
+            }
+            
+            result.ListView = lv;
+            result.IsSucceed = true;
+            result.Statuses = lv.Count() > 0 ? "x-list" : lv.Count() == 0 ? "x-list" : "x-fail";
+
+            return result;
+        }
+
+        public async Task<Result.ListResult<UserDTO.ComboBox>> GetComboHousingUsers(Guid apartment_id)
         {
             var result = new Result.ListResult<UserDTO.ComboBox>();
             var lv = new List<UserDTO.ComboBox>();
 
             var l = await UserManager.Users.Where(x => x.IsActive == true).ToListAsync();
-            var housing = await Uow.GetRepository<Housing>().GetAllAsync(x => !x.IsDeleted && x.IsActive == true && x.ApartmentId == apartment_id);
+            var housing = await Uow.GetRepository<Housing>().GetAllAsync(x => !x.IsDeleted && x.IsActive == true && x.ApartmentId == apartment_id); // LIST
 
             foreach (var user in l)
             {
