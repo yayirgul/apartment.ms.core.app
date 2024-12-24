@@ -244,7 +244,17 @@
                                 </div>
                             </div>
                         </div>
-                          
+
+                        <div class="col-xl-12">
+                            <div class="option mb-6">
+                                <div class="option-label">
+                                    <div class="option-body pt-0">
+                                        <div class="datatable datatable-bordered datatable-head-custom" id="t-unpaid"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="col-xl-12">
                             <div class="option mb-0">
                                 <div class="option-label">
@@ -356,9 +366,10 @@
                     year: _date.getFullYear(),
                 }
             ],
-            table: "#t-debits",
+            // table: "#t-debits",
             table: {
                 debits: "#t-debits",
+                unpaid: "#t-unpaid",
                 housing_movement: '#t-housing-movement'
             },
             input: {
@@ -412,6 +423,43 @@
         }();
 
         function debits() {
+
+            var debit = [];
+ 
+            $(qcs.table.unpaid).on('datatable-on-init', function () {
+               
+            }).on('datatable-on-check', function (e, args) {
+                
+                // console.log('OnCheck: ' + args.toString());
+
+                console.log("ADD ------------------------------");
+                debit = args;
+                console.log(debit);
+                console.log("---------------------------------------");
+
+
+            }).on('datatable-on-uncheck', function (e, args) {
+                 
+                console.log("REMOVE ------------------------------"); 
+
+                // console.log('UnCheck: ' + args.toString());
+                 
+                $.each(args, function (index, value) {
+                    debit = debit.filter(item => item !== value);
+                });
+               
+                console.log("KALANLAR : ------ ");
+                console.log(debit);
+
+                console.log("------------------------------------------");
+
+            });
+
+
+
+
+
+
 
             $(document).on("click", qcs.modal.housing_movement_open, function () {
 
@@ -521,6 +569,7 @@
                 $(qcs.label.debit_amount).text(filter.debit_amount);
 
                 g_housing_safe(filter.housing_id);
+                l_unpaids(filter.housing_id);
 
                 console.log(filter);
 
@@ -1007,6 +1056,87 @@
 
         }
 
+        function l_unpaids(housing_id) {
+
+            var list = [];
+
+            $(qcs.table.unpaid).KTDatatable('destroy');
+
+            var ds = $.ajax({
+                type: 'GET',
+                url: '/ams/app/debit/unpaid/' + housing_id,
+                async: false,
+                dataType: 'json',
+                done: function (data) {
+                    return data;
+                },
+                fail: function (jqXHR, textStatus, errorThrown) {
+                    console.log('Could not get posts, server response: ' + textStatus + ': ' + errorThrown);
+                }
+            }).responseJSON;
+
+            // console.table(ds);
+            console.log(ds.listView);
+
+            if (ds.isSucceed) {
+                switch (ds.statuses) {
+                    case 'x-list':
+                        list = ds.listView;
+                        break;
+                }
+            }
+
+            var datatable = $(qcs.table.unpaid).KTDatatable({
+                data: {
+                    source: list,
+                    pageSize: 10,
+                },
+                layout: {
+                    scroll: true,
+                    footer: false,
+                },
+                sortable: true,
+                pagination: false,
+                search: {
+                    input: $('#kt_datatable_search_query'),
+                    key: 'generalSearch',
+                },
+                columns: [
+                    {
+                        field: 'id',
+                        title: '#',
+                        sortable: false,
+                        width: 1,
+                        // type: 'number',
+                        selector: true,
+                        textAlign: 'center',
+                    },
+                    {
+                        field: 'Month',
+                        title: 'Ay/Yıl',
+                        textAlign: 'left',
+                        template: function (row) {
+                            return row._Month + '/' + row._Year;
+                        },
+                    },
+                    {
+                        field: 'Amount',
+                        title: 'Tutar',
+                        textAlign: 'left',
+                        template: function (row) {
+                            return row._Amount;
+                        },
+                    }],
+            });
+
+            $(qcs.combo.filter.paid).on('change', function (e) {
+                // console.log(e.target.value);
+                var paid = $(this).val().toLowerCase();
+                datatable.search(paid, 'paid');
+            });
+
+        }
+
         $(function () {
 
             combo_apartments();
@@ -1045,6 +1175,16 @@
                 container: 'body'
             });
             Masks.Init();
+
+
+
+
+
+
+
+
+
+
 
         });
 

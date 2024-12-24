@@ -54,6 +54,13 @@
             return Json(result);
         }
 
+        [HttpGet, Route("ams/app/debit/unpaid/{housing_id}")]
+        public async Task<JsonResult> GetDebitUnpaids(Guid housing_id)
+        {
+            var unpaid = await DebitService.GetDebitUnpaids(housing_id);
+            return Json(unpaid);
+        }
+
         [HttpGet, Route("ams/app/debits/{apartment_id}/{month}/{year}")]
         public async Task<JsonResult> GetDebits(Guid apartment_id, int month, int year)
         {

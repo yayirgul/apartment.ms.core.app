@@ -288,6 +288,49 @@
             return view;
         }
 
+        public async Task<Result.ListResult<DebitDTO.Table>> GetDebitUnpaids(Guid housing_id)
+        {
+            var result = new Result.ListResult<DebitDTO.Table>();
+
+            var l = await Uow.GetRepository<Debit>().GetAllAsync(
+                a => !a.IsDeleted && a.IsActive == true && a.HousingId == housing_id && a.Paid == false,
+                b => b.Housing!,
+                c => c.DebitTheUser!,
+                d => d.CreateTheUser!,
+                e => e.ModifiedTheUser!
+                ); 
+
+            var unpaid = l.ConvertAll(x => new DebitDTO.Table
+            {
+                Id = x.Id,
+                _Housing = x.Housing!.HousingName + " " + x.Housing.HousingNo,
+                Amount = x.Amount,
+                _Amount = x.Amount.HasValue ? x.Amount.Value.ToString("N2", Culture) : "0",
+
+                CreateTime = x.CreateTime,
+                _CreateTime = x.CreateTime != null ? x.CreateTime.ToString("dd/MM/yyyy") : "",
+                _Month = x._Month,
+                _Year = x._Year,
+                Paid = x.Paid ? 1 : 2,
+                DebitUser = x.DebitUser,
+                HousingId = x.HousingId,
+            }).OrderBy(x => x.Queue).ToList();
+
+            if (unpaid.Count() > 0)
+            {
+                result.ListView = unpaid;
+                result.IsSucceed = true;
+                result.Statuses = "x-list";
+            }
+            else
+            {
+                result.IsSucceed = true;
+                result.Statuses = "x-fail";
+            }
+
+            return result;
+        }
+
         public async Task<Result.ListResult<DebitDTO.Table>> GetDebits(Guid apartment_id, int month, int year)
         {
             var result = new Result.ListResult<DebitDTO.Table>();
@@ -300,14 +343,32 @@
                 e => e.ModifiedTheUser!
                 );
 
+            var unpaid = await Uow.GetRepository<Debit>().GetAllAsync(
+                a => !a.IsDeleted && a.IsActive == true && a.ApartmentId == apartment_id && a.Paid == false && a._Year == year,
+                b => b.Housing!
+                );
+
             var debits = l.ConvertAll(x => new DebitDTO.Table
             {
                 Id = x.Id,
                 _Housing = x.Housing!.HousingName + " " + x.Housing.HousingNo,
                 HousingName = x.Housing!.HousingName + " " + x.Queue + " - [ <b class='text-dark'>" + x.DebitTheUser!.Firstname + " " + x.DebitTheUser.Lastname + "</b> ]",
                 HousingUser = x.DebitTheUser != null ? x.DebitTheUser!.Firstname + " " + x.DebitTheUser.Lastname : "-",
-                Amount = x.Amount,
-                _Amount = x.Amount.HasValue ? x.Amount.Value.ToString("N2", Culture) : "0",
+                //Amount = x.Amount,
+                //_Amount = x.Amount.HasValue ? x.Amount.Value.ToString("N2", Culture) : "0",
+
+                Amount = x.Paid == false 
+                ? x.Amount.HasValue 
+                ? unpaid.Where(y => y.HousingId == x.HousingId && x._Month >= 1 && x._Month <= 12).Sum(y => y.Amount) 
+                : 0
+                : x.Amount.HasValue ? x.Amount.Value : 0,
+
+                _Amount = x.Paid == false 
+                ? x.Amount.HasValue 
+                ? unpaid.Where(y => y.HousingId == x.HousingId && x._Month >= 1 && x._Month <= 12).Sum(y => y.Amount).Value.ToString("N2", Culture) 
+                : "0" 
+                : x.Amount.HasValue ? x.Amount.Value.ToString("N2", Culture) : "0",
+
                 CreateTime = x.CreateTime,
                 _CreateTime = x.CreateTime != null ? x.CreateTime.ToString("dd/MM/yyyy") : "",
                 ExpenseCode = x.ExpenseCode,
