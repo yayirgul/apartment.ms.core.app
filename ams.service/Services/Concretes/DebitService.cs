@@ -7,6 +7,7 @@
     using ams.service.Services.Abstractions;
     using System;
     using System.Globalization;
+    using static ams.entity.DTOs.DebitDTO;
 
     public class DebitService : IDebitService
     {
@@ -17,6 +18,90 @@
         {
             Uow = uow;
             Culture = new CultureInfo("tr-TR");
+        }
+
+        public async Task<Result.ViewResult> DebitPays(DebitDTO.Pays pays)
+        {
+            var view = new Result.ViewResult();
+
+            foreach (var item in pays.DebitId!)
+            {
+                var qdebit = await Uow.GetRepository<Debit>().GetAsync(x => !x.IsDeleted && x.IsActive == true && x.Id == Guid.Parse(item));
+
+                if (qdebit != null)
+                {
+                    qdebit!.ModifiedUser = pays.ModifiedUser;
+                    qdebit.ModifiedTime = pays.ModifiedTime;
+                    qdebit.Paid = true;
+
+                    var safe = await Uow.GetRepository<HousingSafe>().GetAsync(x => !x.IsDeleted && x.IsActive == true && x.HousingId == qdebit.HousingId);
+
+                    if (safe != null)
+                    {
+                        if (safe.Amount > qdebit.Amount) // TODO : KASA tutarı büyükse BORÇ tutarından
+                        {
+                            var amount = safe.Amount - qdebit.Amount;
+
+                            var movement = new HousingSafeMovement()
+                            {
+                                AccountId = qdebit.AccountId,
+                                ApartmentId = (Guid)qdebit.ApartmentId!,
+                                HousingId = qdebit.HousingId,
+                                HousingSafeId = safe!.Id,
+                                FormerAmount = safe.Amount,   // TODO : KASA'daki önceki tutar   
+                                MovementAmount = amount,      // TODO : KASA'da para varsa düşülecek tutarı "KASA HAREKETLERİNE" ekliyorum.
+                                DebitAmount = qdebit!.Amount, // TODO : Kalan "BORCU" "KASA HAREKETLERİNDE" göstermek için ekliyorum.
+                                _Month = qdebit._Month,
+                                _Year = qdebit._Year,
+                                CreateUser = pays.CreateUser,
+                                IsActive = true,
+                            };
+
+                            safe.Amount = amount;
+
+                            await Uow.GetRepository<HousingSafe>().UpdateAsync(safe);
+                            await Uow.GetRepository<HousingSafeMovement>().AddAsync(movement);
+                        }
+
+                        if (safe.Amount <= 0)
+                        {
+                            var movement = new HousingSafeMovement()
+                            {
+                                AccountId = qdebit.AccountId,
+                                ApartmentId = (Guid)qdebit.ApartmentId!,
+                                HousingId = qdebit.HousingId,
+                                HousingSafeId = safe!.Id,
+                                FormerAmount = safe.Amount,   // TODO : KASA'daki önceki tutar   
+                                MovementAmount = 0,      // TODO : KASA'da para varsa düşülecek tutarı "KASA HAREKETLERİNE" ekliyorum.
+                                DebitAmount = qdebit!.Amount, // TODO : Kalan "BORCU" "KASA HAREKETLERİNDE" göstermek için ekliyorum.
+                                _Month = qdebit._Month,
+                                _Year = qdebit._Year,
+                                CreateUser = pays.CreateUser,
+                                IsActive = true,
+                            };
+                            await Uow.GetRepository<HousingSafeMovement>().AddAsync(movement);
+                        }
+                    }
+
+
+                    await Uow.GetRepository<Debit>().UpdateAsync(qdebit);
+                }
+            }
+
+            var result = await Uow.SaveAsync();
+
+            if (result > 0)
+            {
+                view.IsSucceed = true;
+                view.Statuses = "x-pay";
+            }
+            else
+            {
+                view.IsSucceed = true;
+                view.Statuses = "x-fail";
+            }
+
+            return view;
         }
 
         public async Task<Result.ViewResult> DebitPay(DebitDTO.Pay pay)
@@ -144,7 +229,6 @@
                     view.Statuses = "x-fail";
                     break;
             }
-
 
             return view;
         }
@@ -298,7 +382,7 @@
                 c => c.DebitTheUser!,
                 d => d.CreateTheUser!,
                 e => e.ModifiedTheUser!
-                ); 
+                );
 
             var unpaid = l.ConvertAll(x => new DebitDTO.Table
             {
@@ -357,16 +441,16 @@
                 //Amount = x.Amount,
                 //_Amount = x.Amount.HasValue ? x.Amount.Value.ToString("N2", Culture) : "0",
 
-                Amount = x.Paid == false 
-                ? x.Amount.HasValue 
-                ? unpaid.Where(y => y.HousingId == x.HousingId && x._Month >= 1 && x._Month <= 12).Sum(y => y.Amount) 
+                Amount = x.Paid == false
+                ? x.Amount.HasValue
+                ? unpaid.Where(y => y.HousingId == x.HousingId && x._Month >= 1 && x._Month <= 12).Sum(y => y.Amount)
                 : 0
                 : x.Amount.HasValue ? x.Amount.Value : 0,
 
-                _Amount = x.Paid == false 
-                ? x.Amount.HasValue 
-                ? unpaid.Where(y => y.HousingId == x.HousingId && x._Month >= 1 && x._Month <= 12).Sum(y => y.Amount).Value.ToString("N2", Culture) 
-                : "0" 
+                _Amount = x.Paid == false
+                ? x.Amount.HasValue
+                ? unpaid.Where(y => y.HousingId == x.HousingId && x._Month >= 1 && x._Month <= 12).Sum(y => y.Amount).Value.ToString("N2", Culture)
+                : "0"
                 : x.Amount.HasValue ? x.Amount.Value.ToString("N2", Culture) : "0",
 
                 CreateTime = x.CreateTime,

@@ -4,6 +4,16 @@
 
     public class DebitDTO
     {
+        public class Pays
+        {
+            public string[]? DebitId { get; set; }
+            public int Month { get; set; }
+            public int Year { get; set; }
+            public Guid CreateUser { get; set; }
+            public Guid ModifiedUser { get; set; }
+            public DateTime ModifiedTime { get; set; }
+
+        }
         public class Pay
         {
             public Guid DebitId { get; set; }

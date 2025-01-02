@@ -82,6 +82,7 @@
                                     <div class="col-md-1 my-2 my-md-0">
                                         <div class="d-flex align-items-center">
                                             <select class="form-control" id="combo-filter-years">
+                                                <option value="2025">2025</option>
                                                 <option value="2024">2024</option>
                                                 <option value="2023">2023</option>
                                             </select>
@@ -250,6 +251,7 @@
                                 <div class="option-label">
                                     <div class="option-body pt-0">
                                         <div class="datatable datatable-bordered datatable-head-custom" id="t-unpaid"></div>
+                                        <button type="button" id="button-pay" class="btn btn-primary font-weight-bold">Öde</button>
                                     </div>
                                 </div>
                             </div>
@@ -269,7 +271,7 @@
                                 </div>
                             </div>
                         </div>
-                         
+
                     </div>
 
                 </form>
@@ -356,6 +358,7 @@
 
     <script type="text/javascript">
 
+        var payable = [];
         var _date = new Date();
 
         // Query Component Selector
@@ -424,38 +427,95 @@
 
         function debits() {
 
-            var debit = [];
- 
-            $(qcs.table.unpaid).on('datatable-on-init', function () {
-               
-            }).on('datatable-on-check', function (e, args) {
-                
-                // console.log('OnCheck: ' + args.toString());
-
-                console.log("ADD ------------------------------");
-                debit = args;
-                console.log(debit);
-                console.log("---------------------------------------");
+            
 
 
-            }).on('datatable-on-uncheck', function (e, args) {
-                 
-                console.log("REMOVE ------------------------------"); 
 
-                // console.log('UnCheck: ' + args.toString());
-                 
-                $.each(args, function (index, value) {
-                    debit = debit.filter(item => item !== value);
-                });
-               
-                console.log("KALANLAR : ------ ");
-                console.log(debit);
+            $(document).on("click", "#button-pay", function () {
 
-                console.log("------------------------------------------");
+                if (payable.length != 0) {
+                    // alert(payable);
+
+                    var dm = {
+                        DebitId: payable,
+                        HousingId: $(qcs.input.housing_id).val(),
+                        ApartmentId: $(qcs.combo.filter.apartments).val(),
+                        Month: $(qcs.combo.filter.months).val(),
+                        Year: $(qcs.combo.filter.years).val(),
+                    }
+
+                    $.post("/ams/app/debit/pays", dm, function (d) {
+
+                        console.log(d);
+
+                        if (d.isSucceed) {
+                            switch (d.statuses) {
+                                case 'x-pay':
+
+                                    Swal.fire({
+                                        title: "Ödeme",
+                                        text: "Ödeme için teşekkürler.",
+                                        icon: "success",
+                                        timer: 4000,
+                                        onOpen: function () { Swal.showLoading() },
+                                        allowOutsideClick: false,
+                                        allowEscapeKey: false,
+                                        buttonsStyling: false,
+                                        confirmButtonText: "<i class='la la-headphones'></i> I am game!",
+                                        showCancelButton: false,
+                                        cancelButtonText: "<i class='la la-thumbs-down'></i> No, thanks",
+                                        customClass: {
+                                            confirmButton: "btn btn-danger",
+                                            cancelButton: "btn btn-default"
+                                        }
+                                    }).then(function (r) {
+
+                                        if (r.dismiss === "timer") {
+                                            $(qcs.modal.payment).modal('hide');
+                                            l_debits(dm.ApartmentId, dm.Month, dm.Year);
+                                            payable = null;
+                                        }
+
+                                    });
+
+                                    break;
+                            }
+                        }
+
+
+                    }).done(function () {
+
+                    }).fail(function (jqXHR, textStatus, errorThrown) {
+
+                    }).always(function () {
+
+                    });
+
+
+                } else {
+
+                    Swal.fire({
+                        title: "Uyarı",
+                        text: "Lütfen ödeme yapacağız tutarları seçiniz.",
+                        icon: "warning",
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                        buttonsStyling: false,
+                        confirmButtonText: "Tamam",
+                        customClass: { confirmButton: "btn btn-danger", cancelButton: "btn btn-default" }
+                    }).then(function (result) {
+
+                        if (result.value) {
+                            // $(qcs.modal.debit).modal('hide');
+                        }
+
+                    });
+
+                }
+
+
 
             });
-
-
 
 
 
@@ -471,7 +531,6 @@
                     year: $(qcs.combo.filter.years).val(),
                     debit_amount: $(this).data("debit-amount"),
                 }
-                console.log(filter);
 
                 $(qcs.widget.housing_debit_amount).text(filter.debit_amount);
                 $(qcs.widget.housing_month_year).text(filter.month + "/" + filter.year);
@@ -546,6 +605,8 @@
             // PAYMENT MODAL OPEN
             $(document).on("click", qcs.modal.payment_open, function () {
 
+                // $(qcs.table.unpaid).KTDatatable('reload');
+
                 $(qcs.modal.payment).modal();
 
                 var filter = {
@@ -570,9 +631,7 @@
 
                 g_housing_safe(filter.housing_id);
                 l_unpaids(filter.housing_id);
-
-                console.log(filter);
-
+                
                 fv.resetForm("form-payment");
                 button_payment.innerHTML = "Kaydet";
 
@@ -580,7 +639,7 @@
 
 
             $(document).on("click", qcs.modal.debit_open, function () {
-                $(qcs.modal.debit).modal(); 
+                $(qcs.modal.debit).modal();
             });
 
             const form_payment = document.getElementById('form-payment');
@@ -723,8 +782,6 @@
 
             $.get("/ams/app/housing-safe/" + housing_id, function (d) {
 
-                console.log(d);
-
                 if (d.isSucceed) {
                     switch (d.statuses) {
                         case 'x-detail':
@@ -742,9 +799,7 @@
                                 text: "İstenmeyen bir hata oluştu.",
                                 icon: "error",
                                 timer: 4000,
-                                onOpen: function () {
-                                    Swal.showLoading()
-                                },
+                                onOpen: function () { Swal.showLoading() },
                                 allowOutsideClick: false,
                                 allowEscapeKey: false,
                                 buttonsStyling: false,
@@ -946,9 +1001,9 @@
                         template: function (row) {
 
                             var r = `
-                            <a href="javascript:;" class="btn btn-sm btn-clean btn-icon modal-housing-movement-open" data-housing-id='${row.housingId}' data-debit-month="${row._Month}" data-debit-year="${row._Year}" data-debit-amount="${row._Amount}" data-toggle="tooltip"><i class="la la-bars"></i>
-                            </a>
-                            `;
+                                    <a href="javascript:;" class="btn btn-sm btn-clean btn-icon modal-housing-movement-open" data-housing-id='${row.housingId}' data-debit-month="${row._Month}" data-debit-year="${row._Year}" data-debit-amount="${row._Amount}" data-toggle="tooltip"><i class="la la-bars"></i>
+                                    </a>
+                                    `;
 
                             return r;
 
@@ -1045,7 +1100,7 @@
                         textAlign: 'left',
                     },
 
-                    ],
+                ],
             });
 
             // $(qcs.combo.filter.paid).on('change', function (e) {
@@ -1135,6 +1190,37 @@
                 datatable.search(paid, 'paid');
             });
 
+            $(qcs.table.unpaid).on('datatable-on-init', function () {
+
+                console.log("On Init");
+
+            }).on('datatable-on-check', function (e, args) {
+
+                // console.log('OnCheck: ' + args.toString());
+
+                console.log("ADD ------------------------------");
+                payable = args;
+                console.log(payable);
+                console.log("---------------------------------------");
+
+
+            }).on('datatable-on-uncheck', function (e, args) {
+
+                console.log("REMOVE ------------------------------");
+
+                // console.log('UnCheck: ' + args.toString());
+
+                $.each(args, function (index, value) {
+                    payable = payable.filter(item => item !== value);
+                });
+
+                console.log("KALANLAR : ------ ");
+                console.log(payable);
+
+                console.log("------------------------------------------");
+
+            });
+
         }
 
         $(function () {
@@ -1175,16 +1261,6 @@
                 container: 'body'
             });
             Masks.Init();
-
-
-
-
-
-
-
-
-
-
 
         });
 
