@@ -5,7 +5,7 @@
 
     public interface IDebitService
     {
-        Task<Result.ListResult<DebitDTO.Table>> GetDebitUnpaids(Guid housing_id);
+        Task<Result.ListResult<DebitDTO.Unpaid>> GetDebitUnpaids(Guid housing_id);
         Task<Result.ListResult<DebitDTO.Table>> GetDebits(Guid apartment_id, int month, int year);
         Task<Result.ViewResult> DebitAddAsync(Guid apartment_id, Guid create_user, int month, int year);
         Task<Result.ViewResult> DebitPay(DebitDTO.Pay pay);

@@ -84,7 +84,6 @@
                                             <select class="form-control" id="combo-filter-years">
                                                 <option value="2025">2025</option>
                                                 <option value="2024">2024</option>
-                                                <option value="2023">2023</option>
                                             </select>
                                         </div>
                                     </div>
@@ -164,8 +163,8 @@
                         <div class="col-xl-6">
                             <label>* Yıl</label>
                             <select class="form-control" id="combo-expense-years">
+                                <option value="2025">2025</option>
                                 <option value="2024">2024</option>
-                                <option value="2023">2023</option>
                             </select>
                         </div>
 
@@ -250,7 +249,8 @@
                             <div class="option mb-6">
                                 <div class="option-label">
                                     <div class="option-body pt-0">
-                                        <div class="datatable datatable-bordered datatable-head-custom" id="t-unpaid"></div>
+                                        <div class="datatable datatable-bordered datatable-head-custom w-100" id="t-unpaid"></div>
+                                        <div class="separator separator-solid mb-6 mt-1"></div>
                                         <button type="button" id="button-pay" class="btn btn-primary font-weight-bold">Öde</button>
                                     </div>
                                 </div>
@@ -633,7 +633,7 @@
                 l_unpaids(filter.housing_id);
                 
                 fv.resetForm("form-payment");
-                button_payment.innerHTML = "Kaydet";
+                button_payment.innerHTML = "Öde";
 
             });
 
@@ -675,7 +675,7 @@
 
                 fv.validate().then(function (status) {
 
-                    button_payment.innerHTML = status === 'Valid' ? 'Güncelleniyor...' : 'Lütfen tekrar deneyin';
+                    button_payment.innerHTML = status === 'Valid' ? 'Ödeniyor...' : 'Lütfen tekrar deneyin';
 
                     switch (status) {
                         case "Valid":
@@ -1167,20 +1167,20 @@
                         textAlign: 'center',
                     },
                     {
-                        field: 'Month',
+                        field: 'monthYear',
                         title: 'Ay/Yıl',
                         textAlign: 'left',
-                        template: function (row) {
-                            return row._Month + '/' + row._Year;
-                        },
+                        // template: function (row) {
+                        //     return row._Month + '/' + row._Year;
+                        // },
                     },
                     {
-                        field: 'Amount',
+                        field: '_Amount',
                         title: 'Tutar',
                         textAlign: 'left',
-                        template: function (row) {
-                            return row._Amount;
-                        },
+                        // template: function (row) {
+                        //     return row._Amount;
+                        // },
                     }],
             });
 

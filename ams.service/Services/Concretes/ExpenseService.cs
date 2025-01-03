@@ -48,7 +48,6 @@
                     view.IsSucceed = true;
                     view.Statuses = "x-housing";
                 }
-
             }
             else
             {

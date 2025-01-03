@@ -88,7 +88,6 @@
                                             <select class="form-control" id="combo-filter-years">
                                                 <option value="2025">2025</option>
                                                 <option value="2024">2024</option>
-                                                <option value="2023">2023</option>
                                             </select>
                                         </div>
                                     </div>
@@ -184,7 +183,6 @@
                             <select class="form-control" id="combo-expense-years">
                                 <option value="2025">2025</option>
                                 <option value="2024">2024</option>
-                                <option value="2023">2023</option>
                             </select>
                         </div>
 
@@ -474,7 +472,7 @@
 
                                             Swal.fire({
                                                 title: "Tebrikler",
-                                                text: "Yeni gider oluşturuldu.",
+                                                text: "Yeni gider oluşturuluyor...",
                                                 icon: "success",
                                                 timer: 4000,
                                                 onOpen: function () {
@@ -581,12 +579,6 @@
 
 
 
-
-
-
-
-
-
             $(document).on("change", qcs.combo.filter.apartments, function () {
 
                 var filter = {
@@ -621,6 +613,9 @@
                 $(qcs.combo.filter.months).children('option').removeAttr('selected');
                 $(qcs.combo.filter.months).find('option[value=' + filter.month + ']').attr('selected', 'selected');
 
+                $(qcs.combo.expense_months).find('option[value=' + filter.month + ']').attr('selected', 'selected');
+                $(qcs.combo.expense_years).find('option[value=' + filter.year + ']').attr('selected', 'selected');
+
                 l_expenses(filter.apartment_id, filter.month, filter.year);
 
             });
@@ -639,6 +634,9 @@
 
                 $(qcs.combo.filter.years).children('option').removeAttr('selected');
                 $(qcs.combo.filter.years).find('option[value=' + filter.year + ']').attr('selected', 'selected');
+
+                $(qcs.combo.expense_months).find('option[value=' + filter.month + ']').attr('selected', 'selected');
+                $(qcs.combo.expense_years).find('option[value=' + filter.year + ']').attr('selected', 'selected');
 
                 l_expenses(filter.apartment_id, filter.month, filter.year);
 
@@ -677,8 +675,7 @@
                 };
 
                 g_debit_calc(apartment.id, apartment.title, apartment.month, apartment.year);
-                $(qcs.modal.debit).modal();
-
+                
             });
 
 
@@ -808,26 +805,23 @@
                     switch (d.statuses) {
                         case 'x-calc':
 
+                            $(qcs.modal.debit).modal();
+
                             $(qcs.label.apartment_month_year).text(title + " - " + month + "." + year);
                             $(qcs.label.apartment_total_amount).text(d.view.totalAmount);
                             $(qcs.label.apartment_calc_amount).text(d.view.calcAmount);
 
                             break;
-
                         case 'x-fail':
 
                             Swal.fire({
                                 title: "Hata",
-                                text: "İstenmeyen bir hata oluştu.",
+                                text: "Hesaplama yapılacak tutar bulunamadı...",
                                 icon: "error",
-                                timer: 4000,
-                                onOpen: function () {
-                                    Swal.showLoading()
-                                },
                                 allowOutsideClick: false,
                                 allowEscapeKey: false,
                                 buttonsStyling: false,
-                                confirmButtonText: "<i class='la la-headphones'></i> I am game!",
+                                confirmButtonText: "Tamam",
                                 showCancelButton: false,
                                 cancelButtonText: "<i class='la la-thumbs-down'></i> No, thanks",
                                 customClass: {
@@ -835,21 +829,14 @@
                                     cancelButton: "btn btn-default"
                                 }
                             }).then(function (r) {
-
-                                if (r.dismiss === "timer") {
+                                if (r.value) {
                                     $(qcs.modal.housing).modal('hide');
-                                    // l_expenses(dm.ApartmentId, dm.Month, dm.Year);
                                 }
                             });
 
                             break;
                     }
                 }
-
-
-
-
-
 
             }).done(function (d) {
 

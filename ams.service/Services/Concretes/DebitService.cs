@@ -372,9 +372,9 @@
             return view;
         }
 
-        public async Task<Result.ListResult<DebitDTO.Table>> GetDebitUnpaids(Guid housing_id)
+        public async Task<Result.ListResult<DebitDTO.Unpaid>> GetDebitUnpaids(Guid housing_id)
         {
-            var result = new Result.ListResult<DebitDTO.Table>();
+            var result = new Result.ListResult<DebitDTO.Unpaid>();
 
             var l = await Uow.GetRepository<Debit>().GetAllAsync(
                 a => !a.IsDeleted && a.IsActive == true && a.HousingId == housing_id && a.Paid == false,
@@ -384,20 +384,12 @@
                 e => e.ModifiedTheUser!
                 );
 
-            var unpaid = l.ConvertAll(x => new DebitDTO.Table
+            var unpaid = l.ConvertAll(x => new DebitDTO.Unpaid
             {
                 Id = x.Id,
-                _Housing = x.Housing!.HousingName + " " + x.Housing.HousingNo,
                 Amount = x.Amount,
                 _Amount = x.Amount.HasValue ? x.Amount.Value.ToString("N2", Culture) : "0",
-
-                CreateTime = x.CreateTime,
-                _CreateTime = x.CreateTime != null ? x.CreateTime.ToString("dd/MM/yyyy") : "",
-                _Month = x._Month,
-                _Year = x._Year,
-                Paid = x.Paid ? 1 : 2,
-                DebitUser = x.DebitUser,
-                HousingId = x.HousingId,
+                MonthYear = x._Month + "/" + x._Year,
             }).OrderBy(x => x.Queue).ToList();
 
             if (unpaid.Count() > 0)
