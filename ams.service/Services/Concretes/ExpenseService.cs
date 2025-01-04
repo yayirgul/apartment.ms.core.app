@@ -113,6 +113,7 @@
             expense.Year = dto.Year;
             expense.ModifiedTime = dto.ModifiedTime;
             expense.ModifiedUser = dto.ModifiedUser;
+            expense.IsFixed = dto.IsFixed;
 
             await Uow.GetRepository<Expense>().UpdateAsync(expense);
             var result = await Uow.SaveAsync();
@@ -154,18 +155,26 @@
                 Year = view!.Year,
                 Amount = view.Amount,
                 //_Amount = view.Amount.HasValue ? view.Amount!.Value.ToString("#,##0.00") : ""
-                //_Amount = view.Amount.HasValue ? amount.ToString("N2", Culture) : "",
                 _Amount = view.Amount.HasValue ? view.Amount.Value.ToString("N2", Culture) : "",
+                IsFixed = view.IsFixed
             };
 
             return expense;
         }
 
-        public async Task<List<ExpenseDTO.ListView>> GetExpenses(Guid apartment_id, int month, int year)
+        public async Task<List<ExpenseDTO.Table>> GetExpenses(Guid apartment_id, int month, int year)
         {
-            var l = await Uow.GetRepository<Expense>().GetAllAsync(x => !x.IsDeleted && x.ApartmentId == apartment_id && x.Month == month && x.Year == year, y => y.CreateTheUser!, z => z.ModifiedTheUser!);
+            var list = new List<Expense>();
 
-            var expenses = l.ConvertAll(x => new ExpenseDTO.ListView
+            // TODO : Annual variable expenses
+            var ls = await Uow.GetRepository<Expense>().GetAllAsync(x => !x.IsDeleted && x.ApartmentId == apartment_id && x.Month == month && x.Year == year && x.IsFixed == false, y => y.CreateTheUser!, z => z.ModifiedTheUser!);
+
+            // TODO : Annual fixed expenses 
+            var lsf = await Uow.GetRepository<Expense>().GetAllAsync(x => !x.IsDeleted && x.ApartmentId == apartment_id && x.Year == year && x.IsFixed == true, y => y.CreateTheUser!, z => z.ModifiedTheUser!);
+            
+            list = ls.Concat(lsf).ToList(); 
+
+            var expenses = list.ConvertAll(x => new ExpenseDTO.Table
             {
                 Id = x.Id,
                 ExpenseName = x.ExpenseName,
@@ -180,7 +189,7 @@
                 IsActive = x.IsActive ? 1 : 2,
                 CreateUser = x.CreateTheUser != null ? x.CreateTheUser.Firstname + " " + x.CreateTheUser.Lastname : "-",
                 UpdateUser = x.ModifiedTheUser != null ? x.ModifiedTheUser.Firstname + " " + x.ModifiedTheUser.Lastname : "-",
-                
+                IsFixed = x.IsFixed
             }).OrderBy(x => x.IsFixed).ToList();
 
             return expenses;

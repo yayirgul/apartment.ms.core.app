@@ -98,7 +98,6 @@
 
                                             <div class="col-md-12 my-2 my-md-0 d-flex align-items-center justify-content-end">
 
-
                                                 <div class="input-icon mr-5">
                                                     <input type="text" class="form-control" placeholder="Search..." id="kt_datatable_search_query" />
                                                     <span>
@@ -137,7 +136,7 @@
     <div class="modal-dialog modal-dialog-centered modal-md" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modal-expense-title">Yeni Gider</h5>
+                <h5 class="modal-title" id="modal-expense-title">Yeni</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <i aria-hidden="true" class="ki ki-close"></i>
                 </button>
@@ -178,7 +177,7 @@
                             </select>
                         </div>
 
-                        <div class="col-xl-6">
+                        <div class="col-xl-6 mb-6">
                             <label>* Yıl</label>
                             <select class="form-control" id="combo-expense-years">
                                 <option value="2025">2025</option>
@@ -186,9 +185,20 @@
                             </select>
                         </div>
 
-                        <div class="col-xl-12">
+                        <div class="col-xl-12  mb-6">
                             <label>* Tutar</label>
                             <input type="text" name="Amount" class="form-control money" id="kt_money_input" maxlength="22" placeholder="0,00">
+                        </div>
+
+                        <div class="col-xl-12">
+                            <label>Periyot (<b>12 Aylık</b>)</label>
+                            <span class="switch switch-outline switch-icon switch-primary switch-md expense-fixed-on-off" data-analytics-id="">
+                                <label>
+                                    <input type="checkbox" name="select">
+                                    <span></span>
+                                </label>
+                            </span>
+
                         </div>
 
                     </div>
@@ -340,10 +350,14 @@
                 debit: '#modal-debit',
                 expense_new: '#modal-expense-new',
                 expense_edit: '.modal-expense-edit',
-                debit_new: '#modal-debit-new'
+                debit_new: '#modal-debit-new',
+                expense_title: '#modal-expense-title'
             },
             button: {
                 auto_debit: "#button-auto-debit",
+            },
+            switch: {
+                expense_fixed_on_off: ".expense-fixed-on-off",
             }
         }
 
@@ -358,7 +372,6 @@
                     Mask();
                 }
             };
-
         }();
 
 
@@ -392,10 +405,6 @@
             });
 
         }
-
-
-        // $(qcs.modal_user_email).modal('hide');
-
 
         function expenses() {
 
@@ -450,6 +459,7 @@
                         case "Valid":
 
                             var apartment_id = $("select[name='ExpApartments']").val();
+                            var is_fixed = $(qcs.switch.expense_fixed_on_off).find('input[type="checkbox"]').is(':checked');
 
                             var dm = {
                                 Id: $(qcs.input.expense_id).val(),
@@ -458,6 +468,7 @@
                                 Month: $(qcs.combo.expense_months).val(),
                                 Year: $(qcs.combo.expense_years).val(),
                                 Amount: $(qcs.input.expense_amount).val(),
+                                IsFixed: is_fixed
                             };
 
                             console.log(dm);
@@ -576,9 +587,6 @@
                 });
             });
 
-
-
-
             $(document).on("change", qcs.combo.filter.apartments, function () {
 
                 var filter = {
@@ -645,6 +653,9 @@
             // TODO : Gider girebileceğimiz "Modal" açma
             $(document).delegate(qcs.modal.expense_new, 'click', function () {
 
+                $(qcs.modal.expense_title).text('Yeni');
+                $(qcs.switch.expense_fixed_on_off).find('input[type="checkbox"]').prop('checked', false);
+
                 fv.resetForm("fv-form-expense");
                 fv_expense_save.innerHTML = "Kaydet";
 
@@ -655,6 +666,7 @@
             // TODO : Gider düzenleyeceğimiz "Modal" açma
             $(document).delegate(qcs.modal.expense_edit, 'click', function () {
 
+                $(qcs.modal.expense_title).text('Düzenle');
                 fv_expense_save.innerHTML = "Kaydet";
                 var filter = { id: $(this).data('expense-id') }
 
@@ -775,7 +787,6 @@
                         }
                     }
 
-
                 }).done(function () {
 
                 }).fail(function (jqXHR, textStatus, errorThrown) {
@@ -784,13 +795,28 @@
 
                 });
 
+            });
 
 
+            $(document).on('change', qcs.switch.expense_fixed_on_off, function () {
+
+                var is_checkbox = $(this, qcs.switch.expense_fixed_on_off).find('input[type="checkbox"]').is(':checked');
+
+                $(this, qcs.switch.expense_fixed_on_off).find('input[type="checkbox"]').removeAttr("checked");
+
+                if (is_checkbox) {
+                    console.log(is_checkbox);
+                    $(this, qcs.switch.expense_fixed_on_off).find('input[type="checkbox"]').attr("checked", "checked");
+                }
+                else {
+                    $(this, qcs.switch.expense_fixed_on_off).find('input[type="checkbox"]').removeAttr("checked");
+                }
 
             });
 
-        }
 
+
+        }
 
         function g_debit_calc(id, title, month, year) {
 
@@ -872,7 +898,6 @@
 
         }
 
-
         function g_expense(expense_id) {
 
             // var dm = { Id: expense_id };
@@ -886,32 +911,13 @@
                 $(qcs.input.expense_name).val(d.expenseName);
                 $(qcs.input.expense_amount).val(d._Amount);
 
-
-                // $(qcs.input.expense_amount).inputmask(d._Amount);
-
-                // $(qcs.label_username).attr("data-label-username", d.View.Username);
-                // $(qcs.modal_user_title).text(d.View.Firstname + ' ' + d.View.Lastname);
-
-                // $(qcs.label_email).attr("data-label-email", d.View.Email);
-
-
                 $(qcs.combo.expense_apartments + " option[value=" + d.apartmentId + "]").removeAttr('selected').attr('selected', 'selected');
                 $(qcs.combo.expense_months + " option[value=" + d.month + "]").removeAttr('selected').attr('selected', 'selected');
                 $(qcs.combo.expense_years + " option[value=" + d.year + "]").removeAttr('selected').attr('selected', 'selected');
 
-                // $(qcs.user_email_valid).val(d.View.Email);
-
-
-                // KTMaskDemo.init();
-
-
-                // $(qcs.input.expense_amount).on('click', '')
-
-
+                $(qcs.switch.expense_fixed_on_off).find('input[type="checkbox"]').prop('checked', d.isFixed);
 
             }).done(function (d) {
-
-                KTMaskDemo.init();
 
             }).fail(function (jqXHR, textStatus, errorThrown) {
 
@@ -1026,10 +1032,22 @@
                         },
                     },
                     {
+                        field: 'isFixed',
+                        title: 'Periyot',
+                        template: function (row) {
+
+                            if (row.isFixed) {
+                                return "<b>12 Aylık</b>";
+                            } else {
+                                return "-";
+                            }
+                        },
+                    },
+                    {
                         field: 'Amount',
                         title: 'Tutar',
                         template: function (row) {
-                            return row._Amount;
+                            return "<b>" + row._Amount + "</b>";
                         },
                     },
                     {

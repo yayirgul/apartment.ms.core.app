@@ -766,7 +766,19 @@
                         field: 'housingName',
                         title: 'Konut',
                         template: function (row) {
-                            return row.housingName;
+
+                            var status = {
+                                1: { 'class': ' label-success' },
+                                2: { 'class': ' label-danger' },
+                            };
+
+                            return `
+                                    <div class='d-flex align-items-center'>
+                                     <b class='mr-3'>${row.housingName}</b>
+                                     <span class="label label-xl label-dot ${status[row.isActive].class}"></span>
+                                    </div>
+                            `;
+
                         },
                     },
                     {
@@ -792,26 +804,35 @@
                         field: 'Amount',
                         title: 'Kasa Tutarı',
                         template: function (row) {
-                            return row._Amount;
+                            //return row._Amount;
+                            //return '<a href="#" class="btn btn-sm btn-outline-primary d-flex"><b>' + row._Amount + '</b> <i class="flaticon-edit"></i> </a>';
+
+                            return `
+                                    <div class='d-flex align-items-center'>
+                                    <b class='mr-3'>${row._Amount}</b>
+                                    <i class="flaticon-edit"></i>
+                                    </div>
+                            `;
+
                         },
                     },
-                    {
-                        field: 'isActive',
-                        title: 'Durum',
-                        template: function (row) {
-                            var status = {
-                                1: {
-                                    'title': 'Aktif',
-                                    'class': ' label-light-success',
-                                },
-                                2: {
-                                    'title': 'Pasif',
-                                    'class': ' label-light-danger',
-                                },
-                            };
-                            return '<span class="label font-weight-bold label-lg ' + status[row.isActive].class + ' label-inline">' + status[row.isActive].title + '</span>';
-                        },
-                    },
+                    // {
+                    //     field: 'isActive',
+                    //     title: 'Durum',
+                    //     template: function (row) {
+                    //         var status = {
+                    //             1: {
+                    //                 'title': 'Aktif',
+                    //                 'class': ' label-light-success',
+                    //             },
+                    //             2: {
+                    //                 'title': 'Pasif',
+                    //                 'class': ' label-light-danger',
+                    //             },
+                    //         };
+                    //         return '<span class="label font-weight-bold label-lg ' + status[row.isActive].class + ' label-inline">' + status[row.isActive].title + '</span>';
+                    //     },
+                    // },
                     // {
                     //     field: 'Type',
                     //     title: 'Type',

@@ -427,10 +427,6 @@
 
         function debits() {
 
-            
-
-
-
             $(document).on("click", "#button-pay", function () {
 
                 if (payable.length != 0) {
@@ -938,7 +934,7 @@
                         field: 'Amount',
                         title: 'Tutar',
                         template: function (row) {
-                            return row._Amount;
+                            return "<b>" + row._Amount + "</b>";
                         },
                     },
                     {

@@ -44,7 +44,8 @@
                     Month = dto.Month,
                     Year = dto.Year,
                     ModifiedTime = DateTime.UtcNow,
-                    ModifiedUser = User!.Id
+                    ModifiedUser = User!.Id,
+                    IsFixed = dto.IsFixed,
                 };
                 result = await ExpenseService.EditAsync(d);
             }
