@@ -17,9 +17,15 @@ builder.Services.AddScoped<IMailSender, MailSender>(x => new MailSender(
 
 builder.Services.DataHelper(builder.Configuration);
 builder.Services.ServiceHelper();
+
+//builder.Services.AddDistributedMemoryCache();
+
 builder.Services.AddSession(opt =>
 {
-    opt.IdleTimeout = TimeSpan.FromMinutes(360);
+    opt.IdleTimeout = TimeSpan.FromMinutes(3600);
+    //opt.IdleTimeout = TimeSpan.FromSeconds(5);
+    //opt.Cookie.HttpOnly = true;
+    //opt.Cookie.IsEssential = true;
 });
 
 

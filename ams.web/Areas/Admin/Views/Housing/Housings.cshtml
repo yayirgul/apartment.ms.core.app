@@ -129,6 +129,38 @@
     </div>
 </div>
 
+<div class="modal fade" id="modal-housing-safe" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-housing-title">Konut Kasası</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <form class="form" id="form-housing-safe">
+
+                    <div class="form-group mb-0 row">
+
+                        <div class="col-xl-12">
+                            <label>* Tutar</label>
+                            <input type="text" name="Amount" class="form-control money-mask" maxlength="22" placeholder="0,00">
+                        </div>
+
+                    </div>
+
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="button-housing-safe-save" class="btn btn-primary font-weight-bold">Kaydet</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 
 
@@ -171,13 +203,21 @@
                 housing: '#modal-housing',
                 housing_new: '#modal-housing-new',
                 housing_edit: '.modal-housing-edit',
+                housing_safe: '#modal-housing-safe',
+                housing_safe_open: '.modal-housing-safe-open',
             }
         }
 
-
-
-
-
+        var Masks = function () {
+            var Mask = function () {
+                $('.money-mask').mask("#.##0,00", {
+                    reverse: true
+                });
+            }
+            return {
+                Init: function () { Mask(); }
+            };
+        }();
 
 
         // $(qcs.modal_user_email).modal('hide');
@@ -424,7 +464,8 @@
             // TODO : Konut düzenleyeceğimiz "Modal" açma
             $(document).delegate(qcs.modal.housing_edit, 'click', function () {
 
-                // fv_expense_save.innerHTML = "Kaydet";
+                fv_housing_save.innerHTML = "Kaydet";
+
                 var filter = { 
                     apartment_id: $(qcs.combo.filter.apartments).val(),
                     housing_id: $(this).data('housing-id')
@@ -436,6 +477,12 @@
                 g_housing(filter.housing_id);
 
                 $(qcs.modal.housing).modal();
+
+            });
+
+            $(document).on("click", qcs.modal.housing_safe_open, function () {
+
+                $(qcs.modal.housing_safe).modal();
 
             });
 
@@ -810,7 +857,7 @@
                             return `
                                     <div class='d-flex align-items-center'>
                                     <b class='mr-3'>${row._Amount}</b>
-                                    <i class="flaticon-edit"></i>
+                                            <i class="flaticon-edit icon-1x cursor-pointer modal-housing-safe-open"></i>
                                     </div>
                             `;
 
@@ -865,16 +912,14 @@
                         autoHide: false,
                         template: function (row) {
 
-
                             return '\
-                                                                                                                        <a href="javascript:;" class="btn btn-sm btn-clean btn-icon  modal-housing-edit" data-housing-id=' + row.id + ' data-toggle="tooltip" data-theme="dark" title="Edit" >\
-                                                                                                            <i class="la la-pencil"></i>\
-                                                                                                                        </a>\
+                                     <a href="javascript:;" class="btn btn-sm btn-clean btn-icon modal-housing-edit" data-housing-id=' + row.id + ' data-toggle="tooltip" data-theme="dark" title="Edit">\
+                                      <i class="flaticon-edit"></i>\
+                                     </a>\
                                                                                                                       \
-                                                                                                                             <a href="javascript:;" class="btn btn-sm btn-clean btn-icon" data-delete-id='+ row.id + ' data-toggle="tooltip" data-theme="dark" title="Delete">\
-                                                                                                                            <i class="la fa-trash"></i>\
-                                                                                                                        </a>\
-                                                                                                                    ';
+                                     <a href="javascript:;" class="btn btn-sm btn-clean btn-icon" data-delete-id='+ row.id + ' data-toggle="tooltip" data-theme="dark" title="Delete">\
+                                       <i class="flaticon-delete"></i>\
+                                     </a>\ ';
 
 
 
@@ -960,7 +1005,7 @@
                 container: 'body'
             });
 
- 
+            Masks.Init();
 
 
         });
