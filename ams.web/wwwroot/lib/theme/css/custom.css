@@ -1,0 +1,28 @@
+﻿.bx-housing-safe {
+}
+
+    .bx-housing-safe > .bx-apartment {
+        border-bottom: 1px solid #ebedf3;
+        padding: 1.5rem
+    }
+
+    .bx-housing-safe > .bx-housing {
+        display: flex;
+        flex-wrap: wrap;
+        padding: 1rem 0;
+    }
+
+        .bx-housing-safe > .bx-housing > .bx-housing-item {
+            border-right: 1px solid #ebedf3;
+            padding: 1rem 1.5rem;
+            width: 50%;
+        }
+
+            .bx-housing-safe > .bx-housing > .bx-housing-item:last-child {
+                border-right: none;
+            }
+
+        .bx-housing-safe > .bx-balance {
+            border-top: 1px solid #ebedf3;
+            padding: 1.5rem
+        }

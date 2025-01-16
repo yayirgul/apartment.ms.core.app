@@ -79,7 +79,7 @@
     </div>
 </div>
 
-<div class="modal fade" id="modal-housing" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
+<div class="modal fade" id="modal-housing" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="false">
     <div class="modal-dialog modal-dialog-centered modal-md" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -129,13 +129,16 @@
     </div>
 </div>
 
-<div class="modal fade" id="modal-housing-safe" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
+<div class="modal fade" id="modal-housing-safe" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="false">
     <div class="modal-dialog modal-dialog-centered modal-md" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modal-housing-title">Konut Kasası</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title" id="modal-housing-title">KASA</h5>
+@*                 <button type="button" class="close-- btn btn-icon btn-light-danger btn-circle" data-dismiss="modal" aria-label="Close">
                     <i aria-hidden="true" class="ki ki-close"></i>
+                </button> *@
+                <button type="button" class="close-- btn btn-icon btn-light-danger btn-circle" data-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="fas fa-times"></i>
                 </button>
             </div>
             <div class="modal-body">
@@ -145,25 +148,52 @@
                     <div class="form-group mb-0 row">
 
                         <div class="col-xl-12">
-                            <label>* Tutar</label>
-                            <input type="text" name="Amount" class="form-control money-mask" maxlength="22" placeholder="0,00">
-                        </div>
+                            <div class="option p-0">
+                                <div class="option-label">
+                                    <div class="option-body pt-0">
 
+                                        <div class="bx-housing-safe">
+
+                                            <div class="bx-apartment">
+                                                <h6 class="font-size-sm text-dark">APARTMAN</h6>
+                                                <h4 class="text-dark mb-0" id="label-apartment">...</h4>
+                                            </div>
+
+                                            <div class="bx-housing">
+                                                <div class="bx-housing-item">
+                                                    <h6 class="font-size-sm text-dark ">KONUT</h6>
+                                                    <h4 class="text-dark mb-0" id="label-housing">...</h4>
+                                                </div>
+
+                                                <div class="bx-housing-item">
+                                                    <h6 class="font-size-sm text-dark">SAHİBİ</h6>
+                                                    <h4 class="text-dark mb-0" id="label-housing-user">...</h4>
+                                                </div>
+                                            </div>
+
+                                            <div class="bx-balance">
+                                                <h6 class="font-size-sm text-dark">BAKİYE</h6>
+                                                <input type="text" name="HousingSafeAmount" class="form-control money-mask money" maxlength="22" placeholder="0,00">
+                                            </div>
+
+                                        </div>
+ 
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+  
                     </div>
 
                 </form>
 
             </div>
-            <div class="modal-footer">
-                <button type="button" id="button-housing-safe-save" class="btn btn-primary font-weight-bold">Kaydet</button>
+            <div class="modal-footer border-0 pt-0">
+                <button type="button" id="button-housing-safe-save" class="btn btn-light-primary font-weight-bold">Kaydet</button>
             </div>
         </div>
     </div>
 </div>
-
-
-
-
 
 @section Scripts {
 
@@ -186,7 +216,7 @@
                 housing_id: "[name='HousingId']",
                 housing_name: "[name='HousingName']",
                 housing_no: "[name='HousingNo']",
-                // expense_amount: "[name='Amount']"
+                housing_safe_amount: "[name='HousingSafeAmount']"
             },
             select: {
                 users: "select[name='Users']",
@@ -205,7 +235,12 @@
                 housing_edit: '.modal-housing-edit',
                 housing_safe: '#modal-housing-safe',
                 housing_safe_open: '.modal-housing-safe-open',
-            }
+            },
+            label: {
+                apartment: '#label-apartment',
+                housing: '#label-housing',
+                housing_user: '#label-housing-user',
+            },
         }
 
         var Masks = function () {
@@ -482,7 +517,20 @@
 
             $(document).on("click", qcs.modal.housing_safe_open, function () {
 
+                var filter = {
+                    apartment: $(qcs.combo.filter.apartments + " option:selected").text(),
+                    housing_id: $(this).data('housing-id'),
+                    housing_name: $(this).data('housing-name'),
+                    housing_user: $(this).data('housing-user'),
+                }
+                 
+                $(qcs.label.apartment).text(filter.apartment);
+                $(qcs.label.housing).text(filter.housing_name);
+                $(qcs.label.housing_user).text(filter.housing_user);
+
                 $(qcs.modal.housing_safe).modal();
+
+                g_housing_safe(filter.housing_id);
 
             });
 
@@ -755,6 +803,86 @@
 
         }
 
+        function g_housing_safe(housing_id) {
+
+            $.get("/ams/app/housing-safe/" + housing_id, function (d) {
+
+                console.log(d);
+
+                if (d.isSucceed) {
+                    switch (d.statuses) {
+                        case 'x-detail':
+
+                            $(qcs.input.housing_safe_amount).val(d.view._Amount);
+
+                            // $(qcs.label.housing_safe_amount).text(d.view._Amount);
+                       
+                            break;
+                        case 'x-ndata':
+                            // $(qcs.label.housing_safe_amount).text(d.view._Amount);
+                            break;
+                        case 'x-fail':
+
+                            Swal.fire({
+                                title: "Hata",
+                                text: "İstenmeyen bir hata oluştu.",
+                                icon: "error",
+                                timer: 4000,
+                                onOpen: function () { Swal.showLoading() },
+                                allowOutsideClick: false,
+                                allowEscapeKey: false,
+                                buttonsStyling: false,
+                                confirmButtonText: "<i class='la la-headphones'></i> I am game!",
+                                showCancelButton: false,
+                                cancelButtonText: "<i class='la la-thumbs-down'></i> No, thanks",
+                                customClass: {
+                                    confirmButton: "btn btn-danger",
+                                    cancelButton: "btn btn-default"
+                                }
+                            }).then(function (r) {
+                                if (r.dismiss === "timer") {
+                                    $(qcs.modal.payment).modal('hide');
+                                }
+                            });
+
+                            break;
+                    }
+                }
+
+            }).done(function (d) {
+
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+
+                Swal.fire({
+                    title: "Hata",
+                    text: "Hata Kodu : " + textStatus,
+                    icon: "error",
+                    timer: 4000,
+                    onOpen: function () {
+                        Swal.showLoading()
+                    },
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    buttonsStyling: false,
+                    confirmButtonText: "<i class='la la-headphones'></i> I am game!",
+                    showCancelButton: false,
+                    cancelButtonText: "<i class='la la-thumbs-down'></i> No, thanks",
+                    customClass: {
+                        confirmButton: "btn btn-danger",
+                        cancelButton: "btn btn-default"
+                    }
+                }).then(function (r) {
+
+                    if (r.dismiss === "timer") { }
+
+                });
+
+            }).always(function (d) {
+
+            });
+
+        }
+
         function l_housings(apartment_id) {
 
             $(qcs.table).KTDatatable('destroy');
@@ -856,8 +984,8 @@
 
                             return `
                                     <div class='d-flex align-items-center'>
-                                    <b class='mr-3'>${row._Amount}</b>
-                                            <i class="flaticon-edit icon-1x cursor-pointer modal-housing-safe-open"></i>
+                                     <b class='mr-3'>${row._Amount}</b>
+                                     <i class="flaticon-edit icon-1x cursor-pointer modal-housing-safe-open" data-housing-id="${row.id}" data-housing-name="${row.housingName}" data-housing-user="${row.housingUser}"></i>
                                     </div>
                             `;
 
