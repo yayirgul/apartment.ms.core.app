@@ -414,34 +414,47 @@
                         field: 'apartmentName',
                         title: 'Apartman',
                         template: function (row) {
-                            return row.apartmentName;
+
+                            var status = {
+                                1: { 'class': ' label-success' },
+                                2: { 'class': ' label-danger' },
+                            };
+
+                            return `
+                            <div class='d-flex align-items-center'>
+                             <b class='mr-3'>${row.apartmentName}</b>
+                             <span class="label label-xl label-dot ${status[row.isActive].class}"></span>
+                            </div>
+                            `;
+
                         },
                     },
                     {
                         field: '_CreateTime',
-                        title: 'Kayıt Tarihi',
+                        title: 'Oluşturulma Tarihi',
                         type: 'date',
                         // format: 'MM/DD/YYYY',
                     }, {
                         field: 'createUser',
                         title: 'Oluşturan',
-                    }, {
-                        field: 'isActive',
-                        title: 'Durum',
-                        template: function (row) {
-                            var status = {
-                                1: {
-                                    'title': 'Aktif',
-                                    'class': ' label-light-success',
-                                },
-                                2: {
-                                    'title': 'Pasif',
-                                    'class': ' label-light-danger',
-                                },
-                            };
-                            return '<span class="label font-weight-bold label-lg ' + status[row.isActive].class + ' label-inline">' + status[row.isActive].title + '</span>';
-                        },
-                    },
+                    }, 
+                    // {
+                    //     field: 'isActive',
+                    //     title: 'Durum',
+                    //     template: function (row) {
+                    //         var status = {
+                    //             1: {
+                    //                 'title': 'Aktif',
+                    //                 'class': ' label-light-success',
+                    //             },
+                    //             2: {
+                    //                 'title': 'Pasif',
+                    //                 'class': ' label-light-danger',
+                    //             },
+                    //         };
+                    //         return '<span class="label font-weight-bold label-lg ' + status[row.isActive].class + ' label-inline">' + status[row.isActive].title + '</span>';
+                    //     },
+                    // },
                     {
                         field: 'Actions',
                         title: 'İşlem',
