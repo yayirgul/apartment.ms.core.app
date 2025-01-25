@@ -237,12 +237,18 @@
         {
             var view = new Result.ViewResult();
 
+            var ls_expense = new List<Expense>();
+
             var q_debit = await Uow.GetRepository<Debit>().GetAsync(x => !x.IsDeleted && x.IsActive == true && x._Month == month && x._Year == year);
 
             if (q_debit == null)
             {
-                var ls_expense = await Uow.GetRepository<Expense>().GetAllAsync(x => !x.IsDeleted && x.IsActive == true && x.ApartmentId == apartment_id && x.Month == month && x.Year == year);
+                var lse = await Uow.GetRepository<Expense>().GetAllAsync(x => !x.IsDeleted && x.IsActive == true && x.ApartmentId == apartment_id && x.Month == month && x.Year == year);
 
+                var lsf = await Uow.GetRepository<Expense>().GetAllAsync(x => !x.IsDeleted && x.IsActive == true && x.ApartmentId == apartment_id && x.Year == year && x.IsFixed == true);
+
+                ls_expense = lse.Concat(lsf).ToList();
+                 
                 if (ls_expense.Count() > 0)
                 {
                     // Toplam 10 adet konut gelecek

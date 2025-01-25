@@ -20,7 +20,13 @@
 
         public async Task<Result.ViewResult<ExpenseDTO.Calc>> GetExpenseDebitCalc(Guid apartment_id, int month, int year)
         {
-            var ls_expense = await Uow.GetRepository<Expense>().GetAllAsync(x => !x.IsDeleted && x.IsActive == true && x.ApartmentId == apartment_id && x.Month == month && x.Year == year);
+            var ls_expense = new List<Expense>();
+
+            var lse = await Uow.GetRepository<Expense>().GetAllAsync(x => !x.IsDeleted && x.IsActive == true && x.ApartmentId == apartment_id && x.Month == month && x.Year == year);
+
+            var lsf = await Uow.GetRepository<Expense>().GetAllAsync(x => !x.IsDeleted && x.IsActive == true && x.ApartmentId == apartment_id && x.Year == year && x.IsFixed == true);
+
+            ls_expense = lse.Concat(lsf).ToList();
 
             var view = new Result.ViewResult<ExpenseDTO.Calc>();
 
