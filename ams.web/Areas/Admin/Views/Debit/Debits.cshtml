@@ -131,20 +131,25 @@
             </div>
             <div class="modal-body">
 
-                <form class="form" id="fv-form-expense">
+                <form class="form" id="form-expense">
 
                     <div class="form-group mb-0 row">
 
-                        @* <input type="hidden" name="ExpenseId" /> *@
+                        <input type="hidden" name="ExpenseId" />
+
+                        <div class="col-xl-12 mb-6">
+                            <label>* Gider Adı</label>
+                            <input type="text" name="ExpenseName" class="form-control money" placeholder="">
+                        </div>
 
                         <div class="col-xl-12 mb-6">
                             <label>* Apartman</label>
-                            <select class="form-control" name="ExpApartments" id="combo-expense-apartments"></select>
+                            <select class="form-control" name="ExpApartments" id="combo-apartments"></select>
                         </div>
 
                         <div class="col-xl-6 mb-6">
                             <label>* Ay</label>
-                            <select class="form-control" id="combo-expense-months">
+                            <select class="form-control" id="combo-months">
                                 <option value="1">Ocak</option>
                                 <option value="2">Şubat</option>
                                 <option value="3">Mart</option>
@@ -160,9 +165,9 @@
                             </select>
                         </div>
 
-                        <div class="col-xl-6">
+                        <div class="col-xl-6 mb-6">
                             <label>* Yıl</label>
-                            <select class="form-control" id="combo-expense-years">
+                            <select class="form-control" id="combo-years">
                                 <option value="2025">2025</option>
                                 <option value="2024">2024</option>
                             </select>
@@ -170,7 +175,7 @@
 
                         <div class="col-xl-12">
                             <label>* Tutar</label>
-                            <input type="text" name="Debit" class="form-control money" id="kt_money_input" maxlength="22" placeholder="0,00">
+                            <input type="text" name="Amount" class="form-control money-mask" maxlength="22" placeholder="0,00">
                         </div>
 
                     </div>
@@ -264,7 +269,7 @@
                                         <div class="row">
                                             <div class="col-xl-12">
                                                 <h6 class="font-size-sm text-dark mb-4">ALINAN TUTAR</h6>
-                                                <input type="text" name="Amount" class="form-control" id="d-amount" maxlength="22" placeholder="0,00">
+                                                <input type="text" name="Amount" class="form-control money-mask money" maxlength="22" placeholder="0,00">
                                             </div>
                                         </div>
                                     </div>
@@ -391,9 +396,9 @@
                 housing_month_year: '#widget-housing-month-year',
             },
             combo: {
-                debit_months: '#combo-debit-months',
-                debit_years: '#combo-debit-years',
-                debit_apartments: '#combo-debit-apartments',
+                months: '#combo-months',
+                years: '#combo-years',
+                apartments: '#combo-apartments',
                 filter: {
                     apartments: '#combo-filter-apartments',
                     months: '#combo-filter-months',
@@ -411,9 +416,11 @@
             }
         }
 
+
+        // #d-amount
         var Masks = function () {
             var Mask = function () {
-                $('#d-amount').mask("#.##0,00", {
+                $('.money-mask').mask("#.##0,00", {
                     reverse: true
                 });
             }
@@ -552,6 +559,10 @@
 
                 $(qcs.combo.filter.apartments).children('option').removeAttr('selected');
                 $(qcs.combo.filter.apartments).find('option[value=' + filter.apartment_id + ']').attr('selected', 'selected');
+                $(qcs.combo.apartments).find('option[value=' + filter.apartment_id + ']').attr('selected', 'selected');
+
+                $(qcs.combo.months).find('option[value=' + filter.month + ']').attr('selected', 'selected');
+                $(qcs.combo.years).find('option[value=' + filter.year + ']').attr('selected', 'selected');
 
                 l_debits(filter.apartment_id, filter.month, filter.year);
 
@@ -573,6 +584,9 @@
                 $(qcs.combo.filter.months).children('option').removeAttr('selected');
                 $(qcs.combo.filter.months).find('option[value=' + filter.month + ']').attr('selected', 'selected');
 
+                $(qcs.combo.months).find('option[value=' + filter.month + ']').attr('selected', 'selected');
+                $(qcs.combo.years).find('option[value=' + filter.year + ']').attr('selected', 'selected');
+
                 l_debits(filter.apartment_id, filter.month, filter.year);
 
             });
@@ -592,6 +606,9 @@
 
                 $(qcs.combo.filter.years).children('option').removeAttr('selected');
                 $(qcs.combo.filter.years).find('option[value=' + filter.year + ']').attr('selected', 'selected');
+
+                $(qcs.combo.months).find('option[value=' + filter.month + ']').attr('selected', 'selected');
+                $(qcs.combo.years).find('option[value=' + filter.year + ']').attr('selected', 'selected');
 
                 l_debits(filter.apartment_id, filter.month, filter.year);
 
@@ -757,8 +774,10 @@
 
                         if (i == 0) {
                             $(qcs.combo.filter.apartments).append('<option value=' + v.id + ' selected="selected">' + v.apartmentName + '</option>');
+                            $(qcs.combo.apartments).append('<option value=' + v.id + ' selected="selected">' + v.apartmentName + '</option>');
                         } else {
                             $(qcs.combo.filter.apartments).append('<option value=' + v.id + '>' + v.apartmentName + '</option>');
+                            $(qcs.combo.apartments).append('<option value=' + v.id + '>' + v.apartmentName + '</option>');
                         }
 
                         // $(qcs.combo.expense_apartments).append($("<option selected='selected'></option>").val(v.id).html(v.apartmentName));
