@@ -447,3 +447,86 @@
 	<!--end::Dashboard-->
 </div>
 <!--end::Container-->
+
+@section Scripts {
+
+	<script>
+
+		$.get("/ams/dashboard/analysis/16f885ff-6897-4d08-afa6-0640c40d2a05/2024", function (d) {
+
+			console.log(d);
+
+			if (d.isSucceed) {
+				switch (d.statuses) {
+					case 'x-detail':
+					
+						break;
+					case 'x-ndata':
+					
+						break;
+					case 'x-timeout':
+						location.href = "/admin/auth/logout";
+						break;
+					case 'x-fail':
+
+						Swal.fire({
+							title: "Hata",
+							text: "İstenmeyen bir hata oluştu.",
+							icon: "error",
+							timer: 4000,
+							onOpen: function () { Swal.showLoading() },
+							allowOutsideClick: false,
+							allowEscapeKey: false,
+							buttonsStyling: false,
+							confirmButtonText: "<i class='la la-headphones'></i> I am game!",
+							showCancelButton: false,
+							cancelButtonText: "<i class='la la-thumbs-down'></i> No, thanks",
+							customClass: {
+								confirmButton: "btn btn-danger",
+								cancelButton: "btn btn-default"
+							}
+						}).then(function (r) {
+							if (r.dismiss === "timer") {
+								
+							}
+						});
+
+						break;
+				}
+			}
+
+		}).done(function (d) {
+
+		}).fail(function (jqXHR, textStatus, errorThrown) {
+
+			Swal.fire({
+				title: "Hata",
+				text: "Hata Kodu : " + textStatus,
+				icon: "error",
+				timer: 4000,
+				onOpen: function () {
+					Swal.showLoading()
+				},
+				allowOutsideClick: false,
+				allowEscapeKey: false,
+				buttonsStyling: false,
+				confirmButtonText: "<i class='la la-headphones'></i> I am game!",
+				showCancelButton: false,
+				cancelButtonText: "<i class='la la-thumbs-down'></i> No, thanks",
+				customClass: {
+					confirmButton: "btn btn-danger",
+					cancelButton: "btn btn-default"
+				}
+			}).then(function (r) {
+
+				if (r.dismiss === "timer") { }
+
+			});
+
+		}).always(function (d) {
+
+		});
+
+	</script>
+
+}

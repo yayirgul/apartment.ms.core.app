@@ -18,6 +18,7 @@
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<IDebitService, DebitService>();
+            services.AddScoped<IDashboardService, DashboardService>();
             
             return services;
         }

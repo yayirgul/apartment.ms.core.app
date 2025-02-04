@@ -76,9 +76,7 @@
                 ExpenseName = dto.ExpenseName,
                 ExpenseCode = dto.ExpenseCode,
                 CreateUser = dto.CreateUser,
-
                 Amount = amount,
-
                 Month = dto.Month,
                 Year = dto.Year,
                 IsFixed = dto.IsFixed,

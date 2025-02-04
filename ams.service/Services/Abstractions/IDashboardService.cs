@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ams.service.Services.Abstractions
+﻿namespace ams.service.Services.Abstractions
 {
-    public interface IDashboardService
+	using ams.core.Units;
+	using ams.entity.DTOs;
+
+	public interface IDashboardService
     {
-    }
+		Task<Result.ListResult<DashboardDTO.Expense>> GetExpenseChart(Guid? account_id, Guid apartment_id, int year);
+	}
 }

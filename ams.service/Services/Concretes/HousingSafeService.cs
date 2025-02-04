@@ -57,10 +57,7 @@
         public async Task<Result.ListResult<HousingSafeDTO.Table>> GetHousingSafes()
         {
             var list = new Result.ListResult<HousingSafeDTO.Table>();
-
             var ls = await Uow.GetRepository<HousingSafe>().GetAllAsync(x => !x.IsDeleted, y => y.HousingSafeMovements!);
-
-
             return list;
         }
     }
