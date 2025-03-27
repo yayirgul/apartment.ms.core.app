@@ -17,6 +17,13 @@
             this.DebitService = DebitService;
         }
 
+        [HttpGet, Route("ams/app/debit/widget/{apartment_id}/{month}/{year}")]
+        public async Task<JsonResult> GetDebitWidget(Guid apartment_id, int month, int year)
+        {
+            var debits = await DebitService.GetDebitWidget(apartment_id, month, year);
+            return Json(debits);
+        }
+
         [HttpPost, Route("ams/app/debit/pays")]
         public async Task<JsonResult> DebitPay(DebitDTO.Pays dto)
         {

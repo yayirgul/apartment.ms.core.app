@@ -18,8 +18,8 @@
 			this.DashboardService = DashboardService;
 		}
 
-		[Route("ams/dashboard/analysis/{apartment_id}/{year}")]
-		public async Task<JsonResult> GetDashboardAnalysis(Guid apartment_id, int year)
+		[Route("ams/dashboard/analysis/{apartment_id}/{type}/{year}")]
+		public async Task<JsonResult> GetDashboardAnalysis(Guid apartment_id, string type, int year)
 		{
 			var user = HttpContext.Session.GetSession<UserDTO.User>(Unit.Constants.SESSION_USER);
 

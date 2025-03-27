@@ -20,6 +20,31 @@
             Culture = new CultureInfo("tr-TR");
         }
 
+        public async Task<Result.ViewResult<DebitDTO.Widget>> GetDebitWidget(Guid apartment_id, int month, int year)
+        {
+            var vw = new DebitDTO.Widget();
+            var debit = new List<Debit>();
+
+            debit = await Uow.GetRepository<Debit>().GetAllAsync(x => !x.IsDeleted && x.IsActive == true && x.ApartmentId == apartment_id && x._Month == month && x._Year == year);
+
+            // TOTAL AMOUNT
+            vw.Total = debit.Sum(x => x.Amount).HasValue ? debit.Sum(x => x.Amount)!.Value.ToString("N2", Culture) : "0";
+
+            // PAID AMOUNT
+            vw.Paid = debit.Where(x => x.Paid == true).Sum(x => x.Amount).HasValue ? debit.Where(x => x.Paid == true).Sum(x => x.Amount)!.Value.ToString("N2", Culture) : "0";
+
+            // UNPAID AMOUNT
+            vw.Unpaid = debit.Where(x => x.Paid == false).Sum(x => x.Amount).HasValue ? debit.Where(x => x.Paid == false).Sum(x => x.Amount)!.Value.ToString("N2", Culture) : "0";
+
+            var view = new Result.ViewResult<DebitDTO.Widget>();
+
+            view.View = vw;
+            view.IsSucceed = true;
+            view.Statuses = "x-detail";
+
+            return view;
+        }
+
         public async Task<Result.ViewResult> DebitPays(DebitDTO.Pays pays)
         {
             var view = new Result.ViewResult();

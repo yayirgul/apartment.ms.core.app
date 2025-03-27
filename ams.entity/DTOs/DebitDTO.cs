@@ -4,6 +4,14 @@
 
     public class DebitDTO
     {
+        public class Widget
+        {
+            public Guid Id { get; set; }
+            public string? Total { get; set; }
+            public string? Paid { get; set; }
+            public string? Unpaid { get; set; }
+        }
+
         public class Unpaid
         {
             public Guid Id { get; set; }

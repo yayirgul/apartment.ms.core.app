@@ -53,7 +53,7 @@
                                     <div class="col-md-1 my-2 my-md-0">
                                         <div class="d-flex align-items-center">
                                             <select class="form-control" id="combo-filter-paid">
-                                                <option value="" selected="selected">Tümü</option>
+                                                <option value="0" selected="selected">Tümü</option>
                                                 <option value="1">Ödendi</option>
                                                 <option value="2">Ödenmedi</option>
                                             </select>
@@ -549,6 +549,7 @@
 
                 var filter = {
                     apartment_id: $(this).val(),
+                    paid: $(qcs.combo.filter.paid).val(),
                     month: $(qcs.combo.filter.months).val(),
                     year: $(qcs.combo.filter.years).val(),
                 }
@@ -566,6 +567,8 @@
 
                 l_debits(filter.apartment_id, filter.month, filter.year);
 
+                wg_debits(filter.apartment_id, filter.month, filter.year);
+
             });
 
             // MONTH FILTER
@@ -573,6 +576,7 @@
 
                 var filter = {
                     apartment_id: $(qcs.combo.filter.apartments).val(),
+                    paid: $(qcs.combo.filter.paid).val(),
                     month: $(this).val(),
                     year: $(qcs.combo.filter.years).val(),
                 }
@@ -589,6 +593,8 @@
 
                 l_debits(filter.apartment_id, filter.month, filter.year);
 
+                wg_debits(filter.apartment_id, filter.month, filter.year);
+
             });
 
             // YEAR FILTER
@@ -596,6 +602,7 @@
 
                 var filter = {
                     apartment_id: $(qcs.combo.filter.apartments).val(),
+                    paid: $(qcs.combo.filter.paid).val(),
                     month: $(qcs.combo.filter.months).val(),
                     year: $(this).val(),
                 }
@@ -611,6 +618,8 @@
                 $(qcs.combo.years).find('option[value=' + filter.year + ']').attr('selected', 'selected');
 
                 l_debits(filter.apartment_id, filter.month, filter.year);
+
+                wg_debits(filter.apartment_id, filter.month, filter.year);
 
             });
 
@@ -759,6 +768,89 @@
         }
 
 
+        function wg_debits(apartment_id, month, year) {
+
+            // console.log("Apartment ID : " + apartment_id);
+            // console.log("Paid : " + paid);
+            // console.log("Month : " + month);
+            // console.log("Year : " + year);
+
+            $.get("/ams/app/debit/widget/" + apartment_id + "/" + month + "/" + year, function (d) {
+
+                if (d.isSucceed) {
+                    switch (d.statuses) {
+                        case 'x-detail':
+                            //////////////////////////////////////////////////
+
+                            console.log(d.view.total);
+                            console.log(d.view.paid);
+                            console.log(d.view.unpaid);
+
+                            break;
+                        case 'x-ndata':
+                      
+                            break;
+                        case 'x-fail':
+
+                            Swal.fire({
+                                title: "Hata",
+                                text: "İstenmeyen bir hata oluştu.",
+                                icon: "error",
+                                timer: 4000,
+                                onOpen: function () { Swal.showLoading() },
+                                allowOutsideClick: false,
+                                allowEscapeKey: false,
+                                buttonsStyling: false,
+                                confirmButtonText: "<i class='la la-headphones'></i> I am game!",
+                                showCancelButton: false,
+                                cancelButtonText: "<i class='la la-thumbs-down'></i> No, thanks",
+                                customClass: {
+                                    confirmButton: "btn btn-danger",
+                                    cancelButton: "btn btn-default"
+                                }
+                            }).then(function (r) {
+                                if (r.dismiss === "timer") {
+                                    $(qcs.modal.payment).modal('hide');
+                                }
+                            });
+
+                            break;
+                    }
+                }
+
+            }).done(function (d) {
+
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+
+                Swal.fire({
+                    title: "Hata",
+                    text: "Hata Kodu : " + textStatus,
+                    icon: "error",
+                    timer: 4000,
+                    onOpen: function () {
+                        Swal.showLoading()
+                    },
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    buttonsStyling: false,
+                    confirmButtonText: "<i class='la la-headphones'></i> I am game!",
+                    showCancelButton: false,
+                    cancelButtonText: "<i class='la la-thumbs-down'></i> No, thanks",
+                    customClass: {
+                        confirmButton: "btn btn-danger",
+                        cancelButton: "btn btn-default"
+                    }
+                }).then(function (r) {
+
+                    if (r.dismiss === "timer") { }
+
+                });
+
+            }).always(function (d) {
+
+            });
+
+        }
 
 
         function combo_apartments() {
@@ -888,7 +980,7 @@
             }).responseJSON;
 
             // console.table(ds);
-            console.log(ds.listView);
+            // console.log(ds.listView);
 
             if (ds.isSucceed) {
                 switch (ds.statuses) {
@@ -1025,6 +1117,7 @@
             $(qcs.combo.filter.paid).on('change', function (e) {
                 // console.log(e.target.value);
                 var paid = $(this).val().toLowerCase();
+                paid = paid == 0 ? null : paid;
                 datatable.search(paid, 'paid');
             });
 
@@ -1257,6 +1350,7 @@
                 $(qcs.combo.filter.months).find('option[value=' + sessions.month + ']').attr('selected', 'selected');
                 $(qcs.combo.filter.years).find('option[value=' + sessions.year + ']').attr('selected', 'selected');
                 l_debits(sessions.apartment, sessions.month, sessions.year);
+                wg_debits(sessions.apartment, sessions.month, sessions.year);
             }
             else {
                 $(qcs.combo.filter.months).find('option[value=' + qcs.default[0].month + ']').attr('selected', 'selected');
@@ -1265,6 +1359,7 @@
                 sessionStorage.setItem("_month", qcs.default[0].month);
                 sessionStorage.setItem("_year", qcs.default[0].year);
                 l_debits(filter.apartment_id, qcs.default[0].month, qcs.default[0].year);
+                wg_debits(filter.apartment_id, filter.month, filter.year);
             }
 
             $(qcs.table.debits).tooltip({

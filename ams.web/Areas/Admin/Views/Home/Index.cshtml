@@ -33,6 +33,38 @@
                 </div>
                 <div class="card-body">
 
+                    <!--begin::Search Form-->
+                    <div class="mb-7">
+                        <div class="row align-items-center">
+                            <div class="col-lg-12 col-xl-12">
+                                <div class="row align-items-center">
+
+                                    <div class="col-md-1 my-2 my-md-0">
+                                        <div class="d-flex align-items-center">
+                                            <select class="form-control" id="combo-filter-apartments">
+                                                <option value="expense">Gelirler</option>
+                                                <option value="debit">Borçlar</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-1 my-2 my-md-0">
+                                        <div class="d-flex align-items-center">
+                                            <select class="form-control" id="combo-filter-years">
+                                                <option value="2025">2025</option>
+                                                <option value="2024">2024</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                     
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+
                     <div id="chart-expense"></div>
 
                 </div>
@@ -62,18 +94,58 @@
                     success: "#1BC5BD",
                     danger: "#F64E60",
                 }
+            },
+            combo: {
+                filter: {
+                    apartments: '#combo-filter-apartments',
+                    months: '#combo-filter-months',
+                    years: '#combo-filter-years'
+                }
             }
         }
 
-        function analysis() {
+        function dashboard() {
+
+            $(document).on("change", qcs.combo.filter.years, function () {
+
+                var filter = {
+                    apartment_id: $(qcs.combo.filter.apartments).val(),
+                    month: $(qcs.combo.filter.months).val(),
+                    year: $(this).val(),
+                }
+
+                analysis(filter.year);
+
+                // sessionStorage.setItem("_apartment", filter.apartment_id);
+                // sessionStorage.setItem("_month", filter.month);
+                // sessionStorage.setItem("_year", filter.year);
+
+                // $(qcs.combo.filter.years).children('option').removeAttr('selected');
+                // $(qcs.combo.filter.years).find('option[value=' + filter.year + ']').attr('selected', 'selected');
+
+                // $(qcs.combo.expense_months).find('option[value=' + filter.month + ']').attr('selected', 'selected');
+                // $(qcs.combo.expense_years).find('option[value=' + filter.year + ']').attr('selected', 'selected');
+
+                // l_expenses(filter.apartment_id, filter.month, filter.year);
+
+            });
+
+        }
+
+        function analysis(year) {
+
+            console.log("YIL : " + year);
 
             const apexChart = "#chart_3";
 
 
-            $.get("/ams/dashboard/analysis/16f885ff-6897-4d08-afa6-0640c40d2a05/2024", function (d) {
+            $.get("/ams/dashboard/analysis/16f885ff-6897-4d08-afa6-0640c40d2a05/expense/" + year, function (d) {
 
-                console.log(JSON.stringify(d.listView));
-                console.log(d.listView[0].amount);
+                // console.log(JSON.stringify(d.listView));
+                console.log(d.listView);
+
+
+                // typ = Gelir - Borç
                  
 
                 var series = [
@@ -82,13 +154,11 @@
                         data: [d.listView[0].amount, d.listView[1].amount, d.listView[2].amount, d.listView[3].amount, d.listView[4].amount, d.listView[5].amount, d.listView[6].amount, d.listView[7].amount, d.listView[8].amount, d.listView[9].amount, d.listView[10].amount, d.listView[11].amount]
                         // data: ["0,00", "0,00", "0,00", "0,00", "0,00", "0,00", "1.852,80", "772,60", "1.858,60", "2.175", "5.342,68", "0,00"]
                     },
-                    { name: 'Borçlar', data: [10, 76, 85, 101, 98, 87, 105, 91, 114, 94, 22, 99] }
+                    // { 
+                    //     name: 'Borçlar',
+                    //     data: [d.listView[0].amount, d.listView[1].amount, d.listView[2].amount, d.listView[3].amount, d.listView[4].amount, d.listView[5].amount, d.listView[6].amount, d.listView[7].amount, d.listView[8].amount, d.listView[9].amount, d.listView[10].amount, d.listView[11].amount]
+                    // }
                 ];
-
-                // var series = [
-                //     { name: 'Gelirler', data: [22, 44, 55, 57, 56, 61, 58, 63, 60, 66, 49, 33] },
-                //     { name: 'Borçlar', data: [10, 76, 85, 101, 98, 87, 105, 91, 114, 94, 22, 99] }
-                // ];
 
                 var options = {
                     series: series,
@@ -122,9 +192,14 @@
                     },
                     tooltip: {
                         y: {
-                            formatter: function (val) {
-                                console.log(val);
-                                return "₺ " + val.toFixed(0);
+                            formatter: function (val, opts) {
+
+                                var view = d.listView[opts.dataPointIndex];
+
+                                console.log("tutar : " + view._Amount);
+
+                                return "₺ " + view._Amount;
+                                // return "₺ " + val.toFixed(0);
                             }
                         }
                     },
@@ -134,21 +209,9 @@
                 var chart = new ApexCharts(document.querySelector(qcs.chart.expense), options);
                 chart.render();
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                chart.updateSeries([{
+                    series: series
+                }]);
 
 
 
@@ -182,7 +245,8 @@
         }
 
         $(function () {
-            analysis();
+            analysis(2025);
+            dashboard();
         });
 
     </script>

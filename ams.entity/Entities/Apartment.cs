@@ -12,9 +12,6 @@
         [StringLength(300)]
         public string? ApartmentName { get; set; }
 
-        //public Guid? UserId { get; set; }
-        //public AppUser? User { get; set; }
-
         public Guid? CreateUser { get; set; }
         [ForeignKey("CreateUser")] 
         public AppUser? CreateTheUser { get; set; }

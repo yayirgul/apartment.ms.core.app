@@ -26,12 +26,12 @@
 			var list = new List<Expense>();
 
 			// TODO : Annual variable expenses
-			var ls = await Uow.GetRepository<Expense>().GetAllAsync(x => !x.IsDeleted && x.AccountId == account_id && x.ApartmentId == apartment_id && x.IsFixed == false);
+			var ls = await Uow.GetRepository<Expense>().GetAllAsync(x => !x.IsDeleted && x.AccountId == account_id && x.ApartmentId == apartment_id && x.IsFixed == false && x.Year == year);
 
 			// TODO : Annual fixed expenses 
 			var lsf = await Uow.GetRepository<Expense>().GetAllAsync(x => !x.IsDeleted && x.AccountId == account_id && x.ApartmentId == apartment_id && x.Year == year && x.IsFixed == true);
 
-			list = ls.Concat(lsf).ToList();
+			//list = ls.Concat(lsf).ToList();
 
 			var start = DateTime.Now.Date;
 			start = new DateTime(year, 1, 1);
@@ -42,7 +42,15 @@
 			{
 				var started = new DateTime(start.Year, i, 1);
 				var ended = started.AddMonths(1);
-				var amount = list.Where(x => x.CreateTime >= started && x.CreateTime < ended).Sum(x => x.Amount);
+
+                var l = new List<Expense>();
+                var lss = ls.Where(x => x.CreateTime >= started && x.CreateTime <= ended).ToList();
+
+				if (lss.Count > 0)
+                    l = lss.Concat(lsf).ToList();
+                
+                var amount = l.Sum(x => x.Amount);
+                //var amount = list.Where(x => x.CreateTime >= started && x.CreateTime < ended).Sum(x => x.Amount);
 
 				lr.Add(new DashboardDTO.Expense()
 				{
