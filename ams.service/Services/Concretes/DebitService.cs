@@ -25,7 +25,9 @@
             var vw = new DebitDTO.Widget();
             var debit = new List<Debit>();
 
-            debit = await Uow.GetRepository<Debit>().GetAllAsync(x => !x.IsDeleted && x.IsActive == true && x.ApartmentId == apartment_id && x._Month == month && x._Year == year);
+            debit = await Uow.GetRepository<Debit>().GetAllAsync(
+                x => !x.IsDeleted && x.IsActive == true && 
+                x.ApartmentId == apartment_id && x._Month == month && x._Year == year);
 
             // TOTAL AMOUNT
             vw.Total = debit.Sum(x => x.Amount).HasValue ? debit.Sum(x => x.Amount)!.Value.ToString("N2", Culture) : "0";

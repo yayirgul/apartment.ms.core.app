@@ -22,7 +22,58 @@
                 border-right: none;
             }
 
-        .bx-housing-safe > .bx-balance {
-            border-top: 1px solid #ebedf3;
-            padding: 1.5rem
+    .bx-housing-safe > .bx-balance {
+        border-top: 1px solid #ebedf3;
+        padding: 1.5rem
+    }
+
+
+
+.bx-ls-expense {
+    position: relative;
+}
+
+    .bx-ls-expense::before,
+    .bx-ls-expense::after {
+        content: "";
+        display: table;
+    }
+
+    .bx-ls-expense::after {
+        clear: both;
+    }
+
+    .bx-ls-expense > ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+        .bx-ls-expense > ul > li {
+            border-right: 1px solid #ebedf3;
+            padding: .825rem 1.42rem;
+            font-size: 1.08rem;
+            line-height: 1.5;
+            /*float: left;*/
+            flex: 1 0 0%;
+            margin-right: 2rem;
         }
+
+            .bx-ls-expense > ul > li > h2 {
+                color: #f64e60;
+                font-size: 0.9rem;
+                font-weight: 600;
+            }
+
+            .bx-ls-expense > ul > li > span {
+                color: #333;
+                font-size: 1.5rem;
+                font-weight: bold;
+            }
+
+            .bx-ls-expense > ul > li:last-child {
+                border: none;
+                margin-right: 0;
+            }

@@ -111,6 +111,41 @@
                         </div>
                     </div>
 
+                    <div class="mb-7">
+                        <div class="row">
+
+                            <div class="col-lg-12">
+
+                                <div class="option">
+                           
+                                    <div class="option-label">
+
+                                        <div class="option-body">
+
+                                            TOPLAM
+
+                                            <div class="separator separator-solid my-7"></div>
+
+                                            <div class="bx-ls-expense">
+                                                <ul id="ls-expense">
+                                                    <li>Asansör (2.500 ₺)</li>
+                                                    <li>Elektrik (1.500 ₺)</li>
+                                                </ul>
+                                            </div>
+
+                                            @* <div class="btn btn-outline-danger btn-lg mr-2">Asansör (2.500 ₺)</div>
+                                            <div class="btn btn-outline-danger btn-lg mr-2">Elektrik (1.500 ₺)</div> *@
+
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+
                     <div class="datatable datatable-bordered datatable-head-custom" id="t-debits"></div>
 
                 </div>
@@ -568,6 +603,7 @@
                 l_debits(filter.apartment_id, filter.month, filter.year);
 
                 wg_debits(filter.apartment_id, filter.month, filter.year);
+                wg_expenses(filter.apartment_id, filter.month, filter.year);
 
             });
 
@@ -594,6 +630,7 @@
                 l_debits(filter.apartment_id, filter.month, filter.year);
 
                 wg_debits(filter.apartment_id, filter.month, filter.year);
+                wg_expenses(filter.apartment_id, filter.month, filter.year);
 
             });
 
@@ -620,6 +657,7 @@
                 l_debits(filter.apartment_id, filter.month, filter.year);
 
                 wg_debits(filter.apartment_id, filter.month, filter.year);
+                wg_expenses(filter.apartment_id, filter.month, filter.year);
 
             });
 
@@ -770,11 +808,6 @@
 
         function wg_debits(apartment_id, month, year) {
 
-            // console.log("Apartment ID : " + apartment_id);
-            // console.log("Paid : " + paid);
-            // console.log("Month : " + month);
-            // console.log("Year : " + year);
-
             $.get("/ams/app/debit/widget/" + apartment_id + "/" + month + "/" + year, function (d) {
 
                 if (d.isSucceed) {
@@ -852,6 +885,34 @@
 
         }
 
+        function wg_expenses(apartment_id, month, year) {
+
+           var ds = $.ajax({
+                type: 'GET',
+                url: '/ams/app/expenses/' + apartment_id + '/' + month + '/' + year,
+                async: false,
+                dataType: 'json',
+                done: function (data) { return data; },
+                fail: function (jqXHR, textStatus, errorThrown) {
+                    console.log('Could not get posts, server response: ' + textStatus + ': ' + errorThrown);
+                }
+            }).responseJSON;
+
+            // console.table(ds);
+
+            $("#ls-expense").empty();
+
+            $.each(ds, function(index, value) {
+
+                $("#ls-expense").append(`
+                 <li>
+                  <h2>${value.expenseName}</h2>
+                  <span>${value._Amount}</span>
+                 </li>
+                `);
+            });
+            
+        }
 
         function combo_apartments() {
 
@@ -1351,6 +1412,7 @@
                 $(qcs.combo.filter.years).find('option[value=' + sessions.year + ']').attr('selected', 'selected');
                 l_debits(sessions.apartment, sessions.month, sessions.year);
                 wg_debits(sessions.apartment, sessions.month, sessions.year);
+                wg_expenses(sessions.apartment, sessions.month, sessions.year);
             }
             else {
                 $(qcs.combo.filter.months).find('option[value=' + qcs.default[0].month + ']').attr('selected', 'selected');
@@ -1360,6 +1422,7 @@
                 sessionStorage.setItem("_year", qcs.default[0].year);
                 l_debits(filter.apartment_id, qcs.default[0].month, qcs.default[0].year);
                 wg_debits(filter.apartment_id, filter.month, filter.year);
+                wg_expenses(filter.apartment_id, filter.month, filter.year);
             }
 
             $(qcs.table.debits).tooltip({
