@@ -29,51 +29,85 @@
 
 
 
-.bx-ls-expense {
-    position: relative;
+
+
+.be-expense-border-danger {
+    border-color: #FFE2E5 !important;
 }
 
-    .bx-ls-expense::before,
-    .bx-ls-expense::after {
-        content: "";
-        display: table;
-    }
+.be-expense-bg-danger {
+    background: #FFE2E5 !important;
+}
 
-    .bx-ls-expense::after {
-        clear: both;
-    }
+.be-expense-border-primary {
+    border-color: #E1F0FF !important;
+}
 
-    .bx-ls-expense > ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
+.be-expense-bg-primary {
+    background: #E1F0FF !important;
+}
+
+.be-expense {
+    border: 2px solid #dbf0f1;
+    border-radius: 1rem;
+    overflow: hidden;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+    .be-expense > .be-expense-header {
+        padding: 1.5rem 2rem;
         display: flex;
-        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
     }
 
-        .bx-ls-expense > ul > li {
-            border-right: 1px solid #ebedf3;
-            padding: .825rem 1.42rem;
-            font-size: 1.08rem;
-            line-height: 1.5;
-            /*float: left;*/
-            flex: 1 0 0%;
-            margin-right: 2rem;
+    .be-expense > .be-expense-body {
+        background: #dbf0f1;
+        padding: 1.5rem 2rem;
+        font-size: 0.90rem;
+        font-weight: 600;
+        min-height: 80px;
+    }
+
+        .be-expense > .be-expense-body > .be-expense-expense {
         }
 
-            .bx-ls-expense > ul > li > h2 {
-                color: #f64e60;
-                font-size: 0.9rem;
-                font-weight: 600;
+            .be-expense > .be-expense-body > .be-expense-expense > ul {
+                list-style: none;
+                padding: 0;
+                margin: 0;
+                display: flex;
+                flex-wrap: wrap;
             }
 
-            .bx-ls-expense > ul > li > span {
-                color: #333;
-                font-size: 1.5rem;
-                font-weight: bold;
-            }
+                .be-expense > .be-expense-body > .be-expense-expense > ul > li {
+                    border-right: 1px solid #c5d9ed;
+                    flex: 1 0 0%;
+                    margin-right: 2rem;
+                    display: flex;
+                    flex-direction: column;
+                }
 
-            .bx-ls-expense > ul > li:last-child {
-                border: none;
-                margin-right: 0;
-            }
+                    .be-expense > .be-expense-body > .be-expense-expense > ul > li:last-child {
+                        border-right: none;
+                    }
+
+                    .be-expense > .be-expense-body > .be-expense-expense > ul > li > .be-expense-title {
+                        margin-bottom: 0.2rem;
+                    }
+
+                    .be-expense > .be-expense-body > .be-expense-expense > ul > li > .be-expense-money {
+                        font-size: 1.1rem;
+                        font-weight: bold;
+                    }
+
+
+    .be-expense > .be-expense-money {
+        background: #dbf0f1;
+        padding: 1.5rem 2rem;
+        min-height: 80px;
+        display: flex;
+        align-items: center;
+        font-size: 1.5rem;
+    }

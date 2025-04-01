@@ -111,36 +111,41 @@
                         </div>
                     </div>
 
-                    <div class="mb-7">
-                        <div class="row">
+                    <div class="row">
+                        <div class="col-lg-8 mb-6">
 
-                            <div class="col-lg-12">
+                            <div class="be-expense be-expense-border-primary">
 
-                                <div class="option">
-                           
-                                    <div class="option-label">
-
-                                        <div class="option-body">
-
-                                            TOPLAM
-
-                                            <div class="separator separator-solid my-7"></div>
-
-                                            <div class="bx-ls-expense">
-                                                <ul id="ls-expense">
-                                                    <li>Asansör (2.500 ₺)</li>
-                                                    <li>Elektrik (1.500 ₺)</li>
-                                                </ul>
-                                            </div>
-
-                                            @* <div class="btn btn-outline-danger btn-lg mr-2">Asansör (2.500 ₺)</div>
-                                            <div class="btn btn-outline-danger btn-lg mr-2">Elektrik (1.500 ₺)</div> *@
-
-                                        </div>
-                                    </div>
-
+                                <div class="be-expense-header">
+                                    <span class="expense-title">Aidat</span>
+                                    <span>0.00</span>
                                 </div>
 
+                                <div class="be-expense-body be-expense-bg-primary">
+                                    <div class="be-expense-expense">
+                                        <ul id="be-expenses"></ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-lg-2 mb-6">
+
+                            <div class="be-expense">
+                                <div class="be-expense-header">
+                                    <span class="expense-title">Ödendi</span>
+                                </div>
+                                <div class="be-expense-money">0.00</div>
+                            </div>
+
+                        </div>
+                        <div class="col-lg-2 mb-6">
+
+                            <div class="be-expense be-expense-border-danger">
+                                <div class="be-expense-header" style="padding:1.5rem;">
+                                    <span class="expense-title">Ödenmedi</span>
+                                </div>
+                                <div class="be-expense-money be-expense-bg-danger">0.00</div>
                             </div>
 
                         </div>
@@ -900,14 +905,21 @@
 
             // console.table(ds);
 
-            $("#ls-expense").empty();
+            $("#be-expenses").empty();
+
+            var amount = 0;
 
             $.each(ds, function(index, value) {
 
-                $("#ls-expense").append(`
-                 <li>
-                  <h2>${value.expenseName}</h2>
-                  <span>${value._Amount}</span>
+                console.log(value)
+
+                amount += value.amount;
+                  console.log(amount)
+
+                $("#be-expenses").append(`
+                 <li class="be-expense-border-primary">
+                  <span class="be-expense-title">${value.expenseName}</span>
+                  <span class="be-expense-money">${value._Amount}</span>
                  </li>
                 `);
             });
