@@ -118,7 +118,7 @@
 
                                 <div class="be-expense-header">
                                     <span class="expense-title">Aidat</span>
-                                    <span>0.00</span>
+                                    <span id="be-expense-total">0.00</span>
                                 </div>
 
                                 <div class="be-expense-body be-expense-bg-primary">
@@ -135,7 +135,7 @@
                                 <div class="be-expense-header">
                                     <span class="expense-title">Ödendi</span>
                                 </div>
-                                <div class="be-expense-money">0.00</div>
+                                <div class="be-expense-money" id="be-expense-paid">0.00</div>
                             </div>
 
                         </div>
@@ -145,7 +145,7 @@
                                 <div class="be-expense-header" style="padding:1.5rem;">
                                     <span class="expense-title">Ödenmedi</span>
                                 </div>
-                                <div class="be-expense-money be-expense-bg-danger">0.00</div>
+                                <div class="be-expense-money be-expense-bg-danger" id="be-expense-unpaid">0.00</div>
                             </div>
 
                         </div>
@@ -516,6 +516,7 @@
                                             $(qcs.modal.payment).modal('hide');
                                             l_debits(dm.ApartmentId, dm.Month, dm.Year);
                                             payable = null;
+                                            wg_debits(dm.ApartmentId, dm.Month, dm.Year);
                                         }
 
                                     });
@@ -820,9 +821,9 @@
                         case 'x-detail':
                             //////////////////////////////////////////////////
 
-                            console.log(d.view.total);
-                            console.log(d.view.paid);
-                            console.log(d.view.unpaid);
+                            $("#be-expense-total").empty().text(d.view.total);
+                            $("#be-expense-paid").empty().text(d.view.paid);
+                            $("#be-expense-unpaid").empty().text(d.view.unpaid);
 
                             break;
                         case 'x-ndata':
@@ -907,17 +908,10 @@
 
             $("#be-expenses").empty();
 
-            var amount = 0;
-
             $.each(ds, function(index, value) {
 
-                console.log(value)
-
-                amount += value.amount;
-                  console.log(amount)
-
                 $("#be-expenses").append(`
-                 <li class="be-expense-border-primary">
+                 <li>
                   <span class="be-expense-title">${value.expenseName}</span>
                   <span class="be-expense-money">${value._Amount}</span>
                  </li>
@@ -1433,8 +1427,8 @@
                 sessionStorage.setItem("_month", qcs.default[0].month);
                 sessionStorage.setItem("_year", qcs.default[0].year);
                 l_debits(filter.apartment_id, qcs.default[0].month, qcs.default[0].year);
-                wg_debits(filter.apartment_id, filter.month, filter.year);
-                wg_expenses(filter.apartment_id, filter.month, filter.year);
+                wg_debits(filter.apartment_id, qcs.default[0].month, qcs.default[0].year);
+                wg_expenses(filter.apartment_id, qcs.default[0].month, qcs.default[0].year);
             }
 
             $(qcs.table.debits).tooltip({
