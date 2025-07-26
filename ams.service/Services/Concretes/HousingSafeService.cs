@@ -54,11 +54,48 @@
             return view;
         }
 
-        public async Task<Result.ListResult<HousingSafeDTO.Table>> GetHousingSafes()
+        public async Task<Result.ListResult<HousingSafeDTO.Table>> GetHousingSafes(Guid apartment_id)
         {
-            var list = new Result.ListResult<HousingSafeDTO.Table>();
-            var ls = await Uow.GetRepository<HousingSafe>().GetAllAsync(x => !x.IsDeleted, y => y.HousingSafeMovements!);
-            return list;
+            var result = new Result.ListResult<HousingSafeDTO.Table>();
+
+            var ls = await Uow.GetRepository<HousingSafe>().GetAllAsync(
+                a => !a.IsDeleted && a.IsActive == true && a.ApartmentId == apartment_id,
+                b => b.Housing!,
+                d => d.CreateTheUser!,
+                e => e.ModifiedTheUser!,
+                f => f.HousingSafeTheUser!
+                );
+
+            var housing_safe = ls.ConvertAll(x => new HousingSafeDTO.Table
+            {
+                Id = x.Id,
+                //AccountId = x.AccountId,
+                ApartmentId = x.ApartmentId,
+                HousingName = x.Housing!.HousingName + " " + x.Housing.HousingNo,
+                HousingNo = x.Housing!.HousingNo!,
+                CreateTime = x.CreateTime,
+                _CreateTime = x.CreateTime != null ? x.CreateTime.ToString("dd/MM/yyyy") : "-",
+                _ModifiedTime = x.ModifiedTime != null ? x.ModifiedTime.Value.ToString("dd/MM/yyyy") : "-",
+                IsActive = x.IsActive ? 1 : 2,
+                CreateUser = x.CreateTheUser != null ? x.CreateTheUser.Firstname + " " + x.CreateTheUser.Lastname : "-",
+                ModifiedUser = x.ModifiedTheUser != null ? x.ModifiedTheUser.Firstname + " " + x.ModifiedTheUser.Lastname : "-",
+                HousingUser = x.HousingSafeTheUser != null ? x.HousingSafeTheUser.Firstname + " " + x.HousingSafeTheUser.Lastname : "-",
+                _Amount = x.Amount.HasValue ? x.Amount.Value.ToString("N2", Culture) : "0",
+            }).OrderBy(x => x.HousingNo).ToList();
+
+            if (housing_safe.Count() > 0)
+            {
+                result.ListView = housing_safe;
+                result.IsSucceed = true;
+                result.Statuses = "x-list";
+            }
+            else
+            {
+                result.IsSucceed = true;
+                result.Statuses = "x-fail";
+            }
+
+            return result;
         }
     }
 }

@@ -3,6 +3,7 @@
     using ams.core.Entities;
     using ams.data.Context;
     using ams.data.Repositories.Abstractions;
+    using Microsoft.Data.SqlClient;
     using Microsoft.EntityFrameworkCore;
     using System.Linq.Expressions;
 
@@ -76,6 +77,12 @@
         {
             await Task.Run(() => Table.Update(entity));
             return entity;
+        }
+
+        public async Task<List<T>> GetAllExecuteAsync(string procedure, params SqlParameter[] parameters)
+        {
+            var sql = $"EXEC {procedure} {string.Join(",", parameters.Select(p => p.ParameterName))}";
+            return await Table.FromSqlRaw(sql, parameters).ToListAsync();
         }
     }
 }

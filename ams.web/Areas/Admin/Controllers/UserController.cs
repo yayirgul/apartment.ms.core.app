@@ -4,6 +4,7 @@
     using ams.entity.DTOs;
     using ams.service.Services.Abstractions;
     using ams.web.Helpers;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.WebUtilities;
     using System.Text;
@@ -119,6 +120,7 @@
         }
 
         [Route("ams/users")]
+        [Authorize(Roles = $"{Helper.Role.ADMIN}")]
         public IActionResult Users()
         {
             return View();
