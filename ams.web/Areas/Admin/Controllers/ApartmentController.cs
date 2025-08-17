@@ -60,7 +60,7 @@
         }
 
         [HttpGet, Route("ams/app/apartments")]
-        public async Task<JsonResult> ApartmentTables()
+        public async Task<JsonResult> GetApartments()
 		{
 			var apartments = await ApartmentService.GetApartments();
 			return Json(apartments);

@@ -1,6 +1,7 @@
 ﻿namespace ams.service.Services.Concretes
 {
     using ams.core.Units;
+    using ams.data.Context;
     using ams.data.UnitOfWorks;
     using ams.entity.DTOs;
     using ams.entity.Entities;
@@ -116,7 +117,15 @@
 
         public async Task<List<ApartmentDTO.Table>> GetApartments()
         {
-            var r = await Uow.GetRepository<Apartment>().GetAllAsync(x => !x.IsDeleted, y => y.CreateTheUser!);
+            var r = await Uow.GetRepository<Apartment>().GetAllAsync(x => !x.IsDeleted, a => a.CreateTheUser!);
+
+            var param = new Dictionary<string, object>{
+                { "@ApartmentId", "16f885ff-6897-4d08-afa6-0640c40d2a05" },
+                { "@AccountId", "16f885ff-6897-4d08-afa6-0640c40d2a05" }
+            };
+
+            var sp = await Uow.GetRepository<Apartment>().GetAllExecuteAsync("sp_aparment_by_id", param);
+
 
             var apartments = r.ConvertAll(x => new ApartmentDTO.Table
             {
@@ -126,10 +135,10 @@
                 _CreateTime = x.CreateTime != null ? x.CreateTime.ToString("dd/MM/yyyy") : "",
                 CreateUser = x.CreateTheUser != null ? x.CreateTheUser!.Firstname + " " + x.CreateTheUser.Lastname : "",
                 IsActive = x.IsActive ? 1 : 2,
+                //TEST = AppDbContext.GetApartmentManager(x.Id)
             });
 
             return apartments;
-            //return await Uow.GetRepository<Apartment>().GetAllAsync(x => !x.IsDeleted, y => y.User!);
         }
     }
 }

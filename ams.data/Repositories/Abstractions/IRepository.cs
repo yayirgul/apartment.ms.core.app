@@ -13,5 +13,7 @@
         Task<T?> GetAsync(Expression<Func<T, bool>> where, params Expression<Func<T, object>>[] inculude);
         Task<T?> GetByIdAsync(Guid id);
         Task<T> UpdateAsync(T entity);
+
+        Task<List<T>> GetAllExecuteAsync(string procedure, Dictionary<string, object> parameters);
     }
 }

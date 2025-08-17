@@ -44,6 +44,7 @@
             public string? _CreateTime { get; set; }
             public string? CreateUser { get; set; }
             public int IsActive { get; set; }
+            public string TEST { get; set; }
         }
     }
 }

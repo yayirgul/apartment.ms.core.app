@@ -79,10 +79,17 @@
             return entity;
         }
 
-        public async Task<List<T>> GetAllExecuteAsync(string procedure, params SqlParameter[] parameters)
+        public async Task<List<T>> GetAllExecuteAsync(string procedure, Dictionary<string, object> parameters)
         {
-            var sql = $"EXEC {procedure} {string.Join(",", parameters.Select(p => p.ParameterName))}";
-            return await Table.FromSqlRaw(sql, parameters).ToListAsync();
+            //var sql = $"EXEC {procedure} {string.Join(",", parameters.Select(p => p.ParameterName))}";
+
+            var param = parameters.Select(x => new SqlParameter(x.Key, x.Value ?? DBNull.Value)).ToArray();
+
+            var parameter_place = string.Join(", ", parameters.Keys.Select(p =>  p));
+
+            var sql = $"EXEC {procedure} {parameter_place}";
+
+            return await Table.FromSqlRaw(sql, param).ToListAsync();
         }
     }
 }

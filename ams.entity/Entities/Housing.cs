@@ -39,14 +39,13 @@
         public Guid? DeleteUser { get; set; }
         [ForeignKey("DeleteUser")]
         public AppUser? DeleteTheUser { get; set; }
-
-         
-
-
+        
 
         [StringLength(300)]
         public string? HousingName { get; set; }
         public int HousingNo { get; set; }
+
+        public bool? IsManager { get; set; }
 
 
         public ICollection<Debit>? Debits { get; set; } // TODO : 1 konutun 1'den çok borcu olabilir
