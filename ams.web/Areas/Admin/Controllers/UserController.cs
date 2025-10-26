@@ -67,6 +67,10 @@
 
             dto.CreateUser = User!.Id;
             dto.AccountId = (Guid)User!.AccountId!;
+
+            //result.IsSucceed = true;
+            //await MailSender.MailSendAsync(dto.Email!, "TEST 2048", "Bu bir test");
+
             result = await UserService.AddAsync(dto);
 
             if (result.IsSucceed)

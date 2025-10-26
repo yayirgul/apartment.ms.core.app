@@ -20,7 +20,7 @@
             this.password = password;
         }
 
-        public Task MailSendAsync(string mail, string subject, string body)
+        public async Task MailSendAsync(string mail, string subject, string body)
         {
             var client = new SmtpClient(host, port)
             {
@@ -28,8 +28,9 @@
                 EnableSsl = enableSSL,
             };
 
-            return client.SendMailAsync(
-                new MailMessage(username ?? "", mail, subject, body) {
+            await client.SendMailAsync(
+                new MailMessage(username ?? "", mail, subject, body)
+                {
                     IsBodyHtml = true
                 });
         }
