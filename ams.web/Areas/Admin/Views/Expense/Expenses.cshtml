@@ -1019,7 +1019,6 @@
                                 1: { 'class': ' label-success' },
                                 2: { 'class': ' label-danger' },
                             };
-
                             return `
                                     <div class='d-flex align-items-center'>
                                      <b class='mr-3'>${row.expenseName}</b>
@@ -1042,7 +1041,11 @@
                         field: 'Month',
                         title: 'Ay/Yıl',
                         template: function (row) {
-                            return row.month + '/' + row.year;
+                            if (row.isFixed) {
+                                return "-";
+                            } else {
+                                return row.month + '/' + row.year;
+                            }
                         },
                     },
                     {

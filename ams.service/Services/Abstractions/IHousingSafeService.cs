@@ -7,5 +7,6 @@
     {
         Task<Result.ViewResult<HousingSafeDTO.Detail>> GetSafeHousingId(Guid housing_id);
         Task<Result.ListResult<HousingSafeDTO.Table>> GetHousingSafes(Guid apartment_id);
+        Task<Result.ViewResult> AmountEdit(HousingSafeDTO.Edit dto);
     }
 }

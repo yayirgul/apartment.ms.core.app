@@ -97,5 +97,36 @@
 
             return result;
         }
+
+        public async Task<Result.ViewResult> AmountEdit(HousingSafeDTO.Edit dto)
+        {
+            var housing_safe = await Uow.GetRepository<HousingSafe>().GetAsync(x => !x.IsDeleted && x.HousingId == dto.HousingId);
+
+            decimal amount;
+            decimal.TryParse(dto.Amount, NumberStyles.Number, Culture, out amount);
+
+            housing_safe!.Amount = amount;
+            housing_safe.ModifiedTime = dto.ModifiedTime;
+            housing_safe.ModifiedUser = dto.ModifiedUser;
+        
+            await Uow.GetRepository<HousingSafe>().UpdateAsync(housing_safe);
+            var result = await Uow.SaveAsync();
+
+            var view = new Result.ViewResult();
+
+            switch (result)
+            {
+                case 1:
+                    view.IsSucceed = true;
+                    view.Statuses = "x-edit";
+                    break;
+                case 0:
+                    view.IsSucceed = true;
+                    view.Statuses = "x-fail";
+                    break;
+            }
+
+            return view;
+        }
     }
 }

@@ -515,6 +515,112 @@
 
             });
 
+
+
+        }
+
+        function housing_safe() {
+
+            const form = document.getElementById('form-housing-safe');
+            const button_save = document.getElementById('button-housing-safe-save');
+
+            const fv = FormValidation.formValidation(form, {
+
+                fields: {
+
+                    Amount: {
+                        validators: {
+                            notEmpty: {
+                                message: 'Tutar alanı boş geçilemez.'
+                            },
+                            stringLength: {
+                                min: 1,
+                                message: 'Tutar minimum 1 olmalıdır'
+                            }
+                        }
+                    },
+
+                },
+
+                plugins: {
+                    trigger: new FormValidation.plugins.Trigger(),
+                    bootstrap: new FormValidation.plugins.Bootstrap(),
+                },
+            }).on('core.form.validating', function () {
+                button_save.innerHTML = 'Doğrulanıyor ...';
+            });
+
+            // -----
+            button_save.addEventListener('click', function () {
+
+                fv.validate().then(function (status) {
+
+                    button_save.innerHTML = status === 'Valid' ? 'Güncelleniyor...' : 'Lütfen tekrar deneyin';
+
+                    switch (status) {
+                        case "Valid":
+
+                            var dm = {
+                                HousingId: $(qcs.input.housing_id).val(),
+                                ApartmentId: $(qcs.select.apartments).val(),
+                                Amount: $(qcs.input.housing_safe_amount).val()
+                            }
+                            console.log(dm);
+
+
+                            $.post("/ams/app/housing-safe/amount-edit", dm, function (d) {
+
+                                console.log(d);
+
+                                if (d.isSucceed) {
+                                    switch (d.statuses) {
+                                        case 'x-edit':
+
+                                            Swal.fire({
+                                                title: "Bakiye",
+                                                text: "Bakiye güncellemesi yapıldı.",
+                                                icon: "success",
+                                                timer: 4000,
+                                                onOpen: function () { Swal.showLoading() },
+                                                allowOutsideClick: false,
+                                                allowEscapeKey: false,
+                                                buttonsStyling: false,
+                                                confirmButtonText: "<i class='la la-headphones'></i> I am game!",
+                                                showCancelButton: false,
+                                                cancelButtonText: "<i class='la la-thumbs-down'></i> No, thanks",
+                                                customClass: {
+                                                    confirmButton: "btn btn-danger",
+                                                    cancelButton: "btn btn-default"
+                                                }
+                                            }).then(function (r) {
+
+                                                if (r.dismiss === "timer") {
+                                                    $(qcs.modal.housing_safe).modal('hide');
+                                                    l_housings(dm.ApartmentId);
+                                                }
+
+                                            });
+
+                                            break;
+                                    }
+                                }
+
+
+                            }).done(function () {
+
+                            }).fail(function (jqXHR, textStatus, errorThrown) {
+
+                            }).always(function () {
+
+                            });
+
+                            break;
+                    }
+
+                });
+
+            });
+
             $(document).on("click", qcs.modal.housing_safe_open, function () {
 
                 var filter = {
@@ -523,7 +629,7 @@
                     housing_name: $(this).data('housing-name'),
                     housing_user: $(this).data('housing-user'),
                 }
-                 
+
                 $(qcs.label.apartment).text(filter.apartment);
                 $(qcs.label.housing).text(filter.housing_name);
                 $(qcs.label.housing_user).text(filter.housing_user);
@@ -531,6 +637,11 @@
                 $(qcs.modal.housing_safe).modal();
 
                 g_housing_safe(filter.housing_id);
+
+                $(qcs.input.housing_id).val(filter.housing_id);
+
+                // fv.resetForm("form-housing-safe");
+                // button_save.innerHTML = "Kaydet";
 
             });
 
@@ -1124,6 +1235,7 @@
             }
 
             housings();
+            housing_safe();
              
             // l_housings(filter.apartment_id);
             combo_users(filter.apartment_id);
