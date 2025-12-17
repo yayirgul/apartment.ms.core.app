@@ -70,7 +70,9 @@
         [HttpGet, Route("ams/app/expenses/{apartment_id}/{month}/{year}")]
         public async Task<JsonResult> GetExpenses(Guid apartment_id, int month, int year)
         {
-            var expenses = await ExpenseService.GetExpenses(apartment_id, month, year);
+            var user = HttpContext.Session.GetSession<UserDTO.User>(Unit.Constants.SESSION_USER);
+            
+            var expenses = await ExpenseService.GetExpenses(user.AccountId, apartment_id, month, year);
             return Json(expenses);
         }
 

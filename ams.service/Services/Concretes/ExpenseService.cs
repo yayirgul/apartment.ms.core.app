@@ -166,15 +166,15 @@
             return expense;
         }
 
-        public async Task<List<ExpenseDTO.Table>> GetExpenses(Guid apartment_id, int month, int year)
+        public async Task<List<ExpenseDTO.Table>> GetExpenses(Guid account_id, Guid apartment_id, int month, int year)
         {
             var list = new List<Expense>();
 
             // TODO : Annual variable expenses
-            var ls = await Uow.GetRepository<Expense>().GetAllAsync(x => !x.IsDeleted && x.ApartmentId == apartment_id && x.Month == month && x.Year == year && x.IsFixed == false, y => y.CreateTheUser!, z => z.ModifiedTheUser!);
+            var ls = await Uow.GetRepository<Expense>().GetAllAsync(x => !x.IsDeleted && x.AccountId == account_id && x.ApartmentId == apartment_id && x.Month == month && x.Year == year && x.IsFixed == false, y => y.CreateTheUser!, z => z.ModifiedTheUser!);
 
             // TODO : Annual fixed expenses 
-            var lsf = await Uow.GetRepository<Expense>().GetAllAsync(x => !x.IsDeleted && x.ApartmentId == apartment_id && x.Year == year && x.IsFixed == true, y => y.CreateTheUser!, z => z.ModifiedTheUser!);
+            var lsf = await Uow.GetRepository<Expense>().GetAllAsync(x => !x.IsDeleted && x.AccountId == account_id && x.ApartmentId == apartment_id && x.Year == year && x.IsFixed == true, y => y.CreateTheUser!, z => z.ModifiedTheUser!);
             
             list = ls.Concat(lsf).ToList(); 
 

@@ -28,7 +28,6 @@
                         <h3 class="card-label">Giderler</h3>
                     </div>
                     <div class="card-toolbar">
-
                     </div>
                 </div>
                 <div class="card-body">
@@ -39,11 +38,17 @@
                             <div class="col-lg-12 col-xl-12">
                                 <div class="row align-items-center">
 
+                                    <div class="col-md-2 my-2 my-md-0">
+                                        <div class="d-flex align-items-center">
+                                            <select class="form-control" id="combo-filter-apartments"></select>
+                                        </div>
+                                    </div>
+
                                     <div class="col-md-1 my-2 my-md-0">
                                         <div class="d-flex align-items-center">
-                                            <select class="form-control" id="combo-filter-apartments">
-                                                <option value="expense">Gelirler</option>
-                                                <option value="debit">Borçlar</option>
+                                            <select class="form-control" id="combo-filter-type">
+                                                <option value="expense">Gider</option>
+                                                <option value="debit">Borç</option>
                                             </select>
                                         </div>
                                     </div>
@@ -56,14 +61,12 @@
                                             </select>
                                         </div>
                                     </div>
-                                     
+
                                 </div>
                             </div>
 
                         </div>
                     </div>
-
-
 
                     <div id="chart-expense"></div>
 
@@ -83,7 +86,7 @@
         const qcs = {
             default: [
                 {
-                    month: _date.getMonth() + 1,
+                    type: "expense",
                     year: _date.getFullYear(),
                 }
             ],
@@ -98,62 +101,258 @@
             combo: {
                 filter: {
                     apartments: '#combo-filter-apartments',
-                    months: '#combo-filter-months',
+                    type: '#combo-filter-type',
                     years: '#combo-filter-years'
                 }
             }
         }
 
+        function combo_apartments() {
+
+            $.ajax({
+                type: 'GET',
+                url: "/ams/app/combo-apartments",
+                async: false,
+                dataType: 'json',
+                success: function (data) {
+
+                    $.each(data, function (i, v) {
+
+                        if (i == 0) {
+                            $(qcs.combo.filter.apartments).append('<option value=' + v.id + ' selected="selected">' + v.apartmentName + '</option>');
+                            $(qcs.combo.expense_apartments).append('<option value=' + v.id + ' selected="selected">' + v.apartmentName + '</option>');
+                        } else {
+                            $(qcs.combo.expense_apartments).append('<option value=' + v.id + '>' + v.apartmentName + '</option>');
+                            $(qcs.combo.filter.apartments).append('<option value=' + v.id + '>' + v.apartmentName + '</option>');
+                        }
+
+                        // $(qcs.combo.expense_apartments).append($("<option selected='selected'></option>").val(v.id).html(v.apartmentName));
+
+                    });
+
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log('Could not get posts, server response: ' + textStatus + ': ' + errorThrown);
+                }
+            });
+
+        }
+
         function dashboard() {
+
+            $(document).on("change", qcs.combo.filter.apartments, function () {
+
+                var filter = {
+                    apartment_id: $(qcs.combo.filter.apartments).val(),
+                    type: $(qcs.combo.filter.type).val(),
+                    year: $(qcs.combo.filter.years).val(),
+                }
+                analysis(filter.apartment_id, filter.type, filter.year);
+
+            });
+
+            $(document).on("change", qcs.combo.filter.type, function () {
+
+                var filter = {
+                    apartment_id: $(qcs.combo.filter.apartments).val(),
+                    type: $(qcs.combo.filter.type).val(),
+                    year: $(qcs.combo.filter.years).val(),
+                }
+                analysis(filter.apartment_id, filter.type, filter.year);
+
+            });
 
             $(document).on("change", qcs.combo.filter.years, function () {
 
                 var filter = {
                     apartment_id: $(qcs.combo.filter.apartments).val(),
-                    month: $(qcs.combo.filter.months).val(),
+                    type: $(qcs.combo.filter.type).val(),
                     year: $(this).val(),
                 }
-
-                analysis(filter.year);
-
-                // sessionStorage.setItem("_apartment", filter.apartment_id);
-                // sessionStorage.setItem("_month", filter.month);
-                // sessionStorage.setItem("_year", filter.year);
-
-                // $(qcs.combo.filter.years).children('option').removeAttr('selected');
-                // $(qcs.combo.filter.years).find('option[value=' + filter.year + ']').attr('selected', 'selected');
-
-                // $(qcs.combo.expense_months).find('option[value=' + filter.month + ']').attr('selected', 'selected');
-                // $(qcs.combo.expense_years).find('option[value=' + filter.year + ']').attr('selected', 'selected');
-
-                // l_expenses(filter.apartment_id, filter.month, filter.year);
+                analysis(filter.apartment_id, filter.type, filter.year);
 
             });
 
         }
 
-        function analysis(year) {
+        function analysis(apartment, type, year) {
 
-            console.log("YIL : " + year);
-
-            const apexChart = "#chart_3";
-
-
-            $.get("/ams/dashboard/analysis/16f885ff-6897-4d08-afa6-0640c40d2a05/expense/" + year, function (d) {
+            $.get("/ams/dashboard/analysis/" + apartment + "/" + type + "/" + year, function (d) {
 
                 // console.log(JSON.stringify(d.listView));
-                // console.log(d.listView);
+                // console.log(d);
 
                 if (d.isSucceed) {
                     switch (d.statuses) {
-                        case 'x-detail':
+                        case 'x-list':
+
+                                // -----------------------------------------------------------------------
+
+                                // typ = EXPENSE - DEBT
+
+                                var series = [
+                                    {
+                                        name: 'Gider',
+                                        data: [d.listView[0].amount, d.listView[1].amount, d.listView[2].amount, d.listView[3].amount, d.listView[4].amount, d.listView[5].amount, d.listView[6].amount, d.listView[7].amount, d.listView[8].amount, d.listView[9].amount, d.listView[10].amount, d.listView[11].amount]
+                                        // data: ["0,00", "0,00", "0,00", "0,00", "0,00", "0,00", "1.852,80", "772,60", "1.858,60", "2.175", "5.342,68", "0,00"]
+                                    }
+                                ];
+
+                                var colors = [
+                                    "#27BDFF", "#23B3F4", "#20A9E9", "#1C9FDE", "#1995D3", "#158BC8",
+                                    "#1280BE", "#0E76B3", "#0B6CA8", "#07629D", "#045892", "#004E87",
+                                ];
+
+                                var options = {
+                                    //series: series,
+                                    series: [],
+                                    chart: {
+                                        type: 'bar',
+                                        height: 500,
+                                        toolbar: {
+                                            show: false
+                                        }
+                                    },
+                                    colors: colors,
+                                    legend: {
+                                        show: false // TODO : Grafiğin altındaki "DOT'ları" gizliyor
+                                    },
+                                    plotOptions: {
+                                        bar: {
+                                            horizontal: false,
+                                            columnWidth: '25%',
+                                            //borderRadius: 10,
+                                            // endingShape: 'rounded',
+                                            dataLabels: {
+                                                position: 'top'
+                                            },
+                                            distributed: true,
+                                        },
+                                    },
+                                    dataLabels: {
+                                        enabled: true,
+                                        formatter: function (val, opts) {
+                                            var view = d.listView[opts.dataPointIndex];
+                                            return "₺ " + view._Amount;
+                                          //return val + "%";
+                                        },
+                                        offsetY: -30,
+                                        style: {
+                                          fontSize: '11px',
+                                          colors: ["#304758"]
+                                        }
+                                    },
+                                    stroke: {
+                                        show: true,
+                                        width: 2,
+                                        //colors: ['transparent']
+                                    },
+                                    xaxis: {
+                                        categories: ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran', 'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'],
+                                        position: 'bottom',
+                                        axisBorder: {
+                                            show: false
+                                        },
+                                        axisTicks: {
+                                            show: false
+                                        },
+                                        //tickPlacement: 'on',
+                                        crosshairs: {
+                                            fill: {
+                                                type: 'gradient',
+                                                gradient: {
+                                                    colorFrom: '#D8E3F0',
+                                                    colorTo: '#BED1E6',
+                                                    stops: [0, 100],
+                                                    opacityFrom: 0.4,
+                                                    opacityTo: 0.5,
+                                                }
+                                            }
+                                        },
+                                    },
+                                    yaxis: {
+                                        labels: {
+                                            show: true, // TODO : Y ekseinindeki SOL tarafındaki sayıları gizliyor.
+                                            formatter: function (val) {
+                                                return '₺ ' + val.toLocaleString('tr-TR');
+                                            }
+                                        },
+                                        axisTicks: {
+                                            show: false
+                                        },
+                                        axisBorder: {
+                                            show: false
+                                        },
+                                        title: {
+                                            text: type === "expense" ? year + " - AİDAT GİDERLER" : year + " - AİDAT BORÇLAR",
+                                            style: {
+                                                fontSize: '14px',
+                                            }
+                                        }
+                                    },
+                                    grid: {
+                                        padding: {
+                                            top: -20,
+                                            left: -8
+                                        },
+                                        xaxis: {
+                                            lines: {
+                                                show: true
+                                            }
+                                        },
+                                        yaxis: {
+                                            lines: {
+                                                show: true
+                                            }
+                                        }
+                                    },
+                                    fill: {
+                                        opacity: 1,
+                                        type: 'gradient',
+                                        gradient: {
+                                          shade: 'light',
+                                          type: "horizontal",
+                                          shadeIntensity: 0.25,
+                                          gradientToColors: undefined,
+                                          inverseColors: true,
+                                          opacityFrom: 0.85,
+                                          opacityTo: 0.85,
+                                          stops: [50, 0, 100]
+                                        },
+                                    },
+                                    tooltip: {
+                                        theme: 'dark', // dark | light
+                                        followCursor: true,
+                                        marker: {
+                                            show: true
+                                        },
+                                        y: {
+                                            formatter: function (val, opts) {
+                                                // var view = d.listView[opts.dataPointIndex];
+                                                // return "₺ " + view._Amount;
+                                                //console.log("tutar : " + view._Amount);
+                                                return '₺ ' + val.toLocaleString('tr-TR');
+                                            }
+                                        },
+                                    },
+                                    //colors: [qcs.chart.color.primary, qcs.chart.color.danger]
+                                };
+
+                                var chart = new ApexCharts(document.querySelector(qcs.chart.expense), options);
+                                chart.render().then(() => {
+                                    chart.updateSeries([
+                                        { name: type === "expense" ? series[0].name : "Borç", data: series[0].data }
+                                    ]);
+                                });
+
+                                // -----------------------------------------------------------------------
 
                             break;
                         case 'x-ndata':
 
                             break;
                         case 'x-timeout':
-                           
+
                            Swal.fire({
                                title: "Oturum",
                                text: "Oturum süresi dolduğu için tekrardan giriş yapmalısınız.",
@@ -181,76 +380,10 @@
                 }
 
 
-                
 
 
-                // typ = Gelir - Borç
-                 
 
-                var series = [
-                    { 
-                        name: 'Gelirler', 
-                        data: [d.listView[0].amount, d.listView[1].amount, d.listView[2].amount, d.listView[3].amount, d.listView[4].amount, d.listView[5].amount, d.listView[6].amount, d.listView[7].amount, d.listView[8].amount, d.listView[9].amount, d.listView[10].amount, d.listView[11].amount]
-                        // data: ["0,00", "0,00", "0,00", "0,00", "0,00", "0,00", "1.852,80", "772,60", "1.858,60", "2.175", "5.342,68", "0,00"]
-                    },
-                    // { 
-                    //     name: 'Borçlar',
-                    //     data: [d.listView[0].amount, d.listView[1].amount, d.listView[2].amount, d.listView[3].amount, d.listView[4].amount, d.listView[5].amount, d.listView[6].amount, d.listView[7].amount, d.listView[8].amount, d.listView[9].amount, d.listView[10].amount, d.listView[11].amount]
-                    // }
-                ];
 
-                var options = {
-                    series: series,
-                    chart: {
-                        type: 'bar',
-                        height: 350
-                    },
-                    plotOptions: {
-                        bar: {
-                            horizontal: false,
-                            columnWidth: '20%',
-                            endingShape: 'rounded'
-                        },
-                    },
-                    dataLabels: {
-                        enabled: false
-                    },
-                    stroke: {
-                        show: true,
-                        width: 2,
-                        colors: ['transparent']
-                    },
-                    xaxis: {
-                        categories: ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran', 'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'],
-                    },
-                    yaxis: {
-                        // title: { text: '$ (thousands)' }
-                    },
-                    fill: {
-                        opacity: 1
-                    },
-                    tooltip: {
-                        y: {
-                            formatter: function (val, opts) {
-
-                                var view = d.listView[opts.dataPointIndex];
-
-                                console.log("tutar : " + view._Amount);
-
-                                return "₺ " + view._Amount;
-                                // return "₺ " + val.toFixed(0);
-                            }
-                        }
-                    },
-                    colors: [qcs.chart.color.primary, qcs.chart.color.danger]
-                };
-
-                var chart = new ApexCharts(document.querySelector(qcs.chart.expense), options);
-                chart.render();
-
-                chart.updateSeries([{
-                    series: series
-                }]);
 
 
 
@@ -272,8 +405,43 @@
         }
 
         $(function () {
-            analysis(2025);
+
             dashboard();
+            combo_apartments();
+
+            var filter = {
+                apartment_id: $(qcs.combo.filter.apartments).val(),
+                type: $(qcs.combo.filter.type).val(),
+                year: $(qcs.combo.filter.years).val(),
+            }
+
+            var sessions = {
+                apartment: sessionStorage.getItem("_apartment"),
+                type: sessionStorage.getItem("_type"),
+                year: sessionStorage.getItem("_year")
+            }
+
+            if (sessions.year != null) {
+
+                $(qcs.combo.filter.apartments).find('option[value=' + sessions.apartment + ']').attr('selected', 'selected');
+                $(qcs.combo.filter.type).find('option[value=' + sessions.type + ']').attr('selected', 'selected');
+                $(qcs.combo.filter.years).find('option[value=' + sessions.year + ']').attr('selected', 'selected');
+
+                 analysis(sessions.apartment, sessions.type, sessions.year);
+            }
+            else {
+
+                $(qcs.combo.filter.apartments).find('option[value=' + filter.apartment_id + ']').attr('selected', 'selected');
+                $(qcs.combo.filter.type).find('option[value=' + qcs.default[0].type + ']').attr('selected', 'selected');
+                $(qcs.combo.filter.years).find('option[value=' + qcs.default[0].year + ']').attr('selected', 'selected');
+
+                sessionStorage.setItem("_apartment", filter.apartment_id);
+                sessionStorage.setItem("_type", filter.type);
+                sessionStorage.setItem("_year", qcs.default[0].year);
+
+                analysis(filter.apartment_id, qcs.default[0].type, qcs.default[0].year);
+            }
+
         });
 
     </script>

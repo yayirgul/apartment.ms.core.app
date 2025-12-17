@@ -65,7 +65,7 @@
                         var session_user = new UserDTO.User()
                         {
                             Id = user.Id,
-                            AccountId = user.AccountId,
+                            AccountId = (Guid)user.AccountId!,
                             Firstname = user.Firstname,
                             Lastname = user.Lastname,
                             Email = dto.Email,

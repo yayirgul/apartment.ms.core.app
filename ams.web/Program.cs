@@ -23,8 +23,9 @@ builder.Services.ServiceHelper();
 builder.Services.AddSession(opt =>
 {
     opt.IdleTimeout = TimeSpan.FromMinutes(3600);
-    //opt.IdleTimeout = TimeSpan.FromSeconds(5);
-    //opt.Cookie.HttpOnly = true;
+    opt.Cookie.HttpOnly = true;
+    opt.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+    opt.Cookie.SameSite = SameSiteMode.Strict;
     //opt.Cookie.IsEssential = true;
 });
 

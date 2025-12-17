@@ -35,9 +35,7 @@
 				Guid account_id;
 
 				if (Guid.TryParse(user!.AccountId.ToString(), out account_id))
-				{
-					analysis = await DashboardService.GetExpenseChart(user!.AccountId, apartment_id, year);
-				}
+					analysis = await DashboardService.GetExpenseChart(user!.AccountId, apartment_id, type, year);
 				else
 				{
 					analysis.IsSucceed = true;
