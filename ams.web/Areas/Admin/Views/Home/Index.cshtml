@@ -20,7 +20,7 @@
     <div class="row">
         <div class="col-xl-12">
             <div class="card card-custom">
-                <div class="card-header">
+@*                 <div class="card-header">
                     <div class="card-title">
                         <span class="card-icon">
                             <i class="far fa-building text-primary"></i>
@@ -29,7 +29,7 @@
                     </div>
                     <div class="card-toolbar">
                     </div>
-                </div>
+                </div> *@
                 <div class="card-body">
 
                     <!--begin::Search Form-->
@@ -40,7 +40,9 @@
 
                                     <div class="col-md-2 my-2 my-md-0">
                                         <div class="d-flex align-items-center">
-                                            <select class="form-control" id="combo-filter-apartments"></select>
+                                            <select class="form-control" id="combo-filter-apartments">
+                                                <option value="all">Tümü</option>
+                                            </select>
                                         </div>
                                     </div>
 
@@ -49,6 +51,25 @@
                                             <select class="form-control" id="combo-filter-type">
                                                 <option value="expense">Gider</option>
                                                 <option value="debit">Borç</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-1 my-2 my-md-0">
+                                        <div class="d-flex align-items-center">
+                                            <select class="form-control" id="combo-filter-months">
+                                                <option value="1">Ocak</option>
+                                                <option value="2">Şubat</option>
+                                                <option value="3">Mart</option>
+                                                <option value="4">Nisan</option>
+                                                <option value="5">Mayıs</option>
+                                                <option value="6">Haziran</option>
+                                                <option value="7">Temmuz</option>
+                                                <option value="8">Ağustos</option>
+                                                <option value="9">Eylül</option>
+                                                <option value="10">Ekim</option>
+                                                <option value="11">Kasım</option>
+                                                <option value="12">Aralık</option>
                                             </select>
                                         </div>
                                     </div>
@@ -67,6 +88,107 @@
 
                         </div>
                     </div>
+
+                    @* <div class="separator separator-dashed separator-border-1 mb-7"></div> *@
+
+                    <div class="mb-7">
+                        <div class="row">
+                            <div class="col-md-2">
+
+                                <div style="border:1px dashed #ddd; border-radius:.475rem;padding:1.5rem; display:flex; flex-direction: column;">
+                                    <div style="font-size: 1rem; font-weight:600; margin-bottom: 1rem;">
+                                        GİDERLER
+                                    </div>
+                                    <div style="font-size: 2.5rem; font-weight:600">
+                                        32.710 ₺
+                                    </div>
+                                    <div style="font-size: 1rem">
+                                        Yıllık Gider
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="col-md-2">
+
+                                <div style="border:1px dashed #ddd; border-radius:.475rem;padding:1.5rem; display:flex; flex-direction: column;">
+                                    <div style="font-size: 1rem; font-weight:600; margin-bottom: 1rem;">
+                                        BORÇLAR
+                                    </div>
+                                    <div style="font-size: 2.5rem; font-weight:600">
+                                        0,00 ₺
+                                    </div>
+                                    <div style="font-size: 1rem">
+                                        Yıllık Borç
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-2">
+
+                                <div style="border:1px dashed #ddd; border-radius:.475rem;padding:1.5rem; display:flex; flex-direction: column; position:relative">
+
+                                    <div style="
+    position: absolute;
+    right: -5px;
+    top: -10px;
+    background: #e25d63;
+    border-radius: 0.475rem;
+    color: #fff;
+    padding: .5rem .7rem;
+    font-size: 10px;
+">
+                                        ARALIK 2025
+                                    </div>
+
+                                    <div style="font-size: 1rem; font-weight:600; margin-bottom: 1rem;">
+                                        ÖDENMEYEN BORÇ
+                                    </div>
+                                    <div style="font-size: 2.5rem; font-weight:600">
+                                        2.367 ₺
+                                    </div>
+                                    <div style="font-size: 1rem">
+                                        Aylık
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-2">
+
+                                <div style="border:1px dashed #ddd; border-radius:.475rem;padding:1.5rem;">
+                                    <div style="font-size: 1rem; font-weight:600; margin-bottom:1rem;">
+                                        KONUT / BORÇLU KONUT
+                                    </div>
+                                    <div style="font-size: 2rem; font-weight:600; display:flex">
+                                        <div style="display:flex;  width:100%; align-items: center; align-items:flex-start">
+                                            <div style="display:flex; align-items:center; font-size:2.5rem;">10
+                                                <span style="font-size:0.9rem; font-weight:500; margin-left:.5rem">Konut</span>
+                                            </div>
+                                            
+                                        </div>
+                                        <div style="display:flex;  width:100%; align-items: center;   flex-direction:column">
+                                            <div style="display:flex; align-items: center; font-size:2.5rem;">
+                                                <span class="label label-xl label-dot label-danger mr-2"></span>
+                                                2<span style="font-size:0.8rem; font-weight:500; margin-left:.5rem">Konut</span>
+                                            </div>
+                                            
+                                            @* <div class="text-danger" style="font-size:0.8rem; font-weight:500; margin-left:.5rem; ">Ödemedi</div> *@
+                                        </div>
+
+                                        @* 10 <span style="font-size:1rem">Konut</span> | 2 *@
+                                    </div>
+                                    <span>Aylık</span>
+
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+             
 
                     <div id="chart-expense"></div>
 
@@ -87,6 +209,7 @@
             default: [
                 {
                     type: "expense",
+                    month: _date.getMonth() + 1,
                     year: _date.getFullYear(),
                 }
             ],
@@ -101,6 +224,7 @@
             combo: {
                 filter: {
                     apartments: '#combo-filter-apartments',
+                    months: '#combo-filter-months',
                     type: '#combo-filter-type',
                     years: '#combo-filter-years'
                 }
@@ -145,8 +269,10 @@
                 var filter = {
                     apartment_id: $(qcs.combo.filter.apartments).val(),
                     type: $(qcs.combo.filter.type).val(),
+                    month: $(qcs.combo.filter.months).val(),
                     year: $(qcs.combo.filter.years).val(),
                 }
+                session_storage(filter.apartment_id, filter.type, filter.month, filter.year);
                 analysis(filter.apartment_id, filter.type, filter.year);
 
             });
@@ -156,9 +282,24 @@
                 var filter = {
                     apartment_id: $(qcs.combo.filter.apartments).val(),
                     type: $(qcs.combo.filter.type).val(),
+                    month: $(qcs.combo.filter.months).val(),
                     year: $(qcs.combo.filter.years).val(),
                 }
+                session_storage(filter.apartment_id, filter.type, filter.month, filter.year);
                 analysis(filter.apartment_id, filter.type, filter.year);
+
+            });
+
+            $(document).on("change", qcs.combo.filter.months, function () {
+
+                var filter = {
+                    apartment_id: $(qcs.combo.filter.apartments).val(),
+                    type: $(qcs.combo.filter.type).val(),
+                    month: $(qcs.combo.filter.months).val(),
+                    year: $(qcs.combo.filter.years).val(),
+                }
+                session_storage(filter.apartment_id, filter.type, filter.month, filter.year);
+                // analysis(filter.apartment_id, filter.type, filter.year);
 
             });
 
@@ -167,20 +308,31 @@
                 var filter = {
                     apartment_id: $(qcs.combo.filter.apartments).val(),
                     type: $(qcs.combo.filter.type).val(),
+                    month: $(qcs.combo.filter.months).val(),
                     year: $(this).val(),
                 }
+                session_storage(filter.apartment_id, filter.type, filter.month, filter.year);
                 analysis(filter.apartment_id, filter.type, filter.year);
 
             });
 
         }
 
+        function session_storage(apartment_id, type, month, year) {
+            sessionStorage.setItem("_apartment", apartment_id);
+            sessionStorage.setItem("_type", type);
+            sessionStorage.setItem("_month", month);
+            sessionStorage.setItem("_year", year);
+        }
+
         function analysis(apartment, type, year) {
+
+             console.log(apartment + " " + type + " - " + year);
 
             $.get("/ams/dashboard/analysis/" + apartment + "/" + type + "/" + year, function (d) {
 
                 // console.log(JSON.stringify(d.listView));
-                // console.log(d);
+                console.log(d);
 
                 if (d.isSucceed) {
                     switch (d.statuses) {
@@ -284,20 +436,21 @@
                                             show: false
                                         },
                                         title: {
-                                            text: type === "expense" ? year + " - AİDAT GİDERLER" : year + " - AİDAT BORÇLAR",
+                                            text: type === "expense" ? year + " - AYLIK AİDAT GİDERLERİ" : year + " - AYLIK AİDAT BORÇLARI",
                                             style: {
                                                 fontSize: '14px',
                                             }
                                         }
                                     },
                                     grid: {
+                                        strokeDashArray: 3,
                                         padding: {
                                             top: -20,
-                                            left: -8
+                                            left: 0
                                         },
                                         xaxis: {
                                             lines: {
-                                                show: true
+                                                show: false
                                             }
                                         },
                                         yaxis: {
@@ -412,33 +565,36 @@
             var filter = {
                 apartment_id: $(qcs.combo.filter.apartments).val(),
                 type: $(qcs.combo.filter.type).val(),
+                month: $(qcs.combo.filter.months).val(),
                 year: $(qcs.combo.filter.years).val(),
             }
 
             var sessions = {
                 apartment: sessionStorage.getItem("_apartment"),
                 type: sessionStorage.getItem("_type"),
-                year: sessionStorage.getItem("_year")
+                month: sessionStorage.getItem("_month"),
+                year: sessionStorage.getItem("_year"),
             }
 
             if (sessions.year != null) {
 
                 $(qcs.combo.filter.apartments).find('option[value=' + sessions.apartment + ']').attr('selected', 'selected');
                 $(qcs.combo.filter.type).find('option[value=' + sessions.type + ']').attr('selected', 'selected');
+                $(qcs.combo.filter.months).find('option[value=' + sessions.month + ']').attr('selected', 'selected');
                 $(qcs.combo.filter.years).find('option[value=' + sessions.year + ']').attr('selected', 'selected');
 
-                 analysis(sessions.apartment, sessions.type, sessions.year);
+                console.log(sessions.apartment + " " + sessions.type + " - " + sessions.month + " - " + sessions.year);
+
+                analysis(sessions.apartment, sessions.type, sessions.year);
             }
             else {
 
                 $(qcs.combo.filter.apartments).find('option[value=' + filter.apartment_id + ']').attr('selected', 'selected');
                 $(qcs.combo.filter.type).find('option[value=' + qcs.default[0].type + ']').attr('selected', 'selected');
+                $(qcs.combo.filter.months).find('option[value=' + qcs.default[0].month + ']').attr('selected', 'selected');
                 $(qcs.combo.filter.years).find('option[value=' + qcs.default[0].year + ']').attr('selected', 'selected');
 
-                sessionStorage.setItem("_apartment", filter.apartment_id);
-                sessionStorage.setItem("_type", filter.type);
-                sessionStorage.setItem("_year", qcs.default[0].year);
-
+                session_storage(filter.apartment_id, filter.type, qcs.default[0].month, qcs.default[0].year);
                 analysis(filter.apartment_id, qcs.default[0].type, qcs.default[0].year);
             }
 

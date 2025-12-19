@@ -189,8 +189,8 @@
                 Amount = x.Amount,
                 //_Amount = x.Amount.HasValue ? x.Amount.Value.ToString("#,##0.00") : "0",
                 _Amount = x.Amount.HasValue ? x.Amount.Value.ToString("N2", Culture) : "0",
-                _CreateTime = x.CreateTime != null ? x.CreateTime.ToString("dd/MM/yyyy") : "",
-                IsActive = x.IsActive ? 1 : 2,
+                _CreateTime = x?.CreateTime != null ? x.CreateTime.ToString("dd/MM/yyyy") : "",
+                IsActive = x!.IsActive ? 1 : 2,
                 CreateUser = x.CreateTheUser != null ? x.CreateTheUser.Firstname + " " + x.CreateTheUser.Lastname : "-",
                 UpdateUser = x.ModifiedTheUser != null ? x.ModifiedTheUser.Firstname + " " + x.ModifiedTheUser.Lastname : "-",
                 IsFixed = x.IsFixed

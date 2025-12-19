@@ -8,13 +8,13 @@
 
     [Area("admin")]
     public class ApartmentController : Controller
-	{
-		private readonly IApartmentService ApartmentService;
+    {
+        private readonly IApartmentService ApartmentService;
 
-		public ApartmentController(IApartmentService ApartmentService)
-		{
-			this.ApartmentService = ApartmentService;
-		}
+        public ApartmentController(IApartmentService ApartmentService)
+        {
+            this.ApartmentService = ApartmentService;
+        }
 
         [HttpPost, Route("ams/app/apartment/add")]
         public async Task<JsonResult> ApartmentEdit(ApartmentDTO.Add dto)
@@ -61,15 +61,43 @@
 
         [HttpGet, Route("ams/app/apartments")]
         public async Task<JsonResult> GetApartments()
-		{
-			var apartments = await ApartmentService.GetApartments();
-			return Json(apartments);
-		}
+        {
+            var user = HttpContext.Session.GetSession<UserDTO.User>(Unit.Constants.SESSION_USER);
 
-		[Route("ams/apartments")]
-		public IActionResult Apartments()
-		{
-			return View();
-		}
-	}
+            //var result = new Result.ListResult<ApartmentDTO.Table>();
+
+            Result.ListResult<ApartmentDTO.Table> result;
+
+            if (user != null)
+            {
+                result = new Result.ListResult<ApartmentDTO.Table>()
+                {
+                    ListView = await ApartmentService.GetApartments(),
+                    IsSucceed = true,
+                    Statuses = "successful",
+                };
+               // result.ListView = await ApartmentService.GetApartments();
+            }
+            else
+            {
+                result = new Result.ListResult<ApartmentDTO.Table>()
+                {
+                    ListView = null,
+                    IsSucceed = false,
+                    Statuses = "session.timeout"
+                };
+            }
+
+            return Json(result);
+
+            //var apartments = await ApartmentService.GetApartments();
+            //return Json(apartments);
+        }
+
+        [Route("ams/apartments")]
+        public IActionResult Apartments()
+        {
+            return View();
+        }
+    }
 }

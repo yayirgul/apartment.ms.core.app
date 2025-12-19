@@ -293,9 +293,9 @@
                     Firstname = user.Firstname,
                     DisplayName = user.Firstname + " " + user.Lastname,
                     IsActive = user.IsActive ? 1 : 2,
-                    _CreateTime = user.CreateTime != null ? user.CreateTime.ToString("dd/MM/yyyy") : "-",
-                    _ModifiedTime = user.ModifiedTime != null ? user.ModifiedTime.Value.ToString("dd/MM/yyyy") : "-",
-                    EmailConfirmed = user.EmailConfirmed ? 1 : 0
+                    _CreateTime = user?.CreateTime != null ? user.CreateTime.ToString("dd/MM/yyyy") : "-",
+                    _ModifiedTime = user?.ModifiedTime != null ? user.ModifiedTime.Value.ToString("dd/MM/yyyy") : "-",
+                    EmailConfirmed = user!.EmailConfirmed ? 1 : 0
                 });
             }
 
