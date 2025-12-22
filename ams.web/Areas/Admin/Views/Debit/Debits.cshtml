@@ -157,8 +157,8 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="modal-expense-title">Yeni Gider</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <i aria-hidden="true" class="ki ki-close"></i>
+                <button type="button" class="close-- btn btn-icon btn-light-danger btn-circle" data-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="fas fa-times"></i>
                 </button>
             </div>
             <div class="modal-body">
@@ -227,8 +227,8 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="modal-expense-title">Ödeme</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <i aria-hidden="true" class="ki ki-close"></i>
+                <button type="button" class="close-- btn btn-icon btn-light-danger btn-circle" data-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="fas fa-times"></i>
                 </button>
             </div>
             <div class="modal-body">
@@ -326,8 +326,8 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="modal-expense-title">BORÇ HAREKETLERİ</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <i aria-hidden="true" class="ki ki-close"></i>
+                <button type="button" class="close-- btn btn-icon btn-light-danger btn-circle" data-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="fas fa-times"></i>
                 </button>
             </div>
             <div class="modal-body">
@@ -896,11 +896,11 @@
                 }
             }).responseJSON;
 
-            // console.table(ds);
+            // console.table(ds.listView);
 
             $("#be-expenses").empty();
 
-            $.each(ds, function(index, value) {
+            $.each(ds.listView, function(index, value) {
 
                 $("#be-expenses").append(`
                  <li>

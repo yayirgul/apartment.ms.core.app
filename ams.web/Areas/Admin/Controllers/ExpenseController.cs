@@ -3,6 +3,7 @@
     using ams.core.Units;
     using ams.entity.DTOs;
     using ams.service.Services.Abstractions;
+    using ams.service.Services.Concretes;
     using ams.web.Helpers;
     using Microsoft.AspNetCore.Mvc;
 
@@ -71,9 +72,30 @@
         public async Task<JsonResult> GetExpenses(Guid apartment_id, int month, int year)
         {
             var user = HttpContext.Session.GetSession<UserDTO.User>(Unit.Constants.SESSION_USER);
-            
-            var expenses = await ExpenseService.GetExpenses(user.AccountId, apartment_id, month, year);
-            return Json(expenses);
+
+            Result.ListResult<ExpenseDTO.Table> result;
+
+            if (user != null)
+            {
+                result = new Result.ListResult<ExpenseDTO.Table>()
+                {
+                    ListView = await ExpenseService.GetExpenses(user!.AccountId, apartment_id, month, year),
+                    IsSucceed = true,
+                    Statuses = "successful",
+                };
+            }
+            else
+            {
+                result = new Result.ListResult<ExpenseDTO.Table>()
+                {
+                    ListView = null,
+                    IsSucceed = false,
+                    Statuses = "session.timeout"
+                };
+            }
+
+            //var expenses = await ExpenseService.GetExpenses(user!.AccountId, apartment_id, month, year);
+            return Json(result);
         }
 
         [Route("ams/expenses")]

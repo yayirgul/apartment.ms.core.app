@@ -11,10 +11,8 @@
                 <span class="text-muted font-weight-bold mr-4">#XRS-45670</span>
             </div>
             <div class="d-flex align-items-center">
-                <a href="javascript:;" id="modal-expense-new" class="btn btn-sm btn-light-primary font-weight-bolder mr-2">Yeni Gider</a>
-                <a href="javascript:;" id="modal-debit-new" class="btn btn-sm btn-light-danger font-weight-bolder">
-                    Borçlandır
-                </a>
+                <a href="javascript:;" id="modal-expense-new" class="btn btn-sm btn-light-primary font-weight-bolder">Yeni Gider</a>
+                <a href="javascript:;" id="modal-debit-new" class="btn btn-sm btn-light-danger font-weight-bolder ml-3">Borçlandır</a>
             </div>
         </div>
     </div>
@@ -124,8 +122,8 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="modal-expense-title">Yeni</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <i aria-hidden="true" class="ki ki-close"></i>
+                <button type="button" class="close-- btn btn-icon btn-light-danger btn-circle" data-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="fas fa-times"></i>
                 </button>
             </div>
             <div class="modal-body">
@@ -206,8 +204,8 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="modal-user-title">Borçlandır</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <i aria-hidden="true" class="ki ki-close"></i>
+                <button type="button" class="close-- btn btn-icon btn-light-danger btn-circle" data-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="fas fa-times"></i>
                 </button>
             </div>
             <div class="modal-body">
@@ -834,9 +832,9 @@
                         case 'x-fail':
 
                             Swal.fire({
-                                title: "Hata",
-                                text: "Hesaplama yapılacak tutar bulunamadı...",
-                                icon: "error",
+                                title: "Uyarı",
+                                html: "<b>" + month + "/" + year + "</b> tarihine ait <b>Gider</b> bulunamadı. <b>Borçlandırma</b> işlemini yapabilmeniz için <b>Yeni Gider</b> oluşturunuz.",
+                                icon: "warning",
                                 allowOutsideClick: false,
                                 allowEscapeKey: false,
                                 buttonsStyling: false,
@@ -966,14 +964,30 @@
             console.log(ds);
 
 
+            if(ds.statuses == "session.timeout")
+            {
+                Swal.fire({
+                    title: "Oturum",
+                    text: "Oturum süresi dolduğu için tekrardan giriş yapmalısınız.",
+                    icon: "error",
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    buttonsStyling: false,
+                    confirmButtonText: "Tamam",
+                    showCancelButton: false,
+                    cancelButtonText: "İptal",
+                    customClass: {
+                        confirmButton: "btn btn-danger",
+                        cancelButton: "btn btn-primary"
+                    }
+                }).then(function (r) {
+                    location.href = "/admin/auth/logout";
+                });
+            }
+
             var datatable = $(qcs.table).KTDatatable({
                 // datasource definition
-                data: {
-                    // type: 'local',
-                    // source: dataJSONArray,
-                    source: ds,
-                    pageSize: 10,
-                },
+                data: { source: ds.listView, pageSize: 10 },
 
                 // layout definition
                 layout: {
@@ -1114,8 +1128,6 @@
             });
 
             $('#combof-months').on('change', function (e) {
-
-
 
             });
 
