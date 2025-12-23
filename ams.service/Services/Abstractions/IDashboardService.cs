@@ -5,6 +5,7 @@
 
 	public interface IDashboardService
     {
-		Task<Result.ListResult<DashboardDTO.Expense>> GetExpenseChart(Guid? account_id, Guid apartment_id, string type, int year);
-	}
+        Task<Result.ListResult<DashboardDTO.Expense>> GetExpenseChart(Guid? account_id, Guid apartment_id, string type, int year);
+        Task<Result.ViewResult<DashboardDTO.Indicator>> GetIndicator(Guid? account_id, string apartment_id, int month, int year);
+    }
 }

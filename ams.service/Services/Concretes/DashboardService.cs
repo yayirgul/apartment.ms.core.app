@@ -109,5 +109,47 @@
 
             return lrs;
         }
+
+        public async Task<Result.ViewResult<DashboardDTO.Indicator>> GetIndicator(Guid? account_id, string apartment_id, int month, int year)
+        {
+            var result = new Result.ViewResult<DashboardDTO.Indicator>();
+
+            if (apartment_id == "all")
+            {
+                var debit = await Uow.GetRepository<Debit>().GetAllAsync(x => !x.IsDeleted && x.AccountId == account_id && x._Month == month && x._Year == year);
+            }
+            else
+            {
+                var debit = await Uow.GetRepository<Debit>().GetAllAsync(x => !x.IsDeleted && x.AccountId == account_id && x.ApartmentId == Guid.Parse(apartment_id) && !x.Paid && x._Month == month && x._Year == year);
+
+                var amount = debit.Sum(x => x.Amount);
+
+                var housing_paid = await Uow.GetRepository<Housing>().CountAsync(x => !x.IsDeleted && x.AccountId == account_id && x.ApartmentId == Guid.Parse(apartment_id));
+
+                var housing_unpaid = await Uow.GetRepository<Debit>().CountAsync(x => !x.IsDeleted && x.AccountId == account_id && x.ApartmentId == Guid.Parse(apartment_id) && !x.Paid && x._Month == month && x._Year == year);
+
+
+                var view = new DashboardDTO.Indicator()
+                {
+                    Unpaid = amount.HasValue ? amount.Value.ToString("N2", Culture) : "0",
+                    HousingPaid = housing_paid,
+                    HousingUnpaid = housing_unpaid,
+                };
+
+                if (view != null)
+                {
+                    result.View = view;
+                    result.IsSucceed = true;
+                    result.Statuses = "x-view";
+                }
+                else
+                {
+                    result.IsSucceed = true;
+                    result.Statuses = "x-fail";
+                }
+            }
+
+            return result;
+        }
     }
 }

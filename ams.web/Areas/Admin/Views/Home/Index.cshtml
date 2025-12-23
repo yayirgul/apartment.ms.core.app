@@ -124,11 +124,11 @@
                             <div style="font-size: 1rem; font-weight:600; margin-bottom: 1rem;">
                                 ÖDENMEYEN BORÇ
                             </div>
-                            <div style="font-size: 2.5rem; font-weight:600">
+                            <div id="unpaid" style="font-size: 2.5rem; font-weight:600">
                                 1.841,00 ₺
                             </div>
                             <div style="font-size: 1rem">
-                                Aralık 2025 ödenmeyen borçtur.
+                                <b>Aralık 2025</b> ödenmeyen borçtur.
                             </div>
                         </div>
 
@@ -143,7 +143,7 @@
                             <div style="font-size: 2rem; font-weight:600; display:flex">
                                 <div style="display:flex;  width:100%; align-items: center; align-items:flex-start">
                                     <div style="display:flex; align-items:center; font-size:2.5rem;">
-                                        10
+                                        <span id="housing-paid">-</span>
                                         <span style="font-size:0.9rem; font-weight:500; margin-left:.5rem">Konut</span>
                                     </div>
 
@@ -151,7 +151,8 @@
                                 <div style="display:flex;  width:100%; align-items: center;   flex-direction:column">
                                     <div style="display:flex; align-items: center; font-size:2.5rem;">
                                         <span class="label label-xl label-dot label-danger mr-2"></span>
-                                        2<span style="font-size:0.8rem; font-weight:500; margin-left:.5rem">Konut</span>
+                                        <span class="housing-unpaid">-</span>
+                                        <span style="font-size:0.8rem; font-weight:500; margin-left:.5rem">Konut</span>
                                     </div>
 
                                     @* <div class="text-danger" style="font-size:0.8rem; font-weight:500; margin-left:.5rem; ">Ödemedi</div> *@
@@ -159,7 +160,7 @@
 
                                 @* 10 <span style="font-size:1rem">Konut</span> | 2 *@
                             </div>
-                            <span>Borçlu <b>2 Konut</b> bulunuyor.</span>
+                            <span>Borçlu <b class="housing-unpaid">-</b> konut bulunuyor.</span>
 
 
                         </div>
@@ -236,6 +237,11 @@
                     type: '#combo-filter-type',
                     years: '#combo-filter-years'
                 }
+            },
+            indicator: {
+                unpaid: '#unpaid',
+                housing_paid: '#housing-paid',
+                housing_unpaid: '.housing-unpaid',
             }
         }
 
@@ -308,6 +314,7 @@
                 }
                 session_storage(filter.apartment_id, filter.type, filter.month, filter.year);
                 // analysis(filter.apartment_id, filter.type, filter.year);
+                indicator(filter.apartment_id, filter.month, filter.year);
 
             });
 
@@ -321,6 +328,7 @@
                 }
                 session_storage(filter.apartment_id, filter.type, filter.month, filter.year);
                 analysis(filter.apartment_id, filter.type, filter.year);
+                indicator(filter.apartment_id, filter.month, filter.year);
 
             });
 
@@ -540,19 +548,6 @@
                     }
                 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
             }).done(function (d) {
 
             }).fail(function (jqXHR, textStatus, errorThrown) {
@@ -562,6 +557,62 @@
 
 
 
+
+        }
+
+        function indicator(apartment_id, month, year) {
+
+            $.get("/ams/dashboard/indicator/" + apartment_id + "/" + month + "/" + year, function (d) {
+
+                // console.log(JSON.stringify(d.listView));
+                console.log(d);
+
+
+                if (d.isSucceed) {
+                    switch (d.statuses) {
+                        case 'x-view':
+
+                        $(qcs.indicator.unpaid).empty().text(d.view.unpaid + " ₺");
+                        $(qcs.indicator.housing_paid).empty().text(d.view.housingPaid);
+                        $(qcs.indicator.housing_unpaid).empty().text(d.view.housingUnpaid);
+
+                            break;
+                        case 'x-ndata':
+
+                            break;
+                        case 'x-timeout':
+
+                           Swal.fire({
+                               title: "Oturum",
+                               text: "Oturum süresi dolduğu için tekrardan giriş yapmalısınız.",
+                               icon: "error",
+                               allowOutsideClick: false,
+                               allowEscapeKey: false,
+                               buttonsStyling: false,
+                               confirmButtonText: "Tamam",
+                               showCancelButton: false,
+                               cancelButtonText: "İptal",
+                               customClass: {
+                                   confirmButton: "btn btn-danger",
+                                   cancelButton: "btn btn-primary"
+                               }
+                           }).then(function (r) {
+                               location.href = "/admin/auth/logout";
+                           });
+
+
+                            break;
+                        case 'x-fail':
+
+                            break;
+                    }
+                }
+
+            }).done(function (d) {
+
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+
+            });
 
         }
 
@@ -594,6 +645,7 @@
                 console.log(sessions.apartment + " " + sessions.type + " - " + sessions.month + " - " + sessions.year);
 
                 analysis(sessions.apartment, sessions.type, sessions.year);
+                indicator(sessions.apartment, sessions.month, sessions.year);
             }
             else {
 
@@ -604,7 +656,11 @@
 
                 session_storage(filter.apartment_id, filter.type, qcs.default[0].month, qcs.default[0].year);
                 analysis(filter.apartment_id, qcs.default[0].type, qcs.default[0].year);
+
+               indicator(filter.apartment_id, qcs.default[0].month, qcs.default[0].year);
             }
+
+             
 
         });
 
