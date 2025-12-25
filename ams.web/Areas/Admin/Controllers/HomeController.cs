@@ -46,7 +46,7 @@
         }
 
         [Route("ams/dashboard/analysis/{apartment_id}/{type}/{year}")]
-        public async Task<JsonResult> GetAnalysis(Guid apartment_id, string type, int year)
+        public async Task<JsonResult> GetAnalysis(string apartment_id, string type, int year)
         {
             var user = HttpContext.Session.GetSession<UserDTO.User>(Unit.Constants.SESSION_USER);
 

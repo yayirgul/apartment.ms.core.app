@@ -7,6 +7,7 @@
             public string Unpaid { get; set; } = null!;
             public int HousingPaid { get; set; }
             public int HousingUnpaid { get; set; }
+            public string Expense { get; set; } = null!;
         }
 
 		public class Expense

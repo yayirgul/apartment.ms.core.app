@@ -22,19 +22,22 @@
 
             <!--begin::Search Form-->
             <div class="mb-7">
+
                 <div class="row align-items-center">
-                    <div class="col-lg-12 col-xl-12">
+
+                    <div class="col-xl-6">
+
                         <div class="row align-items-center">
 
-                            <div class="col-md-2 my-2 my-md-0">
+                            <div class="col-md-3 my-2 my-md-0">
                                 <div class="d-flex align-items-center">
                                     <select class="form-control" id="combo-filter-apartments">
-                                        <option value="all">Tümü</option>
+                                        @* <option value="all">Tümü</option> *@
                                     </select>
                                 </div>
                             </div>
 
-                            <div class="col-md-1 my-2 my-md-0">
+                            <div class="col-md-2 my-2 my-md-0">
                                 <div class="d-flex align-items-center">
                                     <select class="form-control" id="combo-filter-type">
                                         <option value="expense">Gider</option>
@@ -43,7 +46,15 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-1 my-2 my-md-0">
+                        </div>
+
+                    </div>
+
+                    <div class="col-xl-6">
+
+                        <div class="row align-items-center justify-content-end">
+
+                            <div class="col-md-2 my-2 my-md-0">
                                 <div class="d-flex align-items-center">
                                     <select class="form-control" id="combo-filter-months">
                                         <option value="1">Ocak</option>
@@ -62,7 +73,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-1 my-2 my-md-0">
+                            <div class="col-md-2 my-2 my-md-0">
                                 <div class="d-flex align-items-center">
                                     <select class="form-control" id="combo-filter-years">
                                         <option value="2026">2026</option>
@@ -73,6 +84,7 @@
                             </div>
 
                         </div>
+
                     </div>
 
                 </div>
@@ -88,7 +100,7 @@
                             <div style="font-size: 1rem; font-weight:600; margin-bottom: 1rem;">
                                 GİDERLER
                             </div>
-                            <div style="font-size: 2.5rem; font-weight:600">
+                            <div id="total-expenses" style="font-size: 2.5rem; font-weight:600">
                                 32.710 ₺
                             </div>
                             <div style="font-size: 1rem">
@@ -128,7 +140,7 @@
                                 1.841,00 ₺
                             </div>
                             <div style="font-size: 1rem">
-                                <b>Aralık 2025</b> ödenmeyen borçtur.
+                                <b id="unpaid-month-year">Aralık 2025</b> ödenmeyen borçtur.
                             </div>
                         </div>
 
@@ -170,20 +182,6 @@
                 </div>
             </div>
 
-
-
-
-
-
-
-
-
-
-
-
-    
-
-
         </div>
     </div>
 
@@ -195,7 +193,7 @@
                         @* <span class="card-icon">
                             <i class="far fa-building text-primary"></i>
                         </span> *@
-                        <h3 class="card-label">GİDERLER</h3>
+                        <h3 class="card-label" id="chart-expense-title">GİDERLER</h3>
                     </div>
                     <div class="card-toolbar"></div>
                 </div>
@@ -223,6 +221,7 @@
                 }
             ],
             chart: {
+                expense_title: '#chart-expense-title',
                 expense : '#chart-expense',
                 color: {
                     primary: "#3699FF",
@@ -242,6 +241,8 @@
                 unpaid: '#unpaid',
                 housing_paid: '#housing-paid',
                 housing_unpaid: '.housing-unpaid',
+                unpaid_month_year: '#unpaid-month-year',
+                total_expenses: '#total-expenses',
             }
         }
 
@@ -288,6 +289,7 @@
                 }
                 session_storage(filter.apartment_id, filter.type, filter.month, filter.year);
                 analysis(filter.apartment_id, filter.type, filter.year);
+                indicator(filter.apartment_id, filter.month, filter.year);
 
             });
 
@@ -335,20 +337,20 @@
         }
 
         function session_storage(apartment_id, type, month, year) {
-            sessionStorage.setItem("_apartment", apartment_id);
-            sessionStorage.setItem("_type", type);
+            sessionStorage.setItem("..apartment", apartment_id);
+            sessionStorage.setItem("..type", type);
             sessionStorage.setItem("_month", month);
             sessionStorage.setItem("_year", year);
         }
 
         function analysis(apartment, type, year) {
 
-             console.log(apartment + " " + type + " - " + year);
-
             $.get("/ams/dashboard/analysis/" + apartment + "/" + type + "/" + year, function (d) {
 
                 // console.log(JSON.stringify(d.listView));
-                console.log(d);
+                // console.log(d);
+
+                $(qcs.chart.expense_title).text(type === "expense" ? year + " - AYLIK AİDAT GİDERLERİ" : year + " - AYLIK AİDAT BORÇLARI");
 
                 if (d.isSucceed) {
                     switch (d.statuses) {
@@ -564,17 +566,23 @@
 
             $.get("/ams/dashboard/indicator/" + apartment_id + "/" + month + "/" + year, function (d) {
 
-                // console.log(JSON.stringify(d.listView));
+                // console.log("TEST : --------");
                 console.log(d);
-
 
                 if (d.isSucceed) {
                     switch (d.statuses) {
                         case 'x-view':
 
-                        $(qcs.indicator.unpaid).empty().text(d.view.unpaid + " ₺");
-                        $(qcs.indicator.housing_paid).empty().text(d.view.housingPaid);
-                        $(qcs.indicator.housing_unpaid).empty().text(d.view.housingUnpaid);
+                            var tx = {
+                                month: $(qcs.combo.filter.months).find("option:selected").text(),
+                            }
+
+                            $(qcs.indicator.unpaid_month_year).empty().text(tx.month + " " + year);
+                            $(qcs.indicator.total_expenses).empty().text(d.view.expense + " ₺");
+
+                            $(qcs.indicator.unpaid).empty().text(d.view.unpaid + " ₺");
+                            $(qcs.indicator.housing_paid).empty().text(d.view.housingPaid);
+                            $(qcs.indicator.housing_unpaid).empty().text(d.view.housingUnpaid);
 
                             break;
                         case 'x-ndata':
@@ -629,20 +637,18 @@
             }
 
             var sessions = {
-                apartment: sessionStorage.getItem("_apartment"),
-                type: sessionStorage.getItem("_type"),
+                apartment: sessionStorage.getItem("..apartment"),
+                type: sessionStorage.getItem("..type"),
                 month: sessionStorage.getItem("_month"),
                 year: sessionStorage.getItem("_year"),
             }
 
-            if (sessions.year != null) {
+            if (sessions.apartment != null) {
 
                 $(qcs.combo.filter.apartments).find('option[value=' + sessions.apartment + ']').attr('selected', 'selected');
                 $(qcs.combo.filter.type).find('option[value=' + sessions.type + ']').attr('selected', 'selected');
                 $(qcs.combo.filter.months).find('option[value=' + sessions.month + ']').attr('selected', 'selected');
                 $(qcs.combo.filter.years).find('option[value=' + sessions.year + ']').attr('selected', 'selected');
-
-                console.log(sessions.apartment + " " + sessions.type + " - " + sessions.month + " - " + sessions.year);
 
                 analysis(sessions.apartment, sessions.type, sessions.year);
                 indicator(sessions.apartment, sessions.month, sessions.year);
@@ -657,7 +663,7 @@
                 session_storage(filter.apartment_id, filter.type, qcs.default[0].month, qcs.default[0].year);
                 analysis(filter.apartment_id, qcs.default[0].type, qcs.default[0].year);
 
-               indicator(filter.apartment_id, qcs.default[0].month, qcs.default[0].year);
+                indicator(filter.apartment_id, qcs.default[0].month, qcs.default[0].year);
             }
 
              

@@ -587,6 +587,11 @@
                 $(qcs.combo.filter.apartments).children('option').removeAttr('selected');
                 $(qcs.combo.filter.apartments).find('option[value=' + filter.apartment_id + ']').attr('selected', 'selected');
 
+                $(qcs.combo.expense_apartments).children('option').removeAttr('selected');
+                $(qcs.combo.expense_apartments).find('option[value=' + filter.apartment_id + ']').attr('selected', 'selected');
+
+
+
                 l_expenses(filter.apartment_id, filter.month, filter.year);
 
             });
@@ -834,6 +839,29 @@
                             Swal.fire({
                                 title: "Uyarı",
                                 html: "<b>" + month + "/" + year + "</b> tarihine ait <b>Gider</b> bulunamadı. <b>Borçlandırma</b> işlemini yapabilmeniz için <b>Yeni Gider</b> oluşturunuz.",
+                                icon: "warning",
+                                allowOutsideClick: false,
+                                allowEscapeKey: false,
+                                buttonsStyling: false,
+                                confirmButtonText: "Tamam",
+                                showCancelButton: false,
+                                cancelButtonText: "<i class='la la-thumbs-down'></i> No, thanks",
+                                customClass: {
+                                    confirmButton: "btn btn-danger",
+                                    cancelButton: "btn btn-default"
+                                }
+                            }).then(function (r) {
+                                if (r.value) {
+                                    $(qcs.modal.housing).modal('hide');
+                                }
+                            });
+
+                            break;
+                        case 'x-housing':
+
+                            Swal.fire({
+                                title: "Uyarı",
+                                html: "Kayıtlı <b>konut</b> bulunamadığı için <b>gider</b> hesaplaması yapılamadı.",
                                 icon: "warning",
                                 allowOutsideClick: false,
                                 allowEscapeKey: false,
@@ -1157,17 +1185,23 @@
 
         }
 
+        function session_valid(value) {
+            return value !== null &&
+                   value !== "" &&
+                   value !== "null" &&
+                   value !== undefined;
+        }
+
+        function session_storage(apartment_id, month, year) {
+            sessionStorage.setItem("_apartment", apartment_id);
+            sessionStorage.setItem("_month", month);
+            sessionStorage.setItem("_year", year);
+        }
 
         $(function () {
 
             combo_apartments();
             expenses();
-
-            // $(qcs.combo.filter.months).find('option[value=' + qcs.default[0].month + ']').attr('selected', 'selected');
-            // $(qcs.combo.expense_months).find('option[value=' + qcs.default[0].month + ']').attr('selected', 'selected');
-
-            // $(qcs.combo.filter.years).find('option[value=' + qcs.default[0].year + ']').attr('selected', 'selected');
-            // $(qcs.combo.expense_years).find('option[value=' + qcs.default[0].year + ']').attr('selected', 'selected');
 
             var filter = {
                 apartment_id: $(qcs.combo.filter.apartments).val(),
@@ -1180,23 +1214,35 @@
                 month: sessionStorage.getItem("_month"),
                 year: sessionStorage.getItem("_year")
             }
+             
+            if (sessions.apartment !== null && sessions.month !== null && sessions.year !== null) {
 
-            if (sessions.month != null && sessions.year != null) {
                 $(qcs.combo.filter.apartments).find('option[value=' + sessions.apartment + ']').attr('selected', 'selected');
+                $(qcs.combo.expense_apartments).find('option[value=' + sessions.apartment + ']').attr('selected', 'selected');
+
                 $(qcs.combo.filter.months).find('option[value=' + sessions.month + ']').attr('selected', 'selected');
                 $(qcs.combo.expense_months).find('option[value=' + sessions.month + ']').attr('selected', 'selected');
+
                 $(qcs.combo.filter.years).find('option[value=' + sessions.year + ']').attr('selected', 'selected');
                 $(qcs.combo.expense_years).find('option[value=' + sessions.year + ']').attr('selected', 'selected');
+
                 l_expenses(sessions.apartment, sessions.month, sessions.year);
             }
             else {
+
+                $(qcs.combo.filter.apartments).find('option[value=' + filter.apartment_id + ']').attr('selected', 'selected');
+                $(qcs.combo.expense_apartments).find('option[value=' + filter.apartment_id + ']').attr('selected', 'selected');
+
                 $(qcs.combo.filter.months).find('option[value=' + qcs.default[0].month + ']').attr('selected', 'selected');
                 $(qcs.combo.expense_months).find('option[value=' + qcs.default[0].month + ']').attr('selected', 'selected');
+                
                 $(qcs.combo.filter.years).find('option[value=' + qcs.default[0].year + ']').attr('selected', 'selected');
                 $(qcs.combo.expense_years).find('option[value=' + qcs.default[0].year + ']').attr('selected', 'selected');
+                
                 sessionStorage.setItem("_apartment", filter.apartment_id);
                 sessionStorage.setItem("_month", qcs.default[0].month);
                 sessionStorage.setItem("_year", qcs.default[0].year);
+
                 l_expenses(filter.apartment_id, qcs.default[0].month, qcs.default[0].year);
             }
 

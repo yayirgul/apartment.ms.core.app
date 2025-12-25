@@ -20,7 +20,7 @@
             Culture = new CultureInfo("tr-TR");
         }
 
-        public async Task<Result.ListResult<DashboardDTO.Expense>> GetExpenseChart(Guid? account_id, Guid apartment_id, string type, int year)
+        public async Task<Result.ListResult<DashboardDTO.Expense>> GetExpenseChart(Guid? account_id, string apartment, string type, int year)
         {
             var lrs = new Result.ListResult<DashboardDTO.Expense>();
             var list = new List<Expense>();
@@ -28,17 +28,23 @@
             var start = DateTime.Now.Date;
             start = new DateTime(year, 1, 1);
 
+            var lr = new List<DashboardDTO.Expense>();
+
             if (type == "expense")
             {
                 // TODO : Annual variable expenses
-                var ls = await Uow.GetRepository<Expense>().GetAllAsync(x => !x.IsDeleted && x.AccountId == account_id && x.ApartmentId == apartment_id && x.IsFixed == false && x.Year == year);
+                var ls = await Uow.GetRepository<Expense>()
+                    .GetAllAsync(x => !x.IsDeleted && x.IsFixed == false &&
+                    x.AccountId == account_id && 
+                    x.ApartmentId == Guid.Parse(apartment) && 
+                    x.Year == year);
 
                 // TODO : Annual fixed expenses 
-                var lsf = await Uow.GetRepository<Expense>().GetAllAsync(x => !x.IsDeleted && x.AccountId == account_id && x.ApartmentId == apartment_id && x.Year == year && x.IsFixed == true);
-
-                //list = ls.Concat(lsf).ToList();
-
-                var lr = new List<DashboardDTO.Expense>();
+                var lsf = await Uow.GetRepository<Expense>()
+                    .GetAllAsync(x => !x.IsDeleted && x.IsFixed == true &&
+                    x.AccountId == account_id && 
+                    x.ApartmentId == Guid.Parse(apartment) && 
+                    x.Year == year);
 
                 for (var i = 1; i <= 12; i++)
                 {
@@ -60,26 +66,15 @@
                         _Amount = amount.HasValue ? amount.Value.ToString("N2", Culture) : "0"
                     });
                 }
-
-                if (lr.Count > 0)
-                {
-                    lrs.ListView = lr;
-                    lrs.IsSucceed = true;
-                    lrs.Statuses = "x-list";
-                }
-                else
-                {
-                    lrs.IsSucceed = true;
-                    lrs.Statuses = "x-fail";
-                }
             }
 
             if (type == "debit")
             {
-                var lr = new List<DashboardDTO.Expense>();
-
                 var ls = await Uow.GetRepository<Debit>()
-                    .GetAllAsync(x => !x.IsDeleted && x.AccountId == account_id && x.ApartmentId == apartment_id && !x.Paid && x._Year == year);
+                    .GetAllAsync(x => !x.IsDeleted && !x.Paid &&
+                    x.AccountId == account_id &&
+                    x.ApartmentId == Guid.Parse(apartment) &&
+                    x._Year == year);
 
                 for (var i = 1; i <= 12; i++)
                 {
@@ -93,18 +88,18 @@
                         _Amount = amount.HasValue ? amount.Value.ToString("N2", Culture) : "0"
                     });
                 }
+            }
 
-                if (lr.Count > 0)
-                {
-                    lrs.ListView = lr;
-                    lrs.IsSucceed = true;
-                    lrs.Statuses = "x-list";
-                }
-                else
-                {
-                    lrs.IsSucceed = true;
-                    lrs.Statuses = "x-fail";
-                }
+            if (lr.Count > 0)
+            {
+                lrs.ListView = lr;
+                lrs.IsSucceed = true;
+                lrs.Statuses = "x-list";
+            }
+            else
+            {
+                lrs.IsSucceed = true;
+                lrs.Statuses = "x-fail";
             }
 
             return lrs;
@@ -114,39 +109,80 @@
         {
             var result = new Result.ViewResult<DashboardDTO.Indicator>();
 
-            if (apartment_id == "all")
+            #region TOTAL ANNUAL EXPENSES
+
+            var lsr = new List<DashboardDTO.Expense>();
+
+            var ls = await Uow.GetRepository<Expense>()
+                .GetAllAsync(x => !x.IsDeleted && x.IsFixed == false &&
+                x.AccountId == account_id &&
+                x.ApartmentId == Guid.Parse(apartment_id) &&
+                x.Year == year);
+
+            var lsf = await Uow.GetRepository<Expense>()
+                .GetAllAsync(x => !x.IsDeleted && x.IsFixed == true &&
+                x.AccountId == account_id &&
+                x.ApartmentId == Guid.Parse(apartment_id) &&
+                x.Year == year);
+
+            for (var i = 1; i <= 12; i++)
+            { 
+                var l = new List<Expense>();
+                l = ls.Where(x => x.Month == i).Concat(lsf).ToList();
+
+                var l_exp = l.Sum(x => x.Amount);
+
+                lsr.Add(new DashboardDTO.Expense()
+                {
+                    Amount = l_exp.HasValue ? l_exp.Value : 0,
+                    _Amount = l_exp.HasValue ? l_exp.Value.ToString("N2", Culture) : "0"
+                });
+            }
+
+            var _expense = lsr.Sum(x => x.Amount);
+
+            #endregion
+
+            var debit = await Uow.GetRepository<Debit>()
+                .GetAllAsync(x => !x.IsDeleted && !x.Paid && 
+                x.AccountId == account_id && 
+                x.ApartmentId == Guid.Parse(apartment_id) && 
+                x._Month == month && 
+                x._Year == year);
+
+            var unpaid = debit.Sum(x => x.Amount);
+
+            var housing_paid = await Uow.GetRepository<Housing>()
+                .CountAsync(x => !x.IsDeleted && 
+                x.AccountId == account_id && 
+                x.ApartmentId == Guid.Parse(apartment_id));
+
+            var housing_unpaid = await Uow.GetRepository<Debit>()
+                .CountAsync(x => !x.IsDeleted && !x.Paid &&
+                x.AccountId == account_id && 
+                x.ApartmentId == Guid.Parse(apartment_id) && 
+                x._Month == month && 
+                x._Year == year);
+
+
+            var view = new DashboardDTO.Indicator()
             {
-                var debit = await Uow.GetRepository<Debit>().GetAllAsync(x => !x.IsDeleted && x.AccountId == account_id && x._Month == month && x._Year == year);
+                Unpaid = unpaid.HasValue ? unpaid.Value.ToString("N2", Culture) : "0",
+                HousingPaid = housing_paid,
+                HousingUnpaid = housing_unpaid,
+                Expense = _expense.ToString("N2", Culture),
+            };
+
+            if (view != null)
+            {
+                result.View = view;
+                result.IsSucceed = true;
+                result.Statuses = "x-view";
             }
             else
             {
-                var debit = await Uow.GetRepository<Debit>().GetAllAsync(x => !x.IsDeleted && x.AccountId == account_id && x.ApartmentId == Guid.Parse(apartment_id) && !x.Paid && x._Month == month && x._Year == year);
-
-                var amount = debit.Sum(x => x.Amount);
-
-                var housing_paid = await Uow.GetRepository<Housing>().CountAsync(x => !x.IsDeleted && x.AccountId == account_id && x.ApartmentId == Guid.Parse(apartment_id));
-
-                var housing_unpaid = await Uow.GetRepository<Debit>().CountAsync(x => !x.IsDeleted && x.AccountId == account_id && x.ApartmentId == Guid.Parse(apartment_id) && !x.Paid && x._Month == month && x._Year == year);
-
-
-                var view = new DashboardDTO.Indicator()
-                {
-                    Unpaid = amount.HasValue ? amount.Value.ToString("N2", Culture) : "0",
-                    HousingPaid = housing_paid,
-                    HousingUnpaid = housing_unpaid,
-                };
-
-                if (view != null)
-                {
-                    result.View = view;
-                    result.IsSucceed = true;
-                    result.Statuses = "x-view";
-                }
-                else
-                {
-                    result.IsSucceed = true;
-                    result.Statuses = "x-fail";
-                }
+                result.IsSucceed = true;
+                result.Statuses = "x-fail";
             }
 
             return result;
