@@ -47,6 +47,8 @@
     background: #E1F0FF !important;
 }
 
+
+
 .be-expense {
     border: 2px solid #dbf0f1;
     border-radius: 1rem;
@@ -111,3 +113,135 @@
         align-items: center;
         font-size: 1.5rem;
     }
+
+
+
+.be-boarding {
+    border: 1px solid #ebedf3;
+    border-radius: .475rem;
+    padding: 1.5rem;
+}
+
+    .be-boarding > .be-header {
+        font-size: .9rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        border-radius: .475rem;
+    }
+
+        .be-boarding > .be-header > .be-title {
+            display: flex;
+            align-items: center;
+        }
+
+            .be-boarding > .be-header > .be-title > .be-icon {
+                background: #ebedf3;
+                border-radius: 50px;
+                padding: 1rem;
+                margin-right: 1rem;
+                width: 50px;
+                height: 50px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+                .be-boarding > .be-header > .be-title > .be-icon > i {
+                    color: #333;
+                }
+
+            .be-boarding > .be-header > .be-title > .be-caption {
+                font-size: 1.3rem;
+                font-weight: 600;
+            }
+
+
+    .be-boarding > .be-money {
+        /*font-size: 2rem;*/
+        /*font-weight: 700;*/
+        border-bottom: 1px solid #ebedf3;
+        padding-bottom: 1rem;
+        margin-bottom: 1rem;
+        /*color: #f64e60 !important;*/
+    }
+
+        .be-boarding > .be-money > .items {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+            .be-boarding > .be-money > .items > .item {
+                display: flex;
+                flex-direction: column;
+                width: 100%;
+                min-height: 50px;
+            }
+
+                .be-boarding > .be-money > .items > .item > .money {
+                    font-size: 1.6rem;
+                    font-weight: 700;
+                }
+
+                .be-boarding > .be-money > .items > .item > .tag {
+                    font-size: .85rem;
+                }
+
+
+    .be-boarding > .be-housing {
+        background: #e3eaff;
+        border: 1px dashed #4a77ff;
+        font-size: 2rem;
+        font-weight: 600;
+        display: flex;
+        justify-content: space-between;
+        border-radius: 0.475rem;
+        padding: 1rem 2rem;
+        min-height: 50px;
+        margin-bottom: 1rem;
+    }
+
+        .be-boarding > .be-housing > .item {
+            display: flex;
+            width: 100%;
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+            .be-boarding > .be-housing > .item > .em {
+                display: flex;
+                align-items: center;
+                font-size: 2rem;
+            }
+
+                .be-boarding > .be-housing > .item > .em > .emx {
+                    font-size: 0.9rem;
+                    font-weight: 500;
+                    margin-left: .5rem
+                }
+
+
+    .be-boarding > .be-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        min-height: 30px;
+    }
+
+        .be-boarding > .be-footer > .be-link {
+            /*background-color: #e9eef5;*/
+            border: 1px dashed #4a77ff;
+            border-radius: 50px;
+            font-size: 11px;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transform: rotate(45deg);
+        }
+
+            .be-boarding > .be-footer > .be-link > i {
+                font-size: 11px;
+                color: #4a77ff;
+            }

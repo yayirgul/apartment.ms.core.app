@@ -92,94 +92,154 @@
 
             @* <div class="separator separator-dashed separator-border-1 mb-7"></div> *@
 
-            <div class="mb-7">
-                <div class="row">
-                    <div class="col-md-3">
+            <div class="row">
 
-                        <div style="border:1px solid #ebedf3; border-radius:.475rem;padding:1.5rem; display:flex; flex-direction: column;">
-                            <div style="font-size: 1rem; font-weight:600; margin-bottom: 1rem;">
-                                GİDERLER
-                            </div>
-                            <div id="total-expenses" style="font-size: 2.5rem; font-weight:600">
-                                32.710 ₺
-                            </div>
-                            <div style="font-size: 1rem">
-                                Yıllık Gider
-                            </div>
-                        </div>
+                <div class="col-md-3 mb-7">
 
-                    </div>
-                    <div class="col-md-3">
+                    <div class="be-boarding">
 
-                        <div style="border:1px solid #ebedf3; border-radius:.475rem;padding:1.5rem; display:flex; flex-direction: column;">
-                            <div style="font-size: 1rem; font-weight:600; margin-bottom: 1rem;">
-                                BORÇLAR
-                            </div>
-                            <div style="font-size: 2.5rem; font-weight:600">
-                                0,00 ₺
-                            </div>
-                            <div style="font-size: 1rem">
-                                Yıllık Borç
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <div class="col-md-3">
-
-                        <div style="border:1px solid #ebedf3; border-radius:.475rem;padding:1.5rem; display:flex; flex-direction: column; position:relative">
-
-                            <div style="position: absolute;right: -5px;top: -10px;background: #e25d63; border-radius: 0.475rem; color: #fff; padding: .5rem .7rem;font-size: 10px;">
-                                ARALIK 2025
-                            </div>
-
-                            <div style="font-size: 1rem; font-weight:600; margin-bottom: 1rem;">
-                                ÖDENMEYEN BORÇ
-                            </div>
-                            <div id="unpaid" style="font-size: 2.5rem; font-weight:600">
-                                1.841,00 ₺
-                            </div>
-                            <div style="font-size: 1rem">
-                                <b id="unpaid-month-year">Aralık 2025</b> ödenmeyen borçtur.
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <div class="col-md-3">
-
-                        <div style="border:1px solid #ebedf3; border-radius:.475rem;padding:1.5rem;">
-                            <div style="font-size: 1rem; font-weight:600; margin-bottom:1rem;">
-                                KONUT / BORÇLU KONUT
-                            </div>
-                            <div style="font-size: 2rem; font-weight:600; display:flex">
-                                <div style="display:flex;  width:100%; align-items: center; align-items:flex-start">
-                                    <div style="display:flex; align-items:center; font-size:2.5rem;">
-                                        <span id="housing-paid">-</span>
-                                        <span style="font-size:0.9rem; font-weight:500; margin-left:.5rem">Konut</span>
-                                    </div>
-
+                        <div class="be-header">
+                            <div class="be-title">
+                                <div class="be-icon">
+                                    <i class="fas fa-dollar-sign"></i>
                                 </div>
-                                <div style="display:flex;  width:100%; align-items: center;   flex-direction:column">
-                                    <div style="display:flex; align-items: center; font-size:2.5rem;">
-                                        <span class="label label-xl label-dot label-danger mr-2"></span>
-                                        <span class="housing-unpaid">-</span>
-                                        <span style="font-size:0.8rem; font-weight:500; margin-left:.5rem">Konut</span>
-                                    </div>
+                                <div class="be-caption">GİDERLER</div>
+                            </div>
+                        </div>
 
-                                    @* <div class="text-danger" style="font-size:0.8rem; font-weight:500; margin-left:.5rem; ">Ödemedi</div> *@
+                        <div class="be-money">
+
+                            <div class="items">
+
+                                <div class="item">
+                                    <span class="money" id="total-expense">0,00 ₺</span>
+                                    <span class="tag">Toplam gider</span>
                                 </div>
 
-                                @* 10 <span style="font-size:1rem">Konut</span> | 2 *@
+                                <div class="item">
+                                    <span class="money" id="total-expense-fixed">0,00 ₺</span>
+                                    <span class="tag">Periyodik gider</span>
+                                </div>
                             </div>
-                            <span>Borçlu <b class="housing-unpaid">-</b> konut bulunuyor.</span>
 
+                        </div>
 
+                        <div class="be-footer">
+                            <span>Yıllık gider</span>
+                            <a class="be-link" href="/ams/expenses">
+                                <i class="fas fa-arrow-up"></i>
+                            </a>
                         </div>
 
                     </div>
 
                 </div>
+
+                <div class="col-md-3 mb-7">
+
+                    <div class="be-boarding">
+
+                        <div class="be-header">
+                            <div class="be-title">
+                                <div class="be-icon">
+                                    <i class="fas fa-dollar-sign"></i>
+                                </div>
+                                <div class="be-caption">BORÇLAR</div>
+                            </div>
+                        </div>
+
+                        <div class="be-money">
+                            <div class="items">
+                                <div class="item">
+                                    <span class="money">0,00 ₺</span>
+                                    @* <span>Toplam gider</span> *@
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="be-footer">
+                            <span>Yıllık borç</span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-3 mb-7">
+
+                    <div class="be-boarding">
+
+                        <div class="be-header">
+                            <div class="be-title">
+                                <div class="be-icon">
+                                    <i class="fas fa-dollar-sign"></i>
+                                </div>
+                                <div class="be-caption">ÖDENMEYEN BORÇ</div>
+                            </div>
+                        </div>
+
+                        <div class="be-money">
+                            <div class="items">
+                                <div class="item">
+                                    <span class="money" id="unpaid">0,00 ₺</span>
+                                    @* <span>Toplam gider</span> *@
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="be-footer">
+                            <span>
+                                <b id="unpaid-month-year" class="text-danger">...</b> ödenmeyen borçtur.
+                            </span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-3 mb-7">
+
+                    <div class="be-boarding">
+
+                        <div class="be-header">
+                            <div class="be-title">
+                                <div class="be-icon">
+                                    <i class="fas fa-home"></i>
+                                </div>
+                                <div class="be-caption">KONUT / BORÇLU KONUT</div>
+                            </div>
+                        </div>
+
+                        <div class="be-title">
+                        </div>
+
+                        <div class="be-housing">
+
+                            <div class="item">
+                                <div class="em">
+                                    <span id="housing-paid">-</span>
+                                    <span class="emx">Konut</span>
+                                </div>
+                            </div>
+
+                            <div class="item">
+                                <div class="em">
+                                    <span class="label label-xl label-dot label-danger mr-2"></span>
+                                    <span class="housing-unpaid">-</span>
+                                    <span class="emx">Konut</span>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="be-footer">
+                            <span>Borçlu <b class="housing-unpaid label label-light-danger">...</b> konut bulunuyor.</span>
+                        </div>
+
+                    </div>
+
+                </div>
+
             </div>
 
         </div>
@@ -187,17 +247,27 @@
 
     <div class="row">
         <div class="col-xl-12">
-            <div class="card card-custom border shadow-none">
-                <div class="card-header">
+            <div class="card card-custom border-0 shadow-none">
+
+      @*           <div class="card-header border-0 p-0">
                     <div class="card-title">
-                        @* <span class="card-icon">
-                            <i class="far fa-building text-primary"></i>
-                        </span> *@
-                        <h3 class="card-label" id="chart-expense-title">GİDERLER</h3>
+                        <h3 class="card-label" >GİDERLER</h3>
                     </div>
                     <div class="card-toolbar"></div>
-                </div>
-                <div class="card-body">
+                </div> *@
+
+                <div class="card-body p-0">
+
+                    <div id="chart-expense-title" class="bg-light-primary text-primary" style="    font-size: .9rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    background: #ebedf3;
+    padding: 1rem;
+    border-radius: .475rem;
+    display: inline-block;">
+
+                    </div>
+
                     <div id="chart-expense"></div>
                 </div>
             </div>
@@ -242,7 +312,8 @@
                 housing_paid: '#housing-paid',
                 housing_unpaid: '.housing-unpaid',
                 unpaid_month_year: '#unpaid-month-year',
-                total_expenses: '#total-expenses',
+                total_expense: '#total-expense',
+                total_expense_fixed: '#total-expense-fixed',
             }
         }
 
@@ -348,7 +419,7 @@
             $.get("/ams/dashboard/analysis/" + apartment + "/" + type + "/" + year, function (d) {
 
                 // console.log(JSON.stringify(d.listView));
-                // console.log(d);
+                console.log(d.listView);
 
                 $(qcs.chart.expense_title).text(type === "expense" ? year + " - AYLIK AİDAT GİDERLERİ" : year + " - AYLIK AİDAT BORÇLARI");
 
@@ -390,13 +461,13 @@
                                     plotOptions: {
                                         bar: {
                                             horizontal: false,
-                                            columnWidth: '25%',
-                                            //borderRadius: 10,
+                                            columnWidth: '15%',
+                                            borderRadius: 10,
                                             // endingShape: 'rounded',
                                             dataLabels: {
                                                 position: 'top'
                                             },
-                                            distributed: true,
+                                             distributed: true, // TODO : Renk karışımını sağlıyor
                                         },
                                     },
                                     dataLabels: {
@@ -454,7 +525,7 @@
                                             show: false
                                         },
                                         title: {
-                                            text: type === "expense" ? year + " - AYLIK AİDAT GİDERLERİ" : year + " - AYLIK AİDAT BORÇLARI",
+                                            // text: type === "expense" ? year + " - AYLIK AİDAT GİDERLERİ" : year + " - AYLIK AİDAT BORÇLARI",
                                             style: {
                                                 fontSize: '14px',
                                             }
@@ -463,33 +534,33 @@
                                     grid: {
                                         strokeDashArray: 3,
                                         padding: {
-                                            top: -20,
+                                            top: 0,
                                             left: 0
                                         },
                                         xaxis: {
                                             lines: {
-                                                show: false
+                                                show: true
                                             }
                                         },
                                         yaxis: {
                                             lines: {
-                                                show: false
+                                                show: true
                                             }
                                         }
                                     },
                                     fill: {
-                                        opacity: 1,
-                                        type: 'gradient',
-                                        gradient: {
-                                          shade: 'light',
-                                          type: "horizontal",
-                                          shadeIntensity: 0.25,
-                                          gradientToColors: undefined,
-                                          inverseColors: true,
-                                          opacityFrom: 0.85,
-                                          opacityTo: 0.85,
-                                          stops: [50, 0, 100]
-                                        },
+                                        // opacity: 1,
+                                        // type: 'gradient',
+                                        // gradient: {
+                                        //   shade: 'light',
+                                        //   type: "horizontal",
+                                        //   shadeIntensity: 0.25,
+                                        //   gradientToColors: undefined,
+                                        //   inverseColors: true,
+                                        //   opacityFrom: 0.85,
+                                        //   opacityTo: 0.85,
+                                        //   stops: [50, 0, 100]
+                                        // },
                                     },
                                     tooltip: {
                                         theme: 'dark', // dark | light
@@ -578,9 +649,22 @@
                             }
 
                             $(qcs.indicator.unpaid_month_year).empty().text(tx.month + " " + year);
-                            $(qcs.indicator.total_expenses).empty().text(d.view.expense + " ₺");
+                            $(qcs.indicator.total_expense).empty().text(d.view.expense + " ₺");
+                            $(qcs.indicator.total_expense_fixed).empty().text(d.view.expenseFixed + " ₺");
 
-                            $(qcs.indicator.unpaid).empty().text(d.view.unpaid + " ₺");
+                            var unpaid = d.view.unpaid;
+
+                            if(Number(unpaid) > 0)
+                            {
+                                $(qcs.indicator.unpaid).empty().text(d.view._Unpaid + " ₺");
+                            }
+                            else {
+                                $(qcs.indicator.unpaid).empty().text(d.view._Unpaid + " ₺");
+                                // $(qcs.indicator.unpaid_month_year).html().text("Borç bulunamadı.");
+                            }
+                                 
+
+                            
                             $(qcs.indicator.housing_paid).empty().text(d.view.housingPaid);
                             $(qcs.indicator.housing_unpaid).empty().text(d.view.housingUnpaid);
 

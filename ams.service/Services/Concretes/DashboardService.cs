@@ -128,14 +128,24 @@
             for (var i = 1; i <= 12; i++)
             { 
                 var l = new List<Expense>();
-                l = ls.Where(x => x.Month == i).Concat(lsf).ToList();
 
+                if (ls.Count > 0)
+                {
+                    l = ls.Where(x => x.Month == i).Concat(lsf).ToList();
+                }
                 var l_exp = l.Sum(x => x.Amount);
+
+                //var lse = new List<Expense>();
+                //lse = lsf.Where(x => x.Month == i).ToList();
+                //var ls_exp = lse.Sum(x => x.Amount);
+
+                var lse =  lsf.Sum(x => x.Amount);
 
                 lsr.Add(new DashboardDTO.Expense()
                 {
                     Amount = l_exp.HasValue ? l_exp.Value : 0,
-                    _Amount = l_exp.HasValue ? l_exp.Value.ToString("N2", Culture) : "0"
+                    //_Amount = l_exp.HasValue ? l_exp.Value.ToString("N2", Culture) : "0",
+                    ExpenseFixed = lse.HasValue ? lse.Value : 0,
                 });
             }
 
@@ -167,10 +177,12 @@
 
             var view = new DashboardDTO.Indicator()
             {
-                Unpaid = unpaid.HasValue ? unpaid.Value.ToString("N2", Culture) : "0",
+                Unpaid = unpaid.HasValue ? unpaid.Value : 0,
+                _Unpaid = unpaid.HasValue ? unpaid.Value.ToString("N2", Culture) : "0",
                 HousingPaid = housing_paid,
                 HousingUnpaid = housing_unpaid,
                 Expense = _expense.ToString("N2", Culture),
+                ExpenseFixed = lsr.Sum(x => x.ExpenseFixed).ToString("N2", Culture)
             };
 
             if (view != null)

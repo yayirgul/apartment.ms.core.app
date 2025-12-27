@@ -1404,7 +1404,7 @@
                 year: sessionStorage.getItem("_year")
             }
 
-            if (sessions.month != null && sessions.year != null) {
+            if (sessions.apartment != null && sessions.month != null && sessions.year != null) {
                 $(qcs.combo.filter.apartments).find('option[value=' + sessions.apartment + ']').attr('selected', 'selected');
                 $(qcs.combo.filter.months).find('option[value=' + sessions.month + ']').attr('selected', 'selected');
                 $(qcs.combo.filter.years).find('option[value=' + sessions.year + ']').attr('selected', 'selected');
