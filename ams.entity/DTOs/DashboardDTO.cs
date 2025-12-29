@@ -10,6 +10,8 @@
             public int HousingUnpaid { get; set; }
             public string Expense { get; set; } = null!;
             public string ExpenseFixed { get; set; } = null!;
+            public string DebitTotal { get; set; } = null!;
+            public string DebitUnpaid { get; set; } = null!;
         }
 
 		public class Expense

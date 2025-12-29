@@ -6,7 +6,7 @@
     <div class="subheader py-2 py-lg-4 subheader-solid-- border-bottom shadow-none" id="kt_subheader">
         <div class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
             <div class="d-flex align-items-center flex-wrap mr-2">
-                <h5 class="text-dark font-weight-bold mt-2 mb-2 mr-5">Dashboard</h5>
+                <h5 class="text-dark font-weight-bold mt-2 mb-2 mr-5">Pano</h5>
                 <div class="subheader-separator subheader-separator-ver mt-2 mb-2 mr-4 bg-gray-200"></div>
                 <span class="text-muted font-weight-bold mr-4">#XRS-45670</span>
             </div>
@@ -20,74 +20,70 @@
     <div class="row">
         <div class="col-xl-12">
 
-            <!--begin::Search Form-->
-            <div class="mb-7">
+            <div class="row align-items-center">
 
-                <div class="row align-items-center">
+                <div class="col-xl-6">
 
-                    <div class="col-xl-6">
+                    <div class="row align-items-center">
 
-                        <div class="row align-items-center">
-
-                            <div class="col-md-3 my-2 my-md-0">
-                                <div class="d-flex align-items-center">
-                                    <select class="form-control" id="combo-filter-apartments">
-                                        @* <option value="all">Tümü</option> *@
-                                    </select>
-                                </div>
+                        <div class="col-md-3 mb-7">
+                            <div class="d-flex align-items-center">
+                                <select class="form-control" id="combo-filter-apartments">
+                                    @* <option value="all">Tümü</option> *@
+                                </select>
                             </div>
-
-                            <div class="col-md-2 my-2 my-md-0">
-                                <div class="d-flex align-items-center">
-                                    <select class="form-control" id="combo-filter-type">
-                                        <option value="expense">Gider</option>
-                                        <option value="debit">Borç</option>
-                                    </select>
-                                </div>
-                            </div>
-
                         </div>
 
-                    </div>
-
-                    <div class="col-xl-6">
-
-                        <div class="row align-items-center justify-content-end">
-
-                            <div class="col-md-2 my-2 my-md-0">
-                                <div class="d-flex align-items-center">
-                                    <select class="form-control" id="combo-filter-months">
-                                        <option value="1">Ocak</option>
-                                        <option value="2">Şubat</option>
-                                        <option value="3">Mart</option>
-                                        <option value="4">Nisan</option>
-                                        <option value="5">Mayıs</option>
-                                        <option value="6">Haziran</option>
-                                        <option value="7">Temmuz</option>
-                                        <option value="8">Ağustos</option>
-                                        <option value="9">Eylül</option>
-                                        <option value="10">Ekim</option>
-                                        <option value="11">Kasım</option>
-                                        <option value="12">Aralık</option>
-                                    </select>
-                                </div>
+                        <div class="col-md-2 mb-7">
+                            <div class="d-flex align-items-center">
+                                <select class="form-control" id="combo-filter-type">
+                                    <option value="expense">Gider</option>
+                                    <option value="debit">Borç</option>
+                                </select>
                             </div>
-
-                            <div class="col-md-2 my-2 my-md-0">
-                                <div class="d-flex align-items-center">
-                                    <select class="form-control" id="combo-filter-years">
-                                        <option value="2026">2026</option>
-                                        <option value="2025" selected="selected">2025</option>
-                                        <option value="2024">2024</option>
-                                    </select>
-                                </div>
-                            </div>
-
                         </div>
 
                     </div>
 
                 </div>
+
+                <div class="col-xl-6">
+
+                    <div class="row align-items-center justify-content-end">
+
+                        <div class="col-md-2 mb-7">
+                            <div class="d-flex align-items-center">
+                                <select class="form-control" id="combo-filter-months">
+                                    <option value="1">Ocak</option>
+                                    <option value="2">Şubat</option>
+                                    <option value="3">Mart</option>
+                                    <option value="4">Nisan</option>
+                                    <option value="5">Mayıs</option>
+                                    <option value="6">Haziran</option>
+                                    <option value="7">Temmuz</option>
+                                    <option value="8">Ağustos</option>
+                                    <option value="9">Eylül</option>
+                                    <option value="10">Ekim</option>
+                                    <option value="11">Kasım</option>
+                                    <option value="12">Aralık</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2 mb-7">
+                            <div class="d-flex align-items-center">
+                                <select class="form-control" id="combo-filter-years">
+                                    <option value="2026">2026</option>
+                                    <option value="2025" selected="selected">2025</option>
+                                    <option value="2024">2024</option>
+                                </select>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
             </div>
 
             @* <div class="separator separator-dashed separator-border-1 mb-7"></div> *@
@@ -149,16 +145,27 @@
                         </div>
 
                         <div class="be-money">
+
                             <div class="items">
+
                                 <div class="item">
-                                    <span class="money">0,00 ₺</span>
-                                    @* <span>Toplam gider</span> *@
+                                    <span class="money" id="debit-total">32.710,00 ₺</span>
+                                    <span class="tag">Toplam borç</span>
+                                </div>
+
+                                <div class="item">
+                                    <span class="money" id="debit-unpaid">0,00 ₺</span>
+                                    <span class="tag">Kalan borç</span>
                                 </div>
                             </div>
+
                         </div>
 
                         <div class="be-footer">
                             <span>Yıllık borç</span>
+                            <a class="be-link" href="/ams/debits">
+                                <i class="fas fa-arrow-up"></i>
+                            </a>
                         </div>
 
                     </div>
@@ -314,6 +321,8 @@
                 unpaid_month_year: '#unpaid-month-year',
                 total_expense: '#total-expense',
                 total_expense_fixed: '#total-expense-fixed',
+                debit_total: '#debit-total',
+                debit_unpaid: '#debit-unpaid',
             }
         }
 
@@ -651,6 +660,8 @@
                             $(qcs.indicator.unpaid_month_year).empty().text(tx.month + " " + year);
                             $(qcs.indicator.total_expense).empty().text(d.view.expense + " ₺");
                             $(qcs.indicator.total_expense_fixed).empty().text(d.view.expenseFixed + " ₺");
+                            $(qcs.indicator.debit_total).empty().text(d.view.debitTotal + " ₺");
+                            $(qcs.indicator.debit_unpaid).empty().text(d.view.debitUnpaid + " ₺");
 
                             var unpaid = d.view.unpaid;
 

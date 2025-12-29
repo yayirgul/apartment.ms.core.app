@@ -153,6 +153,26 @@
 
             #endregion
 
+            #region TOTAL ANNUAL DEBIT
+
+            var debt = await Uow.GetRepository<Debit>()
+                .GetAllAsync(x => !x.IsDeleted && 
+                x.AccountId == account_id &&
+                x.ApartmentId == Guid.Parse(apartment_id) &&
+                x._Year == year);
+
+            var _debt = debt.Sum(x => x.Amount);
+
+            var debtUnpaid = await Uow.GetRepository<Debit>()
+                .GetAllAsync(x => !x.IsDeleted && !x.Paid &&
+                x.AccountId == account_id &&
+                x.ApartmentId == Guid.Parse(apartment_id) &&
+                x._Year == year);
+
+            var _debtUnpaid = debtUnpaid.Sum(x => x.Amount);
+
+            #endregion
+
             var debit = await Uow.GetRepository<Debit>()
                 .GetAllAsync(x => !x.IsDeleted && !x.Paid && 
                 x.AccountId == account_id && 
@@ -182,7 +202,9 @@
                 HousingPaid = housing_paid,
                 HousingUnpaid = housing_unpaid,
                 Expense = _expense.ToString("N2", Culture),
-                ExpenseFixed = lsr.Sum(x => x.ExpenseFixed).ToString("N2", Culture)
+                ExpenseFixed = lsr.Sum(x => x.ExpenseFixed).ToString("N2", Culture),
+                DebitTotal = _debt.HasValue ? _debt.Value.ToString("N2", Culture) : "0",
+                DebitUnpaid = _debtUnpaid.HasValue ? _debtUnpaid.Value.ToString("N2", Culture) : "0"
             };
 
             if (view != null)
