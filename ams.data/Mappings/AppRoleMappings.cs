@@ -38,21 +38,21 @@
                 Id = Guid.Parse("4271DD20-390A-46CE-B67D-59678A720270"),
                 Name = "admin",
                 NormalizedName = "ADMIN",
-                ConcurrencyStamp = Guid.NewGuid().ToString(),
+                ConcurrencyStamp = "020befa1-6390-4af6-885a-9fb6e883ab71",
             },
             new AppRole
             {
                 Id = Guid.Parse("4438DFF4-28D6-46C1-90EB-F6B2A233D97E"),
                 Name = "agent",
                 NormalizedName = "AGENT",
-                ConcurrencyStamp = Guid.NewGuid().ToString(),
+                ConcurrencyStamp = "83fd2ba2-cd51-4339-ae6e-7a9baa435c4d",
             },
             new AppRole
             {
                 Id = Guid.Parse("051004F1-A383-4746-A722-3B051D12AAEA"),
                 Name = "user",
                 NormalizedName = "USER",
-                ConcurrencyStamp = Guid.NewGuid().ToString(),
+                ConcurrencyStamp = "b2dfd302-b41b-4732-b490-9bc065947992",
             }
             );
         }

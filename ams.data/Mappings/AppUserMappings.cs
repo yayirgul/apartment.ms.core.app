@@ -56,8 +56,9 @@
                 PhoneNumberConfirmed = true,
                 Firstname = "Yunus",
                 Lastname = "AYIRGÜL",
-                SecurityStamp = Guid.NewGuid().ToString(),
+                SecurityStamp = "9d63def9-ca57-4d94-8fdf-2292519cec84",
                 IsActive = true,
+                CreateTime = new DateTime(2026, 01, 01)
             };
             admin.PasswordHash = CreatePasswordHash(admin, "1");
 
@@ -74,8 +75,9 @@
                 PhoneNumberConfirmed = true,
                 Firstname = "Kadir",
                 Lastname = "Keleş",
-                SecurityStamp = Guid.NewGuid().ToString(),
+                SecurityStamp = "be82a95e-81c8-4b07-89e6-eec384caf3ce",
                 IsActive = true,
+                CreateTime = new DateTime(2026, 01, 01)
             };
             agent.PasswordHash = CreatePasswordHash(agent, "1");
 
@@ -92,8 +94,9 @@
                 PhoneNumberConfirmed = true,
                 Firstname = "Lokman",
                 Lastname = "Yılmaz",
-                SecurityStamp = Guid.NewGuid().ToString(),
+                SecurityStamp = "deff56e3-b36c-461f-b4d3-fb88a1f13afa",
                 IsActive = true,
+                CreateTime = new DateTime(2026, 01, 01)
             };
             user.PasswordHash = CreatePasswordHash(user, "1");
 

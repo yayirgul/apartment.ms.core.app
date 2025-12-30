@@ -1,12 +1,10 @@
 ﻿namespace ams.entity.Entities
 {
     using ams.core.Entities;
-    using Microsoft.AspNetCore.Identity;
     using System.ComponentModel.DataAnnotations.Schema;
 
-    public class AppUser : IdentityUser<Guid>, IEntityBase
+    public class Year : EntityBase
     {
-        public Guid? AccountId { get; set; }
         public Guid? CreateUser { get; set; }
         [ForeignKey("CreateUser")]
         public AppUser? CreateTheUser { get; set; }
@@ -19,11 +17,6 @@
         [ForeignKey("DeleteUser")]
         public AppUser? DeleteTheUser { get; set; }
 
-        public DateTime CreateTime { get; set; }
-        public DateTime? ModifiedTime { get; set; }
-        public DateTime? DeletedTime { get; set; }
-        public bool IsActive { get; set; }
-        public string? Firstname { get; set; }
-        public string? Lastname { get; set; }
+        public int YearTX { get; set; }
     }
 }

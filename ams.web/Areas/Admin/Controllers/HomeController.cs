@@ -10,16 +10,20 @@
     public class HomeController : Controller
     {
         private readonly IDashboardService DashboardService;
+        private readonly IYearService YearService;
 
-        public HomeController(IDashboardService DashboardService)
+        public HomeController(IDashboardService DashboardService, IYearService YearService)
         {
             this.DashboardService = DashboardService;
+            this.YearService = YearService;
         }
 
         [Route("ams/dashboard/indicator/{apartment_id}/{month}/{year}")]
         public async Task<JsonResult> GetIndicator(string apartment_id, int month, int year)
         {
             var user = HttpContext.Session.GetSession<UserDTO.User>(Unit.Constants.SESSION_USER);
+
+            var test = await YearService.GetComboYears();
 
             var indicator = new Result.ViewResult<DashboardDTO.Indicator>();
             // GetDebitWidget

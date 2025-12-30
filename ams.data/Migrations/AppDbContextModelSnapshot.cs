@@ -17,7 +17,7 @@ namespace ams.data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.11")
+                .HasAnnotation("ProductVersion", "9.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -80,7 +80,7 @@ namespace ams.data.Migrations
 
                     b.HasIndex("ModifiedUser");
 
-                    b.ToTable("Accounts");
+                    b.ToTable("Accounts", (string)null);
 
                     b.HasData(
                         new
@@ -141,7 +141,7 @@ namespace ams.data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("AdxMenus");
+                    b.ToTable("AdxMenus", (string)null);
 
                     b.HasData(
                         new
@@ -210,7 +210,7 @@ namespace ams.data.Migrations
 
                     b.HasIndex("ModifiedUser");
 
-                    b.ToTable("Apartments");
+                    b.ToTable("Apartments", (string)null);
 
                     b.HasData(
                         new
@@ -671,7 +671,7 @@ namespace ams.data.Migrations
 
                     b.HasIndex("ModifiedUser");
 
-                    b.ToTable("Debits");
+                    b.ToTable("Debits", (string)null);
                 });
 
             modelBuilder.Entity("ams.entity.Entities.Expense", b =>
@@ -748,7 +748,7 @@ namespace ams.data.Migrations
 
                     b.HasIndex("ModifiedUser");
 
-                    b.ToTable("Expenses");
+                    b.ToTable("Expenses", (string)null);
                 });
 
             modelBuilder.Entity("ams.entity.Entities.Housing", b =>
@@ -825,7 +825,7 @@ namespace ams.data.Migrations
 
                     b.HasIndex("ModifiedUser");
 
-                    b.ToTable("Housings");
+                    b.ToTable("Housings", (string)null);
 
                     b.HasData(
                         new
@@ -908,7 +908,7 @@ namespace ams.data.Migrations
 
                     b.HasIndex("ModifiedUser");
 
-                    b.ToTable("HousingSafes");
+                    b.ToTable("HousingSafes", (string)null);
 
                     b.HasData(
                         new
@@ -1004,7 +1004,7 @@ namespace ams.data.Migrations
 
                     b.HasIndex("ModifiedUser");
 
-                    b.ToTable("HousingSafeMovements");
+                    b.ToTable("HousingSafeMovements", (string)null);
                 });
 
             modelBuilder.Entity("ams.entity.Entities.Account", b =>
