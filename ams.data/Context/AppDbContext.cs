@@ -3,7 +3,6 @@
     using ams.entity.Entities;
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
-    using Microsoft.EntityFrameworkCore.Diagnostics;
     using System.Reflection;
 
     public class AppDbContext : IdentityDbContext<AppUser, AppRole, Guid, AppUserClaim, AppUserRole, AppUserLogin, AppRoleClaim, AppUserToken>
@@ -21,9 +20,6 @@
         public DbSet<Debit> Debits { get; set; }
         public DbSet<AdxMenu> AdxMenus { get; set; }
         public DbSet<Year> Years { get; set; }
-
-        //public DbSet<User> Users { get; set; }
-        //public DbSet<Role> Roles { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

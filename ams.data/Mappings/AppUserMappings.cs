@@ -7,6 +7,8 @@
 
     public class AppUserMappings : IEntityTypeConfiguration<AppUser>
     {
+        private const string DefaultPasswordHass = "AQAAAAIAAYagAAAAENQ3dkuS/u67bGlIXDv8nkCDq4gPlcPuSuuTaqgFr5x0RC4qNXhWefrLLUPYTCs95Q==";
+
         public void Configure(EntityTypeBuilder<AppUser> builder)
         {
             // Primary Key
@@ -57,10 +59,12 @@
                 Firstname = "Yunus",
                 Lastname = "AYIRGÜL",
                 SecurityStamp = "9d63def9-ca57-4d94-8fdf-2292519cec84",
+                ConcurrencyStamp = "3ce276c4-a032-4e27-8070-dcc52cf40dd7",
                 IsActive = true,
-                CreateTime = new DateTime(2026, 01, 01)
+                CreateTime = new DateTime(2026, 01, 01),
+                PasswordHash = DefaultPasswordHass,
             };
-            admin.PasswordHash = CreatePasswordHash(admin, "1");
+            //admin.PasswordHash = CreatePasswordHash(admin, "1");
 
             var agent = new AppUser
             {
@@ -76,10 +80,12 @@
                 Firstname = "Kadir",
                 Lastname = "Keleş",
                 SecurityStamp = "be82a95e-81c8-4b07-89e6-eec384caf3ce",
+                ConcurrencyStamp = "9d2171ca-c2c0-48af-8b71-b5dcc9c613a0",
                 IsActive = true,
-                CreateTime = new DateTime(2026, 01, 01)
+                CreateTime = new DateTime(2026, 01, 01),
+                PasswordHash = DefaultPasswordHass,
             };
-            agent.PasswordHash = CreatePasswordHash(agent, "1");
+            //agent.PasswordHash = CreatePasswordHash(agent, "1");
 
             var user = new AppUser
             {
@@ -95,18 +101,21 @@
                 Firstname = "Lokman",
                 Lastname = "Yılmaz",
                 SecurityStamp = "deff56e3-b36c-461f-b4d3-fb88a1f13afa",
+                ConcurrencyStamp = "023556ad-708e-4426-b761-0f997b740d07",
                 IsActive = true,
-                CreateTime = new DateTime(2026, 01, 01)
+                CreateTime = new DateTime(2026, 01, 01),
+                PasswordHash = DefaultPasswordHass,
             };
-            user.PasswordHash = CreatePasswordHash(user, "1");
+            //user.PasswordHash = CreatePasswordHash(user, "1");
 
             builder.HasData(admin, agent, user);
         }
 
-        private string CreatePasswordHash(AppUser user, string password)
-        {
-            var pass = new PasswordHasher<AppUser>();
-            return pass.HashPassword(user, password);
-        }
+        // TODO : Bu yöntem artık geçerli değil
+        //private string CreatePasswordHash(AppUser user, string password)
+        //{
+        //    var pass = new PasswordHasher<AppUser>();
+        //    return pass.HashPassword(user, password);
+        //}
     }
 }

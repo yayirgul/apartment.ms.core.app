@@ -4,8 +4,8 @@
 
     public abstract class EntityBase : IEntityBase
     {
-        public virtual Guid Id { get; set; } = Guid.NewGuid();
-        public virtual DateTime CreateTime { get; set; } = DateTime.Now;
+        public virtual Guid Id { get; set; }
+        public virtual DateTime CreateTime { get; set; }
         public virtual DateTime? ModifiedTime { get; set; }
         public virtual DateTime? DeletedTime { get; set; }
         public virtual bool IsDeleted { get; set; } = false;

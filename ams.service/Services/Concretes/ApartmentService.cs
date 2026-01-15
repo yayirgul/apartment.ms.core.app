@@ -124,7 +124,7 @@
                 { "@AccountId", "16f885ff-6897-4d08-afa6-0640c40d2a05" }
             };
 
-            var sp = await Uow.GetRepository<Apartment>().GetAllExecuteAsync("sp_aparment_by_id", param);
+            //var sp = await Uow.GetRepository<Apartment>().GetAllExecuteAsync("sp_aparment_by_id", param);
 
 
             var apartments = r.ConvertAll(x => new ApartmentDTO.Table
