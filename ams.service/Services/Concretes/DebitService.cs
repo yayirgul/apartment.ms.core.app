@@ -270,15 +270,17 @@
 
             if (q_debit == null)
             {
-                var lse = await Uow.GetRepository<Expense>().GetAllAsync(x => !x.IsDeleted && x.IsActive == true && x.ApartmentId == apartment_id && x.Month == month && x.Year == year);
+                // TODO: Aylık sabit giderler
+                var lse = await Uow.GetRepository<Expense>().GetAllAsync(x => !x.IsDeleted && x.IsActive == true && x.ApartmentId == apartment_id && x.Month == month && x.Year == year && x.IsFixed == false);
 
+                // TODO: Yıllık sabit giderler
                 var lsf = await Uow.GetRepository<Expense>().GetAllAsync(x => !x.IsDeleted && x.IsActive == true && x.ApartmentId == apartment_id && x.Year == year && x.IsFixed == true);
 
                 ls_expense = lse.Concat(lsf).ToList();
                  
                 if (ls_expense.Count() > 0)
                 {
-                    // Toplam 10 adet konut gelecek
+                    // TODO: Apartmana ait toplam konut sayısını alıyorum.
                     var ls_housing = await Uow.GetRepository<Housing>().GetAllAsync(x => !x.IsDeleted && x.IsActive == true && x.ApartmentId == apartment_id);
 
                     if (ls_housing.Count() > 0)
@@ -373,8 +375,6 @@
                                 };
                                 await Uow.GetRepository<Debit>().AddAsync(debit);
                             }
-
-
                         }
 
                         var result = await Uow.SaveAsync();

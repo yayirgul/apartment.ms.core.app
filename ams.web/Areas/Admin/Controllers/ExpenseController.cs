@@ -44,7 +44,7 @@
                     Amount = dto.Amount,
                     Month = dto.Month,
                     Year = dto.Year,
-                    ModifiedTime = DateTime.UtcNow,
+                    ModifiedTime = DateTime.Now,
                     ModifiedUser = User!.Id,
                     IsFixed = dto.IsFixed,
                 };
@@ -52,6 +52,7 @@
             }
             else
             {
+                dto.CreateTime = DateTime.Now;
                 dto.CreateUser = User!.Id;
                 dto.AccountId = (Guid)User!.AccountId!;
                 dto.ExpenseCode = "01" + dto.Month + dto.Year;

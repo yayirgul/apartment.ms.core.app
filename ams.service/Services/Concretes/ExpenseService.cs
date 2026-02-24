@@ -80,6 +80,7 @@
                 Month = dto.Month,
                 Year = dto.Year,
                 IsFixed = dto.IsFixed,
+                CreateTime = dto.CreateTime,
                 IsDeleted = false,
                 IsActive = true,
             };

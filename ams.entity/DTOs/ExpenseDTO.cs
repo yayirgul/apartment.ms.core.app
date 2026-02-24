@@ -16,7 +16,7 @@
 
             public string? ExpenseName { get; set; }
             public string? ExpenseCode { get; set; }
-
+            public DateTime CreateTime { get; set; }
 
             public Guid CreateUser { get; set; }
      
