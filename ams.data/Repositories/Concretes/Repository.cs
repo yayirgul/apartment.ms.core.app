@@ -81,15 +81,65 @@
 
         public async Task<List<T>> GetAllExecuteAsync(string procedure, Dictionary<string, object> parameters)
         {
-            //var sql = $"EXEC {procedure} {string.Join(",", parameters.Select(p => p.ParameterName))}";
+            ////var sql = $"EXEC {procedure} {string.Join(",", parameters.Select(p => p.ParameterName))}";
 
-            var param = parameters.Select(x => new SqlParameter(x.Key, x.Value ?? DBNull.Value)).ToArray();
+            //var param = parameters.Select(x => new SqlParameter(x.Key, x.Value ?? DBNull.Value)).ToArray();
 
-            var parameter_place = string.Join(", ", parameters.Keys.Select(p =>  p));
+            //var parameter_place = string.Join(", ", parameters.Keys.Select(p =>  p));
 
-            var sql = $"EXEC {procedure} {parameter_place}";
+            //var sql = $"EXEC {procedure} {parameter_place}";
 
-            return await Table.FromSqlRaw(sql, param).ToListAsync();
+            //return await Table.FromSqlRaw(sql, param).ToListAsync();
+
+            var sql_parameters = parameters
+                  .Select(x =>
+                  {
+                      var parameterName = x.Key.StartsWith("@") ? x.Key : $"@{x.Key}";
+                      return new SqlParameter(parameterName, x.Value ?? DBNull.Value);
+                  }).ToArray();
+
+            var parameterList = string.Join(
+                ", ",
+                sql_parameters.Select(x =>
+                    $"{x.ParameterName} = {x.ParameterName}"));
+
+            var sql = sql_parameters.Length == 0
+                ? $"EXEC {procedure}"
+                : $"EXEC {procedure} {parameterList}";
+
+            return await Table.FromSqlRaw(sql, sql_parameters).AsNoTracking().ToListAsync();
+        }
+
+        public async Task<T?> GetExecuteAsync(string procedure, Dictionary<string, object> parameters)
+        {
+            var sqlParameters = parameters
+                .Select(x =>
+                {
+                    var parameterName = x.Key.StartsWith("@")
+                        ? x.Key
+                        : $"@{x.Key}";
+
+                    return new SqlParameter(
+                        parameterName,
+                        x.Value ?? DBNull.Value);
+                })
+                .ToArray();
+
+            var parameterList = string.Join(
+                ", ",
+                sqlParameters.Select(x =>
+                    $"{x.ParameterName} = {x.ParameterName}"));
+
+            var sql = sqlParameters.Length == 0
+                ? $"EXEC {procedure}"
+                : $"EXEC {procedure} {parameterList}";
+
+            var results = await Table
+                .FromSqlRaw(sql, sqlParameters)
+                .AsNoTracking()
+                .ToListAsync();
+
+            return results.FirstOrDefault();
         }
     }
 }

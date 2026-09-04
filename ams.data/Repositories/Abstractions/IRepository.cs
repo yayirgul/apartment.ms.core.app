@@ -15,5 +15,6 @@
         Task<T> UpdateAsync(T entity);
 
         Task<List<T>> GetAllExecuteAsync(string procedure, Dictionary<string, object> parameters);
+        Task<T?> GetExecuteAsync(string procedure, Dictionary<string, object> parameters);
     }
 }

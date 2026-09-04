@@ -119,13 +119,35 @@
         {
             var r = await Uow.GetRepository<Apartment>().GetAllAsync(x => !x.IsDeleted, a => a.CreateTheUser!);
 
+            #region SP
+
+            // *********************************************************************************************************************
+
+            // TODO : @ApartmentId veya ApartmentId şeklinde parametre şekilde yazılabilir
             var param = new Dictionary<string, object>{
-                { "@ApartmentId", "16f885ff-6897-4d08-afa6-0640c40d2a05" },
-                { "@AccountId", "16f885ff-6897-4d08-afa6-0640c40d2a05" }
+                { "ApartmentId", "16f885ff-6897-4d08-afa6-0640c40d2a05" },
+                { "AccountId", "16f885ff-6897-4d08-afa6-0640c40d2a05" }
             };
 
-            //var sp = await Uow.GetRepository<Apartment>().GetAllExecuteAsync("sp_aparment_by_id", param);
+            // TODO : SP ile listeyi çekme işlemi
+            //var ls = await Uow.GetRepository<Apartment>().GetAllExecuteAsync("sp_aparments", param);
+            //var lst = ls.ConvertAll(x => new ApartmentDTO.Table
+            //{
+            //    ApartmentId = x.Id,
+            //    ApartmentName = x.ApartmentName,
+            //    CreateTime = x.CreateTime,
+            //    _CreateTime = x.CreateTime != null ? x.CreateTime.ToString("dd/MM/yyyy") : "",
+            //    CreateUser = x.CreateTheUser != null ? x.CreateTheUser!.Firstname + " " + x.CreateTheUser.Lastname : "",
+            //    IsActive = x.IsActive ? 1 : 2,
+            //});
 
+
+            // TODO : SP ile tek bir kayıt çekme işlemi
+            //var spb = await Uow.GetRepository<Apartment>().GetExecuteAsync("sp_aparment_by_id", param);
+
+            // *********************************************************************************************************************
+
+            #endregion
 
             var apartments = r.ConvertAll(x => new ApartmentDTO.Table
             {
